@@ -3,7 +3,10 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-var server_url = 'http://localhost:4000/admin/';
+import  { environment } from 'environments/environment';
+
+
+var server_url = environment.server_url;
 
 
 
