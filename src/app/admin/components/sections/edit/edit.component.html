@@ -1,0 +1,143 @@
+
+ <div class="tile-title-w-btn">
+    <h3 class="title">Edit {{title}}</h3>
+     <p><a class="btn btn-secondary icon-btn btn-sm" [routerLink]="['/admin/'+section_alias+'/index']" ><i class="fa fa-arrow-left"></i></a></p>
+  </div>
+  <div class="tile-body">
+  <form [formGroup]="sectionForm"  novalidate>
+    <div class="row">
+     <div *ngFor="let column of columns" class="form-group col-md-6"> 
+          <div *ngIf="column.type == 'textbox'" >
+            <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+            <input class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" type="text" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]" placeholder="Enter your {{column.label}}">
+             <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+          </div>
+           <div *ngIf="column.type == 'textarea'" >
+            <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+              <textarea  class="form-control"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]" cols="10"  rows="10" placeholder="Enter your {{column.label}}"></textarea>
+               <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+          </div>
+          <div *ngIf="column.type == 'email'" >
+            <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+             <input type="email" class="form-control"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label}}"/>
+          </div>
+          <div *ngIf="column.type == 'hidden'" >
+           
+              <input type="hidden" class="form-control"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]" />
+          </div>
+          <div *ngIf="column.type == 'readonly'" >
+            <label  class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+              <input type="textbox" class="form-control"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]" />
+          </div>
+           <div *ngIf="column.type == 'radio'" >
+            <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+             <fieldset class="form-group">
+                    <div class="form-check" *ngFor="let col of column.source">
+                      <label class="form-check-label">
+                          <input class="form-check-input {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" type="radio" formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]" value="{{col.value}}" />{{col.label}}
+                      </label>
+                    </div>
+             </fieldset>
+              <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+          </div>
+          <div *ngIf="column.type == 'selectbox'" >
+            <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+         <select class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]">
+           <option *ngFor="let col of column.source" value="{{col.value}}">  {{col.label}}</option>
+         </select>
+          <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+ 
+          </div>
+
+           <div *ngIf="column.type == 'checkbox'" >
+            <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+             <fieldset class="form-group">
+                    <div class="form-check" *ngFor="let col of column.source">
+                      <label class="form-check-label">
+                            <input  class="form-check-input" type="checkbox"  (change)="checkboxChange(column.field,col.value, $event.target.checked)"  value="{{col.value}}" [checked]="section_data[column.field] | inArrayCheck:col.value">{{col.label}}  
+                      </label>
+
+                    </div>
+                       <input type="hidden" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]"  />
+                 <div  *ngIf="sectionForm.controls[column.field].invalid  && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+
+
+             </fieldset>
+
+
+
+          </div>
+
+
+
+          <div *ngIf="column.type == 'image'" >
+            <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+            <input class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" type="file" (change)="fileChangeEvent($event,column.field)"  multiple="{{column.multiple == 'true'?'multiple':''}}"  placeholder="Enter your {{column.label}}">
+             <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+             <input type="hidden"  formControlName="{{column.field}}" #{{column.field}} [(ngModel)]= "section_data[column.field]">
+            <div class="row">
+              <div class="col-md-4" *ngFor="let i of section_data[column.field] | toArray" style="padding-top:15px;text-align: center;">
+                <img  [src]="i | getFile | async" width="132px" height="90px"> 
+              
+                <a (click)="deleteFile(i,column.field)" style="margin-top:2px;cursor:pointer" >&nbsp;<i class="fa fa-trash"></i></a>
+              </div>
+            </div>
+
+            
+          </div>
+
+          <div *ngIf="column.type == 'file'" >
+            <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+            <input class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" type="file" (change)="fileChangeEvent($event,column.field)"  multiple="{{column.multiple == 'true'?'multiple':''}}"  placeholder="Enter your {{column.label}}">
+             <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched)  && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+             <input type="hidden" formControlName="{{column.field}}" #{{column.field}} [(ngModel)]= "section_data[column.field]">
+            <div class="row">
+              <div class="col-md-4" *ngFor="let i of section_data[column.field] | toArray;let rowIndex=index" style="padding-top:15px;text-align: center;">
+                <a target="blank" [href]="i | getFile | async">File{{rowIndex+1}}</a>
+              
+                <a (click)="deleteFile(i,column.field)" style="margin-top:2px;cursor:pointer" >&nbsp;<i class="fa fa-trash"></i></a>
+              </div>
+            </div>
+
+            
+          </div>
+
+           <div *ngIf="column.type == 'tags'" >
+             <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+
+              <select2 id="{{column.field}}" class="select2 {{(sectionForm.controls[column.field].invalid)?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" [data]="column.source"
+                     [options]="options"
+                     width="100%"
+                     [value]="section_data[column.field+'_tags']"
+                     (valueChanged)="tagsChange(column.field,$event)"
+            ></select2>
+         
+              <input type="hidden" id="data-{{column.field}}" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]"  />
+              <div  *ngIf="sectionForm.controls[column.field].invalid   && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+
+          </div>
+
+      <!--      <div *ngIf="column.type == 'datepicker'" >
+             <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+
+
+              <input type="hidden" id="data-{{column.field}}" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]"  />
+              <div  *ngIf="sectionForm.controls[column.field].invalid   && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+
+          </div> -->
+
+           
+    </div>
+  </div>
+    <div class="tile-footer">
+        <button (click)="update()" [disabled]="sectionForm.invalid" class="btn btn-primary" ><i class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>
+      </div>
+ </form>
+</div>
+
+
+
+   
+
+
+

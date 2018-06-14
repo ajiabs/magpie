@@ -1,0 +1,45 @@
+     <form class="login-form" [formGroup]="userLoginForm" novalidate>
+          <h3 class="login-head"><i class="fa fa-lg fa-fw fa-user"></i>SIGN IN</h3>
+           <div class="form-group">
+            <label class="control-label">USERNAME</label>
+              <input type="email" class="form-control {{(userLoginForm.controls['email'].invalid && (userLoginForm.controls['email'].dirty || userLoginForm.controls['email'].touched))?'is-invalid':userLoginForm.controls['email'].valid?'is-valid':''}}"  formControlName="email" #email email="true"/>
+                <div  *ngIf="userLoginForm.controls['email'].invalid && (userLoginForm.controls['email'].dirty || userLoginForm.controls['email'].touched) && userLoginForm.controls['email'].errors.required" class="form-control-feedback">   Username is required.</div>
+        
+          </div>
+          <div class="form-group">
+            <label class="control-label">PASSWORD</label>
+            <input type="password" class="form-control {{(userLoginForm.controls['password'].invalid && (userLoginForm.controls['password'].dirty || userLoginForm.controls['password'].touched))?'is-invalid':userLoginForm.controls['password'].valid?'is-valid':''}}" formControlName="password" #password/>
+             <div  *ngIf="userLoginForm.controls['password'].invalid && (userLoginForm.controls['password'].dirty || userLoginForm.controls['password'].touched) && userLoginForm.controls['password'].errors.required" class="form-control-feedback">   Password is required.</div>
+          </div>
+          <div class="form-group">
+            <div class="utility">
+              <div class="animated-checkbox">
+                <label>
+                  <input type="checkbox"><span class="label-text">Stay Signed in</span>
+                </label>
+              </div>
+              <p class="semibold-text mb-2"><a href="#" data-toggle="flip">Forgot Password ?</a></p>
+            </div>
+          </div>
+          <div class="form-group btn-container">
+            <button class="btn btn-primary btn-block" (click)="checkLogin(email.value,password.value)" [disabled]="userLoginForm.pristine || userLoginForm.invalid"><i class="fa fa-sign-in fa-lg fa-fw"></i>SIGN IN</button>
+             <div  *ngIf="login_error" class="form-control-feedback">
+                  {{login_error}}
+                </div>
+          </div>
+        </form>
+         <form class="forget-form" [formGroup]="forgotPasswordForm">
+          <h3 class="login-head"><i class="fa fa-lg fa-fw fa-lock"></i>Forgot Password ?</h3>
+          <div class="form-group">
+            <label class="control-label">EMAIL</label>
+            <input class="form-control" type="text" placeholder="Email">
+          </div>
+          <div class="form-group btn-container">
+            <button class="btn btn-primary btn-block"><i class="fa fa-unlock fa-lg fa-fw"></i>RESET</button>
+          </div>
+          <div class="form-group mt-3">
+            <p class="semibold-text mb-0"><a href="#" data-toggle="flip"><i class="fa fa-angle-left fa-fw"></i> Back to Login</a></p>
+          </div> 
+        </form>
+ 
+   

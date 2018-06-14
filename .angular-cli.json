@@ -53,6 +53,11 @@
       "config": "./karma.conf.js"
     }
   },
+   "uploads": {
+    "uploads": {
+      "config": "./uploads"
+    }
+  },
   "defaults": {
     "styleExt": "css",
     "component": {}
