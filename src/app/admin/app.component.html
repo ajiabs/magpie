@@ -68,17 +68,19 @@
           <p class="app-sidebar__user-designation">Administrator</p>
         </div>
       </div>
+
+    
       <ul class="app-menu">
-          <li><a class="app-menu__item" [routerLink]="['admin/dashboard']" routerLinkActive="active"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a></li>
-     
-          <li  *ngFor="let main of roles_menu;let last = last" menu-toggle [isLast]="last"  class="treeview"  >
+        
+          <li class="treeview"><a class="app-menu__item" data-toggle="treeview" [routerLink]="['admin/dashboard']" routerLinkActive="active"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a></li>
+          <li  *ngFor="let main of roles_menu;let last = last" menu-toggle [isLast]="last"  class="treeview {{main.submenu.indexOf(router.url.split('/')[2]) > -1?'is-expanded':''}}"  >
             <a class="app-menu__item"  data-toggle="treeview">
               <i class="app-menu__icon fa {{main.icon}}"></i>
               <span class="app-menu__label">{{main.name}}</span>
               <i class="treeview-indicator fa fa-angle-right"></i></a>
             <ul class="treeview-menu">
               <li *ngFor="let menus of main.sub" >
-                <a class="treeview-item" [routerLink]="[menus.url]" routerLinkActive="active">
+                <a class="treeview-item {{menus.url.split('/').indexOf(router.url.split('/')[2]) > -1?'active':''}}" [routerLink]="[menus.url]" routerLinkActive="active">
                   <i class="app-menu__icon fa {{menus.icon}}"></i>
                   <span class="app-menu__label">{{menus.name}}</span>
                 </a>
@@ -103,7 +105,7 @@
         </div>
         <ul class="app-breadcrumb breadcrumb">
           <li class="breadcrumb-item"><i [routerLink]="['admin/dashboard']" class="fa fa-home fa-lg"></i></li>
-          <li class="breadcrumb-item"><a [routerLink]="['admin/'+(showNavTitle | lowercase)+'/index']" >{{showNavTitle | titlecase}}</a></li>
+          <li class="breadcrumb-item"><a [routerLink]="['admin/'+(showNavTitle | lowercase)]" >{{showNavTitle | titlecase}}</a></li>
            <li class="breadcrumb-item"><a >{{showNavMethod | titlecase}}</a></li>
         </ul>
 

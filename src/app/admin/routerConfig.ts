@@ -29,7 +29,7 @@ export const appRoutes: Routes = [
         component: SectionEditComponent,
         canActivate: [AuthGuard]
       },
-      { path: ':section/index',
+      { path: ':section',
         component: SectionIndexComponent,
         canActivate: [AuthGuard]
       }

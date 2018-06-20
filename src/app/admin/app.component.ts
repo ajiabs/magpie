@@ -33,11 +33,7 @@ export class AppComponent {
         this.showNav = true;
         this.login_name = localStorage.getItem("userDetails['name']");
         this.login_id = localStorage.getItem("userDetails['users_id']");
-      
 
-      } else {
-        this.showNav = false;
-      }
 
 
       this.service.getAllMenus('menus').subscribe(res => {
@@ -51,7 +47,7 @@ export class AppComponent {
                 var  module_actions = current_roles_menus[i].actions;
                 for(var j=0;j<module_actions.length;j++){
                    var  module = current_roles_menus[i];
-                   if(current_roles_menus[i].actions[j].name == module.name+'-Index' && current_roles_menus[i].actions[j].perm == 'true'){
+                   if(current_roles_menus[i].actions[j].name == module.name.split(' ').join('-')+'-Index' && current_roles_menus[i].actions[j].perm == 'true'){
                     var module_key = Object.keys(res).find(x => res[x].name === module.name);
                    
                     menus[k] = res[module_key];
@@ -69,26 +65,33 @@ export class AppComponent {
                 var parent_key = Object.keys(res).find(x => res[x].menus_id === Number.parseInt(menus[i].parent_id));
                 if(tmp_main.indexOf(res[parent_key].name) == -1){
                   tmp_main.push(res[parent_key].name);
-                  main_menu.push({"name":res[parent_key].name,"icon":res[parent_key].icon,"sub":[menus[i]]});
+                  main_menu.push({"name":res[parent_key].name,"icon":res[parent_key].icon,"sub":[menus[i]],"submenu":[menus[i].url.split('/')[1]]});
                   k++;
                 }
                 else{
 
                    var tmp_key = Object.keys(main_menu).find(x => main_menu[x].name === res[parent_key].name);
                    main_menu[tmp_key]['sub'].push(menus[i]);
+                   main_menu[tmp_key]['submenu'].push(menus[i].url.split('/')[1]);
                 
                 }
                   
               }
               
              this.roles_menu = main_menu;
-            
-       
+           
+          
             
         });
 
       });
-     
+       
+
+      } else {
+        this.showNav = false;
+      }
+
+
 
        this.router.events.subscribe(event => {
 
