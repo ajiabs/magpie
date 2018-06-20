@@ -3,7 +3,7 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import  { environment } from 'environments/environment';
+import  { environment } from './../../environments/environment';
 
 
 var server_url = environment.server_url;

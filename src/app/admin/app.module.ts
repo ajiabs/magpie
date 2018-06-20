@@ -23,7 +23,7 @@ import { GetFilePipe} from './filters/getFile.pipe';
 import { TagsDataPipe} from './filters/tagsData.pipe';
 import { Select2Module } from 'ng2-select2';
 import { RolePermissionsDirective } from './directives/rolePermissions.directive';
-
+import { MenuToggleDirective } from './directives/menuToggle.directive';
 
 
 
@@ -42,7 +42,8 @@ import { RolePermissionsDirective } from './directives/rolePermissions.directive
     ToArrayPipe,
     GetFilePipe,
     TagsDataPipe,
-    RolePermissionsDirective
+    RolePermissionsDirective,
+    MenuToggleDirective
 
   ],
   imports: [

@@ -11,6 +11,9 @@ var UserSchema = new Schema({
         type: String,
         unique: true
     },
+  roles_id: {
+        type: String
+    },
   password: {
         type: String
     }

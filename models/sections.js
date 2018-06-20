@@ -35,9 +35,9 @@ Sections.pre('save', function (next) {
     }
   
 
-    cont += "var "+sections.section_name+" = new Schema("+JSON.stringify(sche)+",{collection:'"+sections.section_table_name+"'});\n";
-    cont += sections.section_name+".plugin(AutoIncrement,{inc_field: '"+sections.section_alias+"_id'});"
-    cont += "module.exports = mongoose.model('"+sections.section_name+"', "+sections.section_name+")";
+    cont += "var "+sections.section_name.split(' ').join('_')+" = new Schema("+JSON.stringify(sche)+",{collection:'"+sections.section_table_name+"'});\n";
+    cont += sections.section_name.split(' ').join('_')+".plugin(AutoIncrement,{inc_field: '"+sections.section_alias+"_id'});"
+    cont += "module.exports = mongoose.model('"+sections.section_name.split(' ').join('_')+"', "+sections.section_name.split(' ').join('_')+")";
    
     next();
     mongoose.connect(config.DB, function(err, db) {

@@ -48,6 +48,7 @@ export class UserLoginComponent implements OnInit {
          localStorage.setItem("userDetails['email']", this.data.result.email);
          localStorage.setItem("userDetails['name']", this.data.result.name);
          localStorage.setItem("userDetails['users_id']", this.data.result.users_id);
+         localStorage.setItem("userDetails['roles_id']", this.data.result.roles_id);
          window.location.href = "/admin/dashboard";
        }
       ,err => {

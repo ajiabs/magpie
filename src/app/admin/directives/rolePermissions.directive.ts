@@ -28,9 +28,9 @@ export class RolePermissionsDirective{
 		 ngAfterContentInit(): void {
 
 		 //console.log(this.allMenus.sectionsModules);
-		 for(i=0;i<this.allMenus.menus.length;i++){
+		 //for(i=0;i<this.allMenus.menus.length;i++){
 		  // console.log(this.allMenus.menus[i].url);
-		 }
+		// }
 
 		 //his.allMenus.sectionsModules.find(function (obj) { return obj.id === 3; });
 

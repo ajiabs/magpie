@@ -22,10 +22,33 @@ const storage =   multer.diskStorage({
 
 
 
-sectionRoutes.route('/getAllMenus').get(passport.authenticate('jwt', { session: false}),function (req, res) {
+sectionRoutes.route('/getRolePermissionMenus').get(passport.authenticate('jwt', { session: false}),function (req, res) {
   var token = getToken(req.headers);
   if (token) 
       return getRolePermissionMenus(req,res);
+  else 
+      return res.status(403).send({success: false, msg: 'Unauthorized.'});
+
+});
+
+
+sectionRoutes.route('/getCurrentRolePermissionMenus/:id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
+  var token = getToken(req.headers);
+  if (token) 
+      return getCurrentRolePermissionMenus(req,res);
+  else 
+      return res.status(403).send({success: false, msg: 'Unauthorized.'});
+
+});
+
+
+
+
+
+sectionRoutes.route('/getAllMenus').get(passport.authenticate('jwt', { session: false}),function (req, res) {
+  var token = getToken(req.headers);
+  if (token) 
+      return getAllMenus(req,res);
   else 
       return res.status(403).send({success: false, msg: 'Unauthorized.'});
 
@@ -199,22 +222,40 @@ getRolePermissionMenus = (req,res) =>  {
           return res.status(403).send({success: false, msg: err});
         }
         else {
-            Sections.find({},function (err, result1){
-              if(err){
-                return res.status(403).send({success: false, msg: err});
-              }
-              else {
-
-              
-                return res.json({"menus":result,"sectionsModules":result1});
-              }
-            });
-
-
+          return res.json(result);
         }
       });
 
 };
+
+getCurrentRolePermissionMenus = (req,res) => {
+
+      var Section = require('../models/'+req.originalUrl.split('/')[2]);
+      Section.find({'roles_id':req.params.id},function (err, result){
+        if(err){
+          return res.status(403).send({success: false, msg: err});
+        }
+        else {
+          return res.json(result);
+        }
+      });
+
+}
+
+
+getAllMenus = (req,res) =>  {
+  var Section = require('../models/'+req.originalUrl.split('/')[2]);
+  Section.find({'status':'active'},function (err, result){
+    if(err){
+      return res.status(403).send({success: false, msg: err});
+    }
+    else {
+      return res.json(result);
+    }
+  });
+
+};
+
 
 
 
@@ -431,15 +472,15 @@ insertData = (req,res,result) =>{
 
     var Section = require('../models/'+req.originalUrl.split('/')[2]);
     var section = new Section(result);
-    section.save().then(function(err, updated) {
-         if(err) 
-             return res.status(403).send({success: false, msg: err});
-         else
-           return res.status(200).json('added successfully');
-
-     });
-
-
+    section.save().then(item => {
+      res.status(200).json('added successfully');
+      })
+      .catch(err => {
+        return res.status(403).send({success: false, msg: err});
+       
+      });
+      
+    
 
 };
 

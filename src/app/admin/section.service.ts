@@ -3,7 +3,7 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import  { environment } from 'environments/environment';
+import  { environment } from './../../environments/environment';
 
 
 var server_url = environment.server_url;
@@ -15,7 +15,7 @@ export class SectionService {
   result: any;
   constructor(private http: HttpClient) { }
 
-  sectionConfig(current_route){
+  sectionConfig = (current_route) =>{
    let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
@@ -28,7 +28,7 @@ export class SectionService {
             });
   }
 
-  customRoute(current_route,from){
+  customRoute = (current_route,from) =>{
 
 
    let httpOptions = {
@@ -45,7 +45,7 @@ export class SectionService {
 
 
 
-  add(data,current_route) {
+  add = (data,current_route) => {
     let httpOptions = {
      
       headers: new HttpHeaders({ 'Accept':'application/json','enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
@@ -74,7 +74,7 @@ export class SectionService {
         .subscribe(res => console.log('Done'));
   }
 
-  search(value,searchable_fields,order_by,sortable_field,relation,current_page,per_page,current_route){
+  search = (value,searchable_fields,order_by,sortable_field,relation,current_page,per_page,current_route) => {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
@@ -93,7 +93,7 @@ export class SectionService {
 
 
 
-   get(current_page,per_page,sortable_field,current_route) {
+   get = (current_page,per_page,sortable_field,current_route) =>{
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
@@ -108,7 +108,7 @@ export class SectionService {
             });
   }
 
-  edit(id,current_route) {
+  edit = (id,current_route) => {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
@@ -122,7 +122,7 @@ export class SectionService {
             });
   }
 
-   update(data,current_route) {
+   update = (data,current_route) => {
 
 
    
@@ -156,7 +156,7 @@ export class SectionService {
       .subscribe(res => console.log('Done'));
       
   }
-   delete(id,current_route) {
+   delete = (id,current_route) => {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
@@ -171,7 +171,7 @@ export class SectionService {
             });
   }
 
-  getImage(id,current_route){
+  getImage = (id,current_route) =>{
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
@@ -186,7 +186,7 @@ export class SectionService {
       
   }
 
-    deleteFile(id,column,rowId,current_route) {
+    deleteFile = (id,column,rowId,current_route) => {
       let httpOptions = {
         headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
       };
@@ -203,11 +203,11 @@ export class SectionService {
   }
 
 
-  getAllMenus (section){
+  getRolePermissionMenus = (section) =>{
       let httpOptions = {
         headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
       };
-      const uri = server_url+section+'/getAllMenus';
+      const uri = server_url+section+'/getRolePermissionMenus';
       return this
               .http
               .get(uri,httpOptions)
@@ -216,6 +216,35 @@ export class SectionService {
             });
 
   }
+
+  getAllMenus = (section) =>{
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url+section+'/getAllMenus';
+    return this
+            .http
+            .get(uri,httpOptions)
+            .map(res => {
+            return res;
+          });
+
+}
+
+getCurrentRolePermissionMenus = (roles,role_id)=>{
+
+  let httpOptions = {
+    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+  };
+  const uri = server_url+roles+'/getCurrentRolePermissionMenus/'+role_id;
+  return this
+          .http
+          .get(uri,httpOptions)
+          .map(res => {
+          return res;
+        });
+
+}
 
 
 

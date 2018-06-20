@@ -118,7 +118,7 @@ export class SectionCreateComponent implements OnInit {
 
    this.service.sectionConfig(this.router.url).subscribe(res => {
 
-     this.service.getAllMenus('menus').subscribe(res1 => {
+     this.service.getRolePermissionMenus('menus').subscribe(res1 => {
            this.getAllMenus  = res1;
 
 
