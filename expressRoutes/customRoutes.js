@@ -9,11 +9,72 @@ var config = require('../config/DB');
 
 
 
+customRoutes.route('/getMainMenus').get(function (req, res) {
+  var Section = require('../models/menus');
+  var token = getToken(req.headers);
+ 
+   if (token) {
+        Section.find({'parent_id':0},'name menus_id',function (err, result){
+         if(err){
+           console.log(err);
+         }
+         else {
+             var temp =[];
+             temp[0] = {'label':'Root','value':0};
+             var i =1;
+             result.forEach(function (rowItem) { 
+               
+                temp[i] = {'label':rowItem.name,'value':rowItem.menus_id};
+                i++;
+ 
+             });
+           res.json(temp);
+         }
+       });
+     } else {
+     return res.status(403).send({success: false, msg: 'Unauthorized.'});
+   }
+ 
+ 
+     
+  });
 
-// Defined Login route
+
+
+
+
+  customRoutes.route('/getRoles').get(function (req, res) {
+    var Section = require('../models/roles');
+    var token = getToken(req.headers);
+   
+     if (token) {
+          Section.find({},'name roles_id',function (err, result){
+           if(err){
+             console.log(err);
+           }
+           else {
+               var temp =[];
+               var i =0;
+               result.forEach(function (rowItem) { 
+                 
+                  temp[i] = {'label':rowItem.name,'value':rowItem.roles_id};
+                  i++;
+   
+               });
+             res.json(temp);
+           }
+         });
+       } else {
+       return res.status(403).send({success: false, msg: 'Unauthorized.'});
+     }
+   
+   
+       
+    });
+
+
+
 customRoutes.route('/getProjects').get(function (req, res) {
-
-
  var Section = require('../models/projects');
  var token = getToken(req.headers);
 
@@ -41,6 +102,11 @@ customRoutes.route('/getProjects').get(function (req, res) {
 
     
  });
+
+
+
+
+ 
 
 
 

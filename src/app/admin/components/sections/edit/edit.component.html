@@ -117,6 +117,16 @@
 
           </div>
 
+          <div *ngIf="column.type == 'custom'">
+           
+        
+          
+              <div role-permissions [formColumn]="column" [allMenus]="getAllMenus"   [customData]="section_data[column.field]" (customDataChange)="section_data[column.field] = $event"  >
+                </div>
+            <input type="hidden" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]">
+            <div  *ngIf="sectionForm.controls[column.field].invalid   && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+         </div>
+
       <!--      <div *ngIf="column.type == 'datepicker'" >
              <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
 

@@ -88,7 +88,7 @@ export class SectionCreateComponent implements OnInit {
       this.section_data['file_fields'] =  this.file_inputs;
       this.service.add(this.section_data,this.router.url);
       this.router.navigated = false;
-      this.router.navigate(['admin/'+this.section_alias+'/index']);
+      this.router.navigate(['admin/'+this.section_alias]);
       $.notify({
         title: "Added! ",
         message: "New Record has been added.",
@@ -119,9 +119,7 @@ export class SectionCreateComponent implements OnInit {
    this.service.sectionConfig(this.router.url).subscribe(res => {
 
      this.service.getRolePermissionMenus('menus').subscribe(res1 => {
-           this.getAllMenus  = res1;
-
-
+            this.getAllMenus  = res1;
             var column_config = JSON.parse(res[0].section_config).column;
             var th_files = [];
             var th =this;

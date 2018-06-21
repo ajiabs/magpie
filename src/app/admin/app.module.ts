@@ -21,6 +21,7 @@ import { InArrayCheckPipe} from './filters/inArrayCheck.pipe';
 import { ToArrayPipe} from './filters/toArray.pipe';
 import { GetFilePipe} from './filters/getFile.pipe';
 import { TagsDataPipe} from './filters/tagsData.pipe';
+import { ToObjectPipe} from './filters/toObject.pipe';
 import { Select2Module } from 'ng2-select2';
 import { RolePermissionsDirective } from './directives/rolePermissions.directive';
 import { MenuToggleDirective } from './directives/menuToggle.directive';
@@ -42,6 +43,7 @@ import { MenuToggleDirective } from './directives/menuToggle.directive';
     ToArrayPipe,
     GetFilePipe,
     TagsDataPipe,
+    ToObjectPipe,
     RolePermissionsDirective,
     MenuToggleDirective
 

@@ -27,25 +27,28 @@ export class RolePermissionsDirective{
 	    }
 		 ngAfterContentInit(): void {
 
-		 //console.log(this.allMenus.sectionsModules);
-		 //for(i=0;i<this.allMenus.menus.length;i++){
-		  // console.log(this.allMenus.menus[i].url);
-		// }
+		
+		  var menus = this.allMenus;
+		  var section = [];
 
-		 //his.allMenus.sectionsModules.find(function (obj) { return obj.id === 3; });
+		  console.log(JSON.parse(this.customData));
 
-
-
-		  var permissions = {
-			    "sections": [{
-			        "name": "Users",
-					"actions":  [{"name":"Users-Edit","perm":"true","label":"Edit"},{"name":"Users-Add","perm":"false","label":"Add"}]
-			    },
-			    {
-			        "name": "Roles",
-					"actions":  [{"name":"Roles-Edit","perm":"false","label":"Edit"},{"name":"Roles-Add","perm":"true","label":"Add"}]
-			    }]
+		 
+		  for(var i=0;i<menus.length;i++){
+			 var menu_actions = JSON.parse(menus[i].actions).selected_values;
+			 var tmp_actions = [];
+			 for(var j =0;j< menu_actions.length;j++){
+				var menu_perm_name = menus[i].name.split(' ').join('-')+'-'+menu_actions[j];
+				tmp_actions.push({"name":menu_perm_name,"perm":"false","label":menu_actions[j]});
+				
 			}
+			section.push({"name":menu_perm_name,"actions":tmp_actions});
+		}
+
+
+		var permissions = {
+			"sections": section
+		}
 
         var str = "";
 	    for(var i=0; i<permissions.sections.length; i++) {

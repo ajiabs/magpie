@@ -26,6 +26,7 @@ export class SectionEditComponent implements OnInit {
   file_inputs:any[];
   tagsElement: any;
   public options: Select2Options;
+  getAllMenus:any;
   constructor(private route: ActivatedRoute, private router: Router, private service: SectionService, private fb: FormBuilder) {
     this.createForm();
    }
@@ -98,7 +99,7 @@ export class SectionEditComponent implements OnInit {
    this.section_data['file_fields'] =  this.file_inputs;
    this.service.update(this.section_data,this.router.url);
    this.router.navigated = false;
-   this.router.navigate(['admin/'+this.section_alias+'/index']);
+   this.router.navigate(['admin/'+this.section_alias]);
 
 
     $.notify({
@@ -163,60 +164,67 @@ fileChangeEvent = (fileInput: any,field) =>{
       
       this.service.sectionConfig(this.router.url).subscribe(res => {
 
-        this.columns  = JSON.parse(res[0].section_config).column; 
 
-        var th_tags = [];
-        var th_files = [];
+        this.service.getRolePermissionMenus('menus').subscribe(res1 => {
+           
+            var config_columns  = JSON.parse(res[0].section_config).column; 
+            var th_tags = [];
+            var th_files = [];
 
-        this.columns.forEach(function (rowItem) { 
-         
-           if((rowItem.type == 'tags' || rowItem.type == 'selectbox' || rowItem.type == 'checkbox' || rowItem.type == 'radio') && rowItem.source_type == 'dynamic'){
-              th_service.customRoute(th_router.url,rowItem.source_from).subscribe(res => {
-
-                  if(rowItem.type == 'tags'){
-
-                      var data_tags = [];
-                      for(var k in res){
-                         data_tags.push({'id':res[k].value,'text':res[k].label});
-                      }
-                      th_tags.push(rowItem.field);
-                      rowItem.source = data_tags;
-                  }
-                   
-                  else
-                   rowItem.source = res;
-              });
-           }
-
-
-        
-            if(rowItem.type == 'file' || rowItem.type == 'image')
-              th_files.push(rowItem.field);
-       
-        });
-
-        this.file_inputs = th_files;
-        this.title = res[0].section_name;
-        this.section_alias = res[0].section_alias;
-        this.actions =  JSON.parse(res[0].section_config).opertations;
-        this.edit_action = this.actions.indexOf('edit') != -1?true:false;
-        if(this.edit_action){
-          this.section_data = this.service.edit(params['id'],this.router.url).subscribe(res => {
-            var dt  = res;
-            for(var k in th_tags){
-                var obj = JSON.parse(dt[th_tags[k]]);
-                dt[th_tags[k]+'_tags'] = Object.keys(obj).map(function(k) { return obj[k] })[0];
-              
-            }
-            this.section_data = dt;
-
-          
-
-             
+            config_columns.forEach(function (rowItem) { 
             
+              if((rowItem.type == 'tags' || rowItem.type == 'selectbox' || rowItem.type == 'checkbox' || rowItem.type == 'radio') && rowItem.source_type == 'dynamic'){
+                  th_service.customRoute(th_router.url,rowItem.source_from).subscribe(res => {
+
+                      if(rowItem.type == 'tags'){
+
+                          var data_tags = [];
+                          for(var k in res){
+                            data_tags.push({'id':res[k].value,'text':res[k].label});
+                          }
+                          th_tags.push(rowItem.field);
+                          rowItem.source = data_tags;
+                      }
+                      
+                      else
+                      rowItem.source = res;
+                  });
+              }
+
+
+            
+                if(rowItem.type == 'file' || rowItem.type == 'image')
+                  th_files.push(rowItem.field);
+          
+            });
+
+            this.file_inputs = th_files;
+            this.title = res[0].section_name;
+            this.section_alias = res[0].section_alias;
+            this.actions =  JSON.parse(res[0].section_config).opertations;
+            this.edit_action = this.actions.indexOf('edit') != -1?true:false;
+            if(this.edit_action){
+              this.section_data = this.service.edit(params['id'],this.router.url).subscribe(res => {
+                var dt  = res;
+                for(var k in th_tags){
+                    var obj = JSON.parse(dt[th_tags[k]]);
+                    dt[th_tags[k]+'_tags'] = Object.keys(obj).map(function(k) { return obj[k] })[0];
+                  
+                }
+                this.section_data = dt;
+                this.columns = config_columns;
+                this.getAllMenus  = res1;
+              
+
+                
+                
+              });
+
+            }
           });
 
-        }
+
+
 
       });
 
