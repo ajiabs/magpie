@@ -158,79 +158,90 @@ fileChangeEvent = (fileInput: any,field) =>{
   ngOnInit() {
     var th_service = this.service; 
     var th_router = this.router; 
+    this.service.getCurrentRolePermissionMenus('roles',localStorage.getItem("userDetails['roles_id']")).subscribe(res1 => {
+   
+      var current_route = this.router.url.split('/')[2].split("-").join(" ");
+      current_route = current_route.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                return letter.toUpperCase();
+            });
+     
+      var current_module = JSON.parse(res1[0].permissions).sections.filter(itm => itm.name == current_route);	
+      var menus_actions = [];
+      current_module[0].actions.forEach(function (menuItem) {
+         menus_actions.push(menuItem.label);
+         menus_actions[menuItem['label']] = menuItem.perm == 'true'?true:false;
+      });
+       if(menus_actions['Edit']){  
+          this.route.params.subscribe(params => {
+            this.service.sectionConfig(this.router.url).subscribe(res => {
+              this.service.getRolePermissionMenus('menus').subscribe(res1 => {
+                
+                  var config_columns  = JSON.parse(res[0].section_config).column; 
+                  var th_tags = [];
+                  var th_files = [];
 
-    this.route.params.subscribe(params => {
-    
-      
-      this.service.sectionConfig(this.router.url).subscribe(res => {
+                  config_columns.forEach(function (rowItem) { 
+                  
+                    if((rowItem.type == 'tags' || rowItem.type == 'selectbox' || rowItem.type == 'checkbox' || rowItem.type == 'radio') && rowItem.source_type == 'dynamic'){
+                        th_service.customRoute(th_router.url,rowItem.source_from).subscribe(res => {
+
+                            if(rowItem.type == 'tags'){
+
+                                var data_tags = [];
+                                for(var k in res){
+                                  data_tags.push({'id':res[k].value,'text':res[k].label});
+                                }
+                                th_tags.push(rowItem.field);
+                                rowItem.source = data_tags;
+                            }
+                            
+                            else
+                            rowItem.source = res;
+                        });
+                    }
 
 
-        this.service.getRolePermissionMenus('menus').subscribe(res1 => {
-           
-            var config_columns  = JSON.parse(res[0].section_config).column; 
-            var th_tags = [];
-            var th_files = [];
-
-            config_columns.forEach(function (rowItem) { 
-            
-              if((rowItem.type == 'tags' || rowItem.type == 'selectbox' || rowItem.type == 'checkbox' || rowItem.type == 'radio') && rowItem.source_type == 'dynamic'){
-                  th_service.customRoute(th_router.url,rowItem.source_from).subscribe(res => {
-
-                      if(rowItem.type == 'tags'){
-
-                          var data_tags = [];
-                          for(var k in res){
-                            data_tags.push({'id':res[k].value,'text':res[k].label});
-                          }
-                          th_tags.push(rowItem.field);
-                          rowItem.source = data_tags;
-                      }
-                      
-                      else
-                      rowItem.source = res;
+                  
+                      if(rowItem.type == 'file' || rowItem.type == 'image')
+                        th_files.push(rowItem.field);
+                
                   });
-              }
 
+                  this.file_inputs = th_files;
+                  this.title = res[0].section_name;
+                  this.section_alias = res[0].section_alias;
+                  this.actions =  JSON.parse(res[0].section_config).opertations;
+                  this.edit_action = this.actions.indexOf('edit') != -1?true:false;
+                 
+                    this.section_data = this.service.edit(params['id'],this.router.url).subscribe(res => {
+                      var dt  = res;
+                      for(var k in th_tags){
+                          var obj = JSON.parse(dt[th_tags[k]]);
+                          dt[th_tags[k]+'_tags'] = Object.keys(obj).map(function(k) { return obj[k] })[0];
+                        
+                      }
+                      this.section_data = dt;
+                      this.columns = config_columns;
+                      this.getAllMenus  = res1;
+                    
 
-            
-                if(rowItem.type == 'file' || rowItem.type == 'image')
-                  th_files.push(rowItem.field);
-          
+                      
+                      
+                    });
+
+                
+                });
+
             });
 
-            this.file_inputs = th_files;
-            this.title = res[0].section_name;
-            this.section_alias = res[0].section_alias;
-            this.actions =  JSON.parse(res[0].section_config).opertations;
-            this.edit_action = this.actions.indexOf('edit') != -1?true:false;
-            if(this.edit_action){
-              this.section_data = this.service.edit(params['id'],this.router.url).subscribe(res => {
-                var dt  = res;
-                for(var k in th_tags){
-                    var obj = JSON.parse(dt[th_tags[k]]);
-                    dt[th_tags[k]+'_tags'] = Object.keys(obj).map(function(k) { return obj[k] })[0];
-                  
-                }
-                this.section_data = dt;
-                this.columns = config_columns;
-                this.getAllMenus  = res1;
-              
 
-                
-                
-              });
-
-            }
           });
 
-
+        }else
+         this.router.navigate(['/admin/dashboard']);
 
 
       });
-
-
-    });
-
 
   
 

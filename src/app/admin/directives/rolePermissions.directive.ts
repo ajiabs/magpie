@@ -30,21 +30,48 @@ export class RolePermissionsDirective{
 		
 		  var menus = this.allMenus;
 		  var section = [];
-
-		  console.log(JSON.parse(this.customData));
-
+        
 		 
 		  for(var i=0;i<menus.length;i++){
-			 var menu_actions = JSON.parse(menus[i].actions).selected_values;
-			 var tmp_actions = [];
-			 for(var j =0;j< menu_actions.length;j++){
-				var menu_perm_name = menus[i].name.split(' ').join('-')+'-'+menu_actions[j];
-				tmp_actions.push({"name":menu_perm_name,"perm":"false","label":menu_actions[j]});
-				
-			}
-			section.push({"name":menu_perm_name,"actions":tmp_actions});
-		}
 
+		
+			
+			if(menus[i].status != 'inactive'){
+					var menu_actions = JSON.parse(menus[i].actions).selected_values;
+					var tmp_actions = [];
+					
+
+					if(this.customData != undefined && this.customData != '' ){
+						var item = JSON.parse(this.customData).sections;
+						var filtered_menu = item.filter(itm => itm.name == menus[i].name);	
+					
+					}
+					
+					
+					
+					for(var j =0;j< menu_actions.length;j++){
+						
+						var menu_perm_name = menus[i].name.split(' ').join('-')+'-'+menu_actions[j];
+						var menu_perm = "false";
+						if(this.customData != undefined && this.customData != '' ){
+							var item = JSON.parse(this.customData).sections;
+							if(filtered_menu.length>0){
+								var filtered_menu_actions = filtered_menu[0].actions.filter(itm => itm.name == menus[i].name.split(' ').join('-')+'-'+menu_actions[j]);
+								if(filtered_menu_actions.length>0)
+								menu_perm = filtered_menu_actions[0].perm;
+							}
+						}
+					
+
+						tmp_actions.push({"name":menu_perm_name,"perm":menu_perm,"label":menu_actions[j]});
+						
+					}
+					
+					section.push({"name":menus[i].name,"actions":tmp_actions});
+				}
+		}
+		
+		
 
 		var permissions = {
 			"sections": section
@@ -55,7 +82,7 @@ export class RolePermissionsDirective{
 	        str+="<div><h6>"+permissions.sections[i].name+"</h6>";
 	        for(var j=0;j<permissions.sections[i].actions.length;j++){
 	           var perm =  permissions.sections[i].actions[j].perm == 'true'?'checked':'';
-	           str+="<div class='form-check col-md-3'><label class='form-check-label'><input  class='form-check-input role_permissions' type='checkbox' data-name='"+permissions.sections[i].actions[j].name+"' data-perm='"+permissions.sections[i].actions[j].perm+"' data-label='"+permissions.sections[i].actions[j].label+"' "+perm+"   >"+permissions.sections[i].actions[j].label+"</label></div>";
+	           str+="<div class='form-check col-md-3'><label class='form-check-label'><input  class='form-check-input role_permissions' type='checkbox' data-name='"+permissions.sections[i].actions[j].name.split(" ").join("-")+"' data-perm='"+permissions.sections[i].actions[j].perm+"' data-label='"+permissions.sections[i].actions[j].label+"' "+perm+"   >"+permissions.sections[i].actions[j].label+"</label></div>";
 	        }
 	       str+="</div>"; 
 	    }
@@ -75,31 +102,45 @@ export class RolePermissionsDirective{
              let temp_perms  = [];
              let i = 0;
              let j = 0;
-             let permision_checked = false;
+			 let permision_checked = false;
+			 let temp = false;
 	    	 elements.forEach(element => {
 	    	     if(element.checked)
-	    	      permision_checked = true;
-    	 		 
-                  var current_section = element.dataset.name.split('-')[0];
+				  permision_checked = true;
+				  var element_dataset = element.dataset.name.split('-');
+				  var current_section;
+    	 		  if(element_dataset.length>2)
+				   current_section = element_dataset[0]+' '+element_dataset[1];
+				  else
+				   current_section = element_dataset[0];
+				  
+				
                   if(i == 0)
-                   temp_sections.push(current_section);
-	    	      if((temp_sections.indexOf(current_section)  == -1 && i >0) || (i+1 == elements.length)){
+				   temp_sections.push(current_section);
+				   
+				
+				  if((temp_sections.indexOf(current_section)  == -1 && i >0)){
+					if(j==0)
+					 temp_perms.push({"name":temp_sections[j],"actions":temp_actions});
+					
+					temp_sections.push(current_section); 
+					j =  temp_sections.indexOf(current_section); 
+					temp_actions = [];
+					temp = true;
 
-	    	        if((i+1 == elements.length))
-	    	          temp_actions.push({"name":element.dataset.name,"perm":element.checked.toString(),"label":element.dataset.label});
-
-	    	        temp_perms.push({"name":temp_sections[j],"actions":temp_actions});
-	    	        temp_actions  = [];
-	    	        j++;
-	    	        temp_sections.push(current_section);
-	    	      }
-	    	       temp_actions.push({"name":element.dataset.name,"perm":element.checked.toString(),"label":element.dataset.label});
-             
-	    	      i++;
+					
+				  }
+				    temp_actions.push({"name":element.dataset.name,"perm":element.checked.toString(),"label":element.dataset.label});
+				    if(temp){
+					  temp_perms.push({"name":temp_sections[j],"actions":temp_actions});
+					  temp = false;
+					}
+				  
+	    	       i++;
  	
 			 });
-			
 
+		
 			
           //this.elRef.nativeElement.querySelector('#permissions').value
           if(permision_checked)

@@ -115,57 +115,71 @@ export class SectionCreateComponent implements OnInit {
 
 
   
-
-   this.service.sectionConfig(this.router.url).subscribe(res => {
-
-     this.service.getRolePermissionMenus('menus').subscribe(res1 => {
-            this.getAllMenus  = res1;
-            var column_config = JSON.parse(res[0].section_config).column;
-            var th_files = [];
-            var th =this;
-            column_config.forEach(function (rowItem) { 
-             
-               if((rowItem.type == 'tags' || rowItem.type == 'selectbox' || rowItem.type == 'checkbox' || rowItem.type == 'radio') && rowItem.source_type == 'dynamic'){
-                  th_service.customRoute(th_router.url,rowItem.source_from).subscribe(res => {
-                        rowItem.source = res;
-                  });
-                  if(rowItem.type == 'tags' || rowItem.type == 'custom')
-                      th.validation_fields_onload[rowItem.field] = false;
-               
-               }
-               if(rowItem.type == 'file' || rowItem.type == 'image')
-                  th_files.push(rowItem.field);
-           
+    this.service.getCurrentRolePermissionMenus('roles',localStorage.getItem("userDetails['roles_id']")).subscribe(res1 => {
+   
+      var current_route = this.router.url.split('/')[2].split("-").join(" ");
+      current_route = current_route.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                return letter.toUpperCase();
             });
-             this.columns = column_config;
-
-            
-
-            this.file_inputs = th_files;
-            this.title = res[0].section_name;
-            this.section_alias = res[0].section_alias;
-            this.actions =  JSON.parse(res[0].section_config).opertations;
-            this.create_action = this.actions.indexOf('create') != -1?true:false;
-      
-            this.section_data = {};
-            if(!this.create_action){
-              this.router.navigate(['/admin/dashboard']);
-
-            }
+     
+      var current_module = JSON.parse(res1[0].permissions).sections.filter(itm => itm.name == current_route);	
+      var menus_actions = [];
+      current_module[0].actions.forEach(function (menuItem) {
+         menus_actions.push(menuItem.label);
+         menus_actions[menuItem['label']] = menuItem.perm == 'true'?true:false;
+      });
 
 
+        if(menus_actions['Create']){  
+            this.service.sectionConfig(this.router.url).subscribe(res => {
 
-           
-     });
+              this.service.getRolePermissionMenus('menus').subscribe(res1 => {
+                      this.getAllMenus  = res1;
+                      var column_config = JSON.parse(res[0].section_config).column;
+                      var th_files = [];
+                      var th =this;
+                      column_config.forEach(function (rowItem) { 
+                      
+                        if((rowItem.type == 'tags' || rowItem.type == 'selectbox' || rowItem.type == 'checkbox' || rowItem.type == 'radio') && rowItem.source_type == 'dynamic'){
+                            th_service.customRoute(th_router.url,rowItem.source_from).subscribe(res => {
+                                  rowItem.source = res;
+                            });
+                            if(rowItem.type == 'tags' || rowItem.type == 'custom')
+                                th.validation_fields_onload[rowItem.field] = false;
+                        
+                        }
+                        if(rowItem.type == 'file' || rowItem.type == 'image')
+                            th_files.push(rowItem.field);
+                    
+                      });
+                      this.columns = column_config;
+
+                      
+
+                      this.file_inputs = th_files;
+                      this.title = res[0].section_name;
+                      this.section_alias = res[0].section_alias;
+                      this.actions =  JSON.parse(res[0].section_config).opertations;
+                      this.create_action = this.actions.indexOf('create') != -1?true:false;
+                
+                      this.section_data = {};
+                     
 
 
 
+                    
+              });
 
-      
-    
+          });
+
+        }else
+          this.router.navigate(['/admin/dashboard']);
+
+        
+
+      });
 
 
-    });
 
 
 

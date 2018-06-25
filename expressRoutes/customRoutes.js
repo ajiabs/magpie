@@ -9,7 +9,7 @@ var config = require('../config/DB');
 
 
 
-customRoutes.route('/getMainMenus').get(function (req, res) {
+customRoutes.route('/getMainMenus').post(function (req, res) {
   var Section = require('../models/menus');
   var token = getToken(req.headers);
  
@@ -43,12 +43,18 @@ customRoutes.route('/getMainMenus').get(function (req, res) {
 
 
 
-  customRoutes.route('/getRoles').get(function (req, res) {
+  customRoutes.route('/getRoles').post(function (req, res) {
     var Section = require('../models/roles');
     var token = getToken(req.headers);
+
+    
+    var where = {};
+    if(req.body.role_id != "1")
+       where = {"roles_id":{$ne: 1}};
+    
    
      if (token) {
-          Section.find({},'name roles_id',function (err, result){
+          Section.find(where,'name roles_id',function (err, result){
            if(err){
              console.log(err);
            }
@@ -56,7 +62,7 @@ customRoutes.route('/getMainMenus').get(function (req, res) {
                var temp =[];
                var i =0;
                result.forEach(function (rowItem) { 
-                 
+      
                   temp[i] = {'label':rowItem.name,'value':rowItem.roles_id};
                   i++;
    
@@ -74,7 +80,7 @@ customRoutes.route('/getMainMenus').get(function (req, res) {
 
 
 
-customRoutes.route('/getProjects').get(function (req, res) {
+customRoutes.route('/getProjects').post(function (req, res) {
  var Section = require('../models/projects');
  var token = getToken(req.headers);
 

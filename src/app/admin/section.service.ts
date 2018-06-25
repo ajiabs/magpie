@@ -35,9 +35,9 @@ export class SectionService {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
     var section = current_route.split('/')[2];
-
     const uri = server_url+'custom/'+from;
-    return this.http.get(uri,httpOptions)
+    const obj = {"role_id":localStorage.getItem("userDetails['roles_id']")};
+    return this.http.post(uri,obj,httpOptions)
        .map(res => {
               return res;
             });
@@ -80,7 +80,7 @@ export class SectionService {
     };
     var section = current_route.split('/')[2];
     const uri = server_url+section+'/search';
-    const obj = {'search':value,'searchable':searchable_fields,'sort_order':order_by,'sort_orderBy':sortable_field,'relation':relation,'current_page':current_page,'per_page':per_page};
+    const obj = {'search':value,'searchable':searchable_fields,'sort_order':order_by,'sort_orderBy':sortable_field,'relation':relation,'current_page':current_page,'per_page':per_page,'role_id':localStorage.getItem("userDetails['roles_id']")};
     return this
             .http
             .post(uri,obj,httpOptions)
@@ -97,9 +97,10 @@ export class SectionService {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
+
     var section = current_route.split('/')[2];
     const uri = server_url+section;
-    const obj = {'current_page':current_page,'per_page':per_page,'sort_orderBy':sortable_field};
+    const obj = {'current_page':current_page,'per_page':per_page,'sort_orderBy':sortable_field,'role_id':localStorage.getItem("userDetails['roles_id']")};
     return this
             .http
             .post(uri,obj,httpOptions)
@@ -208,9 +209,10 @@ export class SectionService {
         headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
       };
       const uri = server_url+section+'/getRolePermissionMenus';
+      const obj  ={'role_id':localStorage.getItem("userDetails['roles_id']")};
       return this
               .http
-              .get(uri,httpOptions)
+              .post(uri,obj,httpOptions)
               .map(res => {
               return res;
             });

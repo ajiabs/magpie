@@ -22,7 +22,7 @@ const storage =   multer.diskStorage({
 
 
 
-sectionRoutes.route('/getRolePermissionMenus').get(passport.authenticate('jwt', { session: false}),function (req, res) {
+sectionRoutes.route('/getRolePermissionMenus').post(passport.authenticate('jwt', { session: false}),function (req, res) {
   var token = getToken(req.headers);
   if (token) 
       return getRolePermissionMenus(req,res);
@@ -216,8 +216,13 @@ getConfig = (req,res) =>  {
 };
 
 getRolePermissionMenus = (req,res) =>  {
+   
+    var where = {'parent_id':{$ne: 0}};
+    if(req.body.role_id != "1")
+      where = {'parent_id':{$ne: 0},"menus_id":{$nin: [3,5]}};
+
       var Section = require('../models/'+req.originalUrl.split('/')[2]);
-      Section.find({'parent_id':{$ne: 0}},function (err, result){
+      Section.find(where,function (err, result){
         if(err){
           return res.status(403).send({success: false, msg: err});
         }
@@ -261,11 +266,24 @@ getAllMenus = (req,res) =>  {
 
 getList = (req,res) =>  {
 
+      var current_section = req.originalUrl.split('/')[2];
+      var where = {};
+  
+      if((current_section == 'users' || current_section == 'roles') && req.body.role_id != "1")
+      {
+        if(current_section == 'users')
+         where = {"roles_id":{$ne: "1"}};
+        if(current_section == 'roles')
+         where = {"roles_id":{$ne: 1}};
+      }
+
+   
+
       var Section = require('../models/'+req.originalUrl.split('/')[2]);
       var orderField =  req.body.sort_orderBy;
       var order = {};
       order[orderField] = 1;
-      Section.find()
+      Section.find(where)
           .collation({ locale: 'en', strength: 2 })
           .limit(req.body.per_page)
           .skip((req.body.per_page * req.body.current_page) - req.body.per_page)
@@ -280,9 +298,19 @@ getList = (req,res) =>  {
 };
 
 setPagination = (req,res,result) =>  {
+
+  var current_section = req.originalUrl.split('/')[2];
+  var where = {};
+  if((current_section == 'users' || current_section == 'roles') && req.body.role_id != "1")
+  {
+    if(current_section == 'users')
+     where = {"roles_id":{$ne: "1"}};
+    if(current_section == 'roles')
+     where = {"roles_id":{$ne: 1}};
+  }
  
     var Section = require('../models/'+req.originalUrl.split('/')[2]);
-    Section.count().exec(function(err, count) {
+    Section.count(where).exec(function(err, count) {
         if(err)  return res.status(403).send({success: false, msg: err});
         else {
 
@@ -319,6 +347,18 @@ search = (req,res) =>{
      var relation = [];
      var relation_columns = [];
 
+
+     var current_section = req.originalUrl.split('/')[2];
+     var where = {};
+     if((current_section == 'users' || current_section == 'roles') && req.body.role_id != "1")
+     {
+     
+       if(current_section == 'users')
+        where = {"roles_id":{$ne: "1"}};
+       if(current_section == 'roles')
+        where = {"roles_id":{$ne: 1}};
+     }
+   
      /*if(JSON.parse(req.body.relation).length >0){
 
          JSON.parse(req.body.relation).forEach(function(element) {
@@ -370,7 +410,7 @@ search = (req,res) =>{
                   $and: [  
                       {
                           $or:searchable 
-                      }]
+                      },where]
                   }
                 });
      column_total_config.push( 
@@ -378,7 +418,7 @@ search = (req,res) =>{
                   $and: [  
                       {
                           $or:searchable 
-                      }]
+                      },where]
                   }
                 });
    }

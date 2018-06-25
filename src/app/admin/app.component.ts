@@ -61,19 +61,20 @@ export class AppComponent {
               var main_menu = [];
               var k = 0;
               for(var i =0;i<menus.length;i++){
+               if(menus[i] != undefined){
+                  var parent_key = Object.keys(res).find(x => res[x].menus_id === Number.parseInt(menus[i].parent_id));
+                  if(tmp_main.indexOf(res[parent_key].name) == -1){
+                    tmp_main.push(res[parent_key].name);
+                    main_menu.push({"name":res[parent_key].name,"icon":res[parent_key].icon,"sub":[menus[i]],"submenu":[menus[i].url.split('/')[1]]});
+                    k++;
+                  }
+                  else{
 
-                var parent_key = Object.keys(res).find(x => res[x].menus_id === Number.parseInt(menus[i].parent_id));
-                if(tmp_main.indexOf(res[parent_key].name) == -1){
-                  tmp_main.push(res[parent_key].name);
-                  main_menu.push({"name":res[parent_key].name,"icon":res[parent_key].icon,"sub":[menus[i]],"submenu":[menus[i].url.split('/')[1]]});
-                  k++;
-                }
-                else{
-
-                   var tmp_key = Object.keys(main_menu).find(x => main_menu[x].name === res[parent_key].name);
-                   main_menu[tmp_key]['sub'].push(menus[i]);
-                   main_menu[tmp_key]['submenu'].push(menus[i].url.split('/')[1]);
-                
+                    var tmp_key = Object.keys(main_menu).find(x => main_menu[x].name === res[parent_key].name);
+                    main_menu[tmp_key]['sub'].push(menus[i]);
+                    main_menu[tmp_key]['submenu'].push(menus[i].url.split('/')[1]);
+                  
+                  }
                 }
                   
               }
