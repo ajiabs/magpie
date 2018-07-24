@@ -1,1 +1,0 @@
-GIT CLONE URL: ssh://dev1@192.168.0.11:/var/www/repository/projects/AroundCampusHousing.git 
