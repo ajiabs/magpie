@@ -1,0 +1,7 @@
+.required_field{
+    color:red;
+    font-size: 20px;
+ }
+ .form-control-feedback{
+     color:red;
+   }
