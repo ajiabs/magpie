@@ -152,8 +152,8 @@
                <div *ngIf="column.type == 'map'" >
            
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
-                    <agm-map [latitude]="lat" [longitude]="lng">
-                      <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+                    <agm-map [latitude]='section_data[column.field] | getMapDetails:"lat"' [longitude]='section_data[column.field] | getMapDetails:"lng"'>
+                      <agm-marker [latitude]='section_data[column.field] | getMapDetails:"lat"' [longitude]='section_data[column.field] | getMapDetails:"lng"'></agm-marker>
                     </agm-map>
                     <ng4geo-autocomplete [userSettings]='{ inputPlaceholderText: "Search Place",inputString: section_data[column.field] | getMapDetails:"address",showSearchButton: false}' (keyup)="onMapKeyUpEvent($event,column.field)" (componentCallback)="onMapChangeEvent($event,column.field)" ></ng4geo-autocomplete>
                     <input type="hidden" formControlName="{{column.field}}" #{{column.field}} [(ngModel)]= "section_data[column.field]">
