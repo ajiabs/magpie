@@ -10,6 +10,7 @@ import { MagpieIndexComponent } from './components/admin/index/index.component';
 import { MagpieCreateComponent } from './components/admin/create/create.component';
 import { MagpieEditComponent } from './components/admin/edit/edit.component';
 import { MagpieViewComponent } from './components/admin/view/view.component';
+import { MagpieProfileEditComponent } from './components/admin/profile-edit/profile-edit.component';
 import { magpieRoutes } from './../../system/src/routerConfig';
 import { SectionService } from './../../system/src/services/admin/section.service';
 import { AuthGuard } from './../../system/src/services/admin/auth-guard.service';
@@ -41,6 +42,7 @@ import { NgxEditorModule } from 'ngx-editor';
     MagpieCreateComponent,
     MagpieEditComponent,
     MagpieViewComponent,
+    MagpieProfileEditComponent,
     RolePermissionsDirective,
     ChartDirective,
     MenuToggleDirective,

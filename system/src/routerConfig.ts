@@ -4,6 +4,7 @@ import { MagpieIndexComponent } from './components/admin/index/index.component';
 import { MagpieCreateComponent } from './components/admin/create/create.component';
 import { MagpieEditComponent } from './components/admin/edit/edit.component';
 import { MagpieViewComponent } from './components/admin/view/view.component';
+import { MagpieProfileEditComponent } from './components/admin/profile-edit/profile-edit.component';
 import { Routes,RouterModule } from '@angular/router';
 import { AuthGuard } from './services/admin/auth-guard.service';
 export const magpieRoutes:Routes = [
@@ -15,6 +16,11 @@ export const magpieRoutes:Routes = [
           },
           { path: 'dashboard',
             component: MagpieDashboardComponent,
+            canActivate: [AuthGuard],
+            runGuardsAndResolvers: 'always',
+          },
+          { path: 'account',
+            component: MagpieProfileEditComponent,
             canActivate: [AuthGuard],
             runGuardsAndResolvers: 'always',
           },

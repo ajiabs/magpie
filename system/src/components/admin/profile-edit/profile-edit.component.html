@@ -1,0 +1,82 @@
+<div class="row user">
+    <div class="col-md-3">
+        <div class="tile p-0">
+          <ul class="nav flex-column nav-tabs user-tabs">
+            <li class="nav-item"><a class="nav-link active" href="#user-account" data-toggle="tab">My Account</a></li>
+            <li class="nav-item"><a class="nav-link" href="#user-change-password" data-toggle="tab">Change Password</a></li>
+          </ul>
+        </div>
+      </div>
+
+<div class="col-md-9">
+    <div class="tab-content">
+      <div class="tab-pane active" id="user-account">
+          <div class="tile user-settings">
+              <h4 class="line-head">My Account</h4>
+              <form class="profile-edit-form" [formGroup]="profileEditForm" novalidate>
+                  <div class="row">
+                      <div class="col-md-8" *ngFor="let column of columns">
+                            <div *ngIf="column.type == 'textbox'" >
+                              <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+                              <input class="form-control {{(profileEditForm.controls[column.field].invalid && (profileEditForm.controls[column.field].dirty || profileEditForm.controls[column.field].touched))?'is-invalid':profileEditForm.controls[column.field].valid?'is-valid':''}}" type="text" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]" placeholder="Enter your {{column.label}}">
+                              <div  *ngIf="profileEditForm.controls[column.field].invalid && (profileEditForm.controls[column.field].dirty || profileEditForm.controls[column.field].touched) && profileEditForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                            </div>
+                            <div *ngIf="column.type == 'email'" >
+                                <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+                                <input type="email" class="form-control" (input)="emailExist($event.target.value)" formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label}}"/>
+                                <div  *ngIf="profileEditForm.controls[column.field].invalid && (profileEditForm.controls[column.field].dirty || profileEditForm.controls[column.field].touched) && profileEditForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                                <div  *ngIf="user_email_exist" class="form-control-feedback">  Email is already exist.</div>
+
+                            </div>
+                              <div *ngIf="column.type == 'hidden'" >
+                                  <input type="hidden" class="form-control"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]" />
+                              </div>
+                              <div *ngIf="column.type == 'image'" >
+                                  <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+                                  <input class="form-control {{(profileEditForm.controls[column.field].invalid && (profileEditForm.controls[column.field].dirty || profileEditForm.controls[column.field].touched))?'is-invalid':profileEditForm.controls[column.field].valid?'is-valid':''}}" type="file" (change)="onFileChangeEvent($event,column.field)"  multiple="{{column.multiple == 'true'?'multiple':''}}"  placeholder="Enter your {{column.label}}">
+                                  <div  *ngIf="profileEditForm.controls[column.field].invalid && (profileEditForm.controls[column.field].dirty || profileEditForm.controls[column.field].touched) && profileEditForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                                  <input type="hidden"  formControlName="{{column.field}}" #{{column.field}} [(ngModel)]= "section_data[column.field]">
+                                  <div class="row">
+                                    <div class="col-md-4" *ngFor="let i of section_data[column.field] | toArray" style="padding-top:15px;text-align: center;">
+                                      <img  [src]="i | getFile:'id' | async" width="132px" height="90px"> 
+                                    
+                                    </div>
+                                  </div>
+        
+                              </div>
+                      </div>
+                  </div>
+                
+                  <div class="tile-footer">
+                    <button (click)="accountUpdate()" [disabled]="profileEditForm.invalid || user_email_exist" class="btn btn-primary" ><i class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>
+                  </div>
+                </form>
+            </div>
+      </div>
+      <div class="tab-pane fade" id="user-change-password">
+        <div class="tile user-settings">
+          <h4 class="line-head">Change Password</h4>
+            <form class="change-password-form" [formGroup]="changePasswordForm" novalidate>
+                <div class="row">
+                    
+                      <div class="col-md-8">
+                        <label class="control-label">New Password<span class="required_field">*</span></label>
+                        <input type="password"  formControlName="new_password" #new_password [(ngModel)]= "change_password_data.new_password" class="form-control {{(changePasswordForm.controls['new_password'].invalid && (changePasswordForm.controls['new_password'].dirty || changePasswordForm.controls['new_password'].touched))?'is-invalid':changePasswordForm.controls['new_password'].valid?'is-valid':''}}"  placeholder="New password"/>
+                        <div  *ngIf="changePasswordForm.controls['new_password'].invalid && (changePasswordForm.controls['new_password'].dirty || changePasswordForm.controls['new_password'].touched) && changePasswordForm.controls['new_password'].errors.required" class="form-control-feedback">   New Password is required.</div>
+                      </div>
+                      <div class="col-md-8">
+                          <label class="control-label">Confirm Password<span class="required_field">*</span></label>
+                          <input type="password"  formControlName="confirm_password" #confirm_password [(ngModel)]= "change_password_data.confirm_password" class="form-control {{(changePasswordForm.controls['confirm_password'].invalid && (changePasswordForm.controls['confirm_password'].dirty || changePasswordForm.controls['confirm_password'].touched))?'is-invalid':changePasswordForm.controls['confirm_password'].valid?'is-valid':''}}"  placeholder="Confirm password"/>
+                          <div  *ngIf="changePasswordForm.controls['confirm_password'].invalid && (changePasswordForm.controls['confirm_password'].dirty || changePasswordForm.controls['confirm_password'].touched) && changePasswordForm.controls['confirm_password'].errors.required" class="form-control-feedback">   Confirm Password is required.</div>
+                      </div>
+                   
+                </div>
+                <div class="tile-footer">
+                  <button (click)="changePassword()" [disabled]="changePasswordForm.pristine ||  changePasswordForm.invalid" class="btn btn-primary" ><i class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -135,6 +135,59 @@ sectionAdminRoutes.route('/add').post(passport.authenticate('jwt', { session: fa
 
 });
 
+sectionAdminRoutes.route('/changePassword').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+   
+  var token = sectionGetToken(req.headers);
+  if (token) 
+    {
+      var Users = require('../models/users');
+      var result = jwt.verify(token,config.secret);
+      Users.update({ _id: result._id }, { $set: { password: req.body.new_password}}).then(item => {
+        res.status(200).json('password changed successfully');
+        })
+        .catch(err => {
+         return  res.json({success: false,  msg: err});
+         
+        });
+
+    }
+  else 
+      return  res.json({success: false,  msg: 'Unauthorized'});
+
+});
+
+
+sectionAdminRoutes.route('/checkEmailExist/:email/:users_id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
+   
+  var token = sectionGetToken(req.headers);
+  if (token) 
+    {
+      var Users = require('../models/users');
+      if(req.params.users_id != 0)
+        var where = {email:req.params.email,users_id:{ $ne: req.params.users_id }};
+      else
+      var where = {email:req.params.email};
+      Users.find(where, function (err, result){
+        if(err) 
+          return res.status(403).send({success: false, msg: err});
+        else
+          return res.json(result);
+      });
+     
+
+    }
+  else 
+      return  res.json({success: false,  msg: 'Unauthorized'});
+
+});
+
+
+
+
+
+
+
+
 sectionAdminRoutes.route('/edit/:id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
 
   var token = sectionGetToken(req.headers);
@@ -145,6 +198,19 @@ sectionAdminRoutes.route('/edit/:id').get(passport.authenticate('jwt', { session
  
  
  });
+
+ sectionAdminRoutes.route('/profile-edit/:users_id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
+
+  var token = sectionGetToken(req.headers);
+  if (token) 
+       return profileFetchDataById(req,res);
+  else 
+       return  res.json({success: false,  msg: 'Unauthorized'});
+ 
+ 
+ });
+
+
 
  sectionAdminRoutes.route('/view/:id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
 
@@ -580,6 +646,18 @@ sectionFetchDataById = (req,res) =>{
         return res.json(result);
   });
 };
+
+profileFetchDataById = (req,res)=>{
+  var Users = require('../models/users');
+  var id = req.params.users_id;
+  Users.findOne({'users_id':id}, function (err, result){
+     if(err) 
+        return  res.json({success: false,  msg: err});
+      else
+        return res.json(result);
+  });
+
+}
 
 
 

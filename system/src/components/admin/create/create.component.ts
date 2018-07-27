@@ -37,6 +37,7 @@ export class MagpieCreateComponent implements OnInit,OnDestroy {
     lat: number = 51.678418;
     lng: number = 7.809007;
     geo_address = "";
+    user_email_exist:any=false;
   
      
   constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService) {
@@ -74,6 +75,18 @@ ngOnInit(){
 
 
   }
+
+  emailExist = (email)=>{
+ 
+    this.section_service.checkEmailExist(email,this.section_data.users_id).subscribe(res=>{
+     if( Object.keys(res).length >0)
+      this.user_email_exist = true;
+     else
+      this.user_email_exist = false;
+
+
+    });
+ }
 create = () => {
 
     this.section_data['file_fields'] =  this.file_inputs;

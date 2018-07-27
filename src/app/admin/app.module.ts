@@ -10,6 +10,7 @@ import { MagpieIndexComponent } from './../../../system/src/components/admin/ind
 import { MagpieCreateComponent } from './../../../system/src/components/admin/create/create.component';
 import { MagpieEditComponent } from './../../../system/src/components/admin/edit/edit.component';
 import { MagpieDashboardComponent } from './../../../system/src/components/admin/dashboard/dashboard.component';
+import { MagpieProfileEditComponent } from './../../../system/src/components/admin/profile-edit/profile-edit.component';
 import { MagpieViewComponent } from './../../../system/src/components/admin/view/view.component';
 import { RolePermissionsDirective } from './../../../system/src/directives/admin/rolePermissions.directive';
 import { ChartDirective } from './../../../system/src/directives/admin/chart.directive';
@@ -42,6 +43,7 @@ import { NgxEditorModule } from 'ngx-editor';
     MagpieDashboardComponent,
     MagpieEditComponent,
     MagpieViewComponent,
+    MagpieProfileEditComponent,
     DashboardComponent,
     RolePermissionsDirective,
     ChartDirective,

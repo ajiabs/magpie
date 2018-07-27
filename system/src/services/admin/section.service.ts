@@ -34,6 +34,7 @@ export class SectionService {
 
 
   sectionConfig = (current_route) =>{
+
    let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
@@ -154,6 +155,19 @@ export class SectionService {
             });
   }
 
+  getProfile = (users_id)=>{
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url+'users/profile-edit/' + users_id;
+    return this
+        .http
+        .get(uri,httpOptions)
+        .map(res => {
+          return res;
+        });
+  }
+
   view = (id,current_route) =>{
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
@@ -198,6 +212,24 @@ export class SectionService {
     const uri = server_url+section+'/update/' + data._id;
 
     const obj = formData;
+    this
+      .http
+      .post(uri, obj,httpOptions)
+      .subscribe(res => console.log('Done'));
+      
+  }
+
+  changePassword = (data,current_route) => {
+
+
+   
+    let httpOptions = {
+     
+      headers: new HttpHeaders({ 'Accept':'application/json','enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
+    };
+
+    const uri = server_url+'users/changePassword';
+    const obj = data;
     this
       .http
       .post(uri, obj,httpOptions)
@@ -287,6 +319,23 @@ getCurrentRolePermissionMenus = (roles,role_id)=>{
     headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
   };
   const uri = server_url+roles+'/getCurrentRolePermissionMenus/'+role_id;
+  return this
+          .http
+          .get(uri,httpOptions)
+          .map(res => {
+          return res;
+        });
+
+}
+
+checkEmailExist = (email,users_id)=>{
+
+  let httpOptions = {
+    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+  };
+  if(users_id == undefined)
+   users_id = 0;
+  const uri = server_url+'users/checkEmailExist/'+email+'/'+users_id;
   return this
           .http
           .get(uri,httpOptions)
