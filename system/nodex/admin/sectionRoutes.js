@@ -249,6 +249,7 @@ sectionAdminRoutes.route('/update/:id').post(passport.authenticate('jwt', { sess
   var token = sectionGetToken(req.headers);
   if (token) 
      {
+
           var upload = multer({ storage : storage}).any();
           upload(req,res,function(err) {
               if(err) 
@@ -693,29 +694,43 @@ sectionUpdate = (req,res) =>{
                    });
 
                     Section.findById(req.params.id, function(err, rows) {
+                      var SectionModel = require('../models/sections');
+                      SectionModel.find({'section_alias':req.originalUrl.split('/')[2]},function (err, section_rows){
+                     
+                      
 
+                   
+                        for(var m of req.body['file_fields'].split(',')) {
 
-                      for(var m of req.body['file_fields'].split(',')) {
-
-
-                           if( rows[m] != ''){
-                               if(file_column_array[m] !== undefined){
-                                  var obj = JSON.parse(rows[m]);
-                                  var column_val = Object.keys(obj).map(function(k) { return obj[k] })[0];
-                                  var new_column_val = column_val.concat(file_column_array[m]);
+                          var item = JSON.parse(section_rows[0].section_config).column;
+                          var field_config = item.filter(function (item) {
+                            return item['field'] == m;
+                          });
+                          if( rows[m] != ''){
+                              if(file_column_array[m] !== undefined){
+                                 var obj = JSON.parse(rows[m]);
+                                 var column_val = Object.keys(obj).map(function(k) { return obj[k] })[0];
+                                 var new_column_val = column_val.concat(file_column_array[m]);
+                                 if( field_config[0].multiple == 'true')
                                   result[m] = JSON.stringify({'selected_values':new_column_val});
-                               }
-                            }else{
+                                 else
+                                  result[m] =  JSON.stringify({'selected_values':file_column_array[m]});
 
-                              if(file_column_array[m] !== undefined)
-                               result[m] =  JSON.stringify({'selected_values':file_column_array[m]});
-                                    
-                             }
+                              }
+                           }else{
 
-                              
-                       }
-                    return sectionUpdateData(req,res,result);
-                
+                             if(file_column_array[m] !== undefined)
+                              result[m] =  JSON.stringify({'selected_values':file_column_array[m]});
+                                   
+                            }
+
+                             
+                        }
+                       return sectionUpdateData(req,res,result);
+
+
+
+                      });
 
                   });
 

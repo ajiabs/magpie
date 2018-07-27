@@ -86,10 +86,10 @@
                     <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
                     <input type="hidden"  formControlName="{{column.field}}" #{{column.field}} [(ngModel)]= "section_data[column.field]">
                     <div class="row">
-                      <div class="col-md-4" *ngFor="let i of section_data[column.field] | toArray" style="padding-top:15px;text-align: center;">
-                        <img  [src]="i | getFile:'id' | async" width="132px" height="90px"> 
                       
-                        <a (click)="deleteFile(i,column.field)" style="margin-top:2px;cursor:pointer" >&nbsp;<i class="fa fa-trash"></i></a>
+                      <div class="col-md-4" *ngFor="let i of section_data[column.field] | toArray as images" style="padding-top:15px;text-align: center;">
+                        <img  [src]="i | getFile:'id' | async" width="132px" height="90px">
+                        <a *ngIf="(column.multiple =='true' && column.validations[0].required == 'true' && images.length >1) || (column.multiple =='true' && column.validations[0].required == 'false') " (click)="deleteFile(i,column.field)" style="margin-top:2px;cursor:pointer" >&nbsp;<i class="fa fa-trash"></i></a>
                       </div>
                     </div>
 
@@ -102,10 +102,10 @@
                     <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched)  && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
                     <input type="hidden" formControlName="{{column.field}}" #{{column.field}} [(ngModel)]= "section_data[column.field]">
                     <div class="row">
-                      <div class="col-md-4" *ngFor="let i of section_data[column.field] | toArray;let rowIndex=index" style="padding-top:15px;text-align: center;">
+                      <div class="col-md-4" *ngFor="let i of section_data[column.field] | toArray as files;let rowIndex=index" style="padding-top:15px;text-align: center;">
                         <a target="blank" [href]="i | getFile:'id' | async">File{{rowIndex+1}}</a>
                       
-                        <a (click)="deleteFile(i,column.field)" style="margin-top:2px;cursor:pointer" >&nbsp;<i class="fa fa-trash"></i></a>
+                        <a *ngIf="(column.multiple =='true' && column.validations[0].required == 'true' && files.length >1) || (column.multiple =='true' && column.validations[0].required == 'false') " (click)="deleteFile(i,column.field)" style="margin-top:2px;cursor:pointer" >&nbsp;<i class="fa fa-trash"></i></a>
                       </div>
                     </div>
 

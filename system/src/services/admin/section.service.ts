@@ -194,7 +194,7 @@ export class SectionService {
     };
 
 
-    let formData = new FormData();
+     let formData = new FormData();
       Object.keys(data).forEach(k => {
           if( data.file_fields.indexOf(k) != -1){
            if((data[k][0] !== undefined )){

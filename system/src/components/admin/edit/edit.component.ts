@@ -193,6 +193,7 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
   
   
      });
+     this.init();
       $.notify({
         title: "Deleted! ",
         message: "File has been unlinked.",
