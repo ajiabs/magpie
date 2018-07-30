@@ -15,7 +15,10 @@
                         <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
                         <input class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" type="text" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]" placeholder="Enter your {{column.label}}">
                         <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
-                  </div>
+                        <div *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.pattern"  class="form-control-feedback">
+                          {{column.label}} is not valid.
+                       </div>      
+                 </div>
                     <div *ngIf="column.type == 'textarea'" >
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
                       <textarea  class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]" cols="10"  rows="10" placeholder="Enter your {{column.label}}"></textarea>
@@ -23,11 +26,13 @@
                   </div>
                   <div *ngIf="column.type == 'email'" >
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
-                    <input type="email" *ngIf="section_alias =='users'" (input)="emailExist($event.target.value)" class="form-control"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label}}"/>
-                    <input type="email" *ngIf="section_alias !='users'" class="form-control"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label}}"/>
+                    <input type="email" *ngIf="section_alias =='users'" (input)="emailExist($event.target.value)" class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label}}"/>
+                    <input type="email" *ngIf="section_alias !='users'" class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label}}"/>
                     <div  *ngIf="user_email_exist" class="form-control-feedback">  Email is already exist.</div>
                     <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
-
+                    <div *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.pattern"  class="form-control-feedback">
+                      {{column.label}} is not valid.
+                  </div> 
                   </div>
                   <div *ngIf="column.type == 'hidden'" >
                     <label ng-show="column.field == 'password'" class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>

@@ -142,13 +142,18 @@ sectionAdminRoutes.route('/changePassword').post(passport.authenticate('jwt', { 
     {
       var Users = require('../models/users');
       var result = jwt.verify(token,config.secret);
-      Users.update({ _id: result._id }, { $set: { password: req.body.new_password}}).then(item => {
-        res.status(200).json('password changed successfully');
-        })
-        .catch(err => {
-         return  res.json({success: false,  msg: err});
-         
-        });
+      Users.findById( result._id, function(err, users) {
+        if (err) return false;
+        users.password = req.body.new_password;
+        users.save().then(item => {
+          res.status(200).json('password changed successfully');
+          })
+          .catch(err => {
+           return  res.json({success: false,  msg: err});
+           
+          });
+      });
+
 
     }
   else 

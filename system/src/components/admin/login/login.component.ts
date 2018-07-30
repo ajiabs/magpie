@@ -28,7 +28,7 @@ export class MagpieLoginComponent implements OnInit {
     forgotPasswordForm :FormGroup;
     constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService) {
       this.userLoginForm = this.fb.group({
-        email: ['', Validators.required ],
+        email: ['', [Validators.required,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')] ],
         password: ['', Validators.required ]
   
      });

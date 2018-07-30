@@ -2,7 +2,7 @@ import { Component, OnInit,Input,Output,OnDestroy } from '@angular/core';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { FormGroup,  FormBuilder,  Validators,AbstractControl } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
@@ -34,10 +34,23 @@ export class MagpieProfileEditComponent implements OnInit {
                var column_config  = JSON.parse(res[0].section_config).column;
                var column_validation = {}; 
                column_config.forEach(function(value, key) {
-                   if(column_config[key]['field'] != 'roles_id'){
-                    var req = column_config[key]['validations'][0]['required'] == 'true'?Validators.required:'';
-                    column_validation[column_config[key]['field']] = ['', req ];
-                   }
+                var validation_array = []; 
+                if(column_config[key]['type'] == 'email')
+                  validation_array.push(Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$'));
+                if( column_config[key]['validations'][0]['required'] == 'true')
+                  validation_array.push(Validators.required);
+                else
+                 {
+                   if(typeof column_config[key]['validations'][0]['pattern'] != undefined)
+                      validation_array.push(Validators.pattern(column_config[key]['validations'][0]['pattern']));
+                   
+                 }
+  
+  
+  
+                var req = column_config[key]['validations'][0]['required'] == 'true'?validation_array:'';
+            
+                column_validation[column_config[key]['field']] = ['', req ];
                   
                  
                });    
@@ -49,12 +62,27 @@ export class MagpieProfileEditComponent implements OnInit {
            this.changePasswordForm = this.fb.group({
             new_password: ['', Validators.required ],
             confirm_password: ['', Validators.required ]
-          });
+            }, {
+              validator:this.MatchPassword 
+            });
   
         }
       });
   
     }
+
+    MatchPassword(AC: AbstractControl) {
+      let password = AC.get('new_password').value; 
+      let confirmPassword = AC.get('confirm_password').value; 
+       if(password != confirmPassword) {
+           AC.get('confirm_password').setErrors( {MatchPassword: true} )
+       } else {
+          
+           return null
+       }
+   }
+
+
 
   ngOnInit(){
     this.init();
