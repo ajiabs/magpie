@@ -10,7 +10,10 @@ import { AuthGuard } from './../../../system/src/services/admin/auth-guard.servi
 import { SectionService } from './../../../system/src/services/admin/section.service';
 import { DashboardService } from './../../../src/app/admin/services/dashboard.service';
 import { customRoutes } from './../admin/routerConfig';
-
+import { Select2Module } from 'ng2-select2';
+import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
+import { AgmCoreModule } from '@agm/core';
+import { NgxEditorModule } from 'ngx-editor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,13 +21,21 @@ import { customRoutes } from './../admin/routerConfig';
 
   ],
   imports: [
-    MagpieModule,
     BrowserModule,
     RouterModule.forRoot(customRoutes,{
       onSameUrlNavigation: 'reload'
     }),
+     MagpieModule,
      HttpClientModule,
-     ReactiveFormsModule
+     ReactiveFormsModule,  
+     Select2Module,
+     Ng4GeoautocompleteModule.forRoot(),
+     AgmCoreModule.forRoot({
+       apiKey: 'AIzaSyDZ0qMJNqSxi8QJFuUDuPdE7Pwh3TPCjpo',
+       libraries: ["places"]
+     }),
+     NgxEditorModule
+     
   ],
   providers: [DashboardService,SectionService,AuthGuard],
   bootstrap: [AppComponent]

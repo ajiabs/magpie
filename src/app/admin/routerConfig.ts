@@ -13,8 +13,8 @@ const routes:Routes = [
         runGuardsAndResolvers: 'always',
       }]
   }];
-//const routes:Routes = [];
-  
 
-export const customRoutes:Routes  = routes.concat(magpieRoutes);
+
+magpieRoutes[0].children =routes[0].children.concat(magpieRoutes[0].children).filter((li, idx, self) => self.map(itm => itm.path).indexOf(li.path) === idx);
+export const customRoutes:Routes  = magpieRoutes;
 
