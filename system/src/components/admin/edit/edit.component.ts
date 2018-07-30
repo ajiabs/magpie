@@ -45,8 +45,23 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
              var column_config  = JSON.parse(res[0].section_config).column;
              var column_validation = {}; 
              column_config.forEach(function(value, key) {
-                
-                  var req = column_config[key]['validations'][0]['required'] == 'true'?Validators.required:'';
+
+
+                  var validation_array = []; 
+                  if(column_config[key]['type'] == 'email')
+                    validation_array.push(Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$'));
+                  if( column_config[key]['validations'][0]['required'] == 'true')
+                    validation_array.push(Validators.required);
+                  else
+                   {
+                     if(typeof column_config[key]['validations'][0]['pattern'] != undefined)
+                        validation_array.push(Validators.pattern(column_config[key]['validations'][0]['pattern']));
+                     
+                   }
+
+
+
+                  var req = column_config[key]['validations'][0]['required'] == 'true'?validation_array:'';
               
                   column_validation[column_config[key]['field']] = ['', req ];
                 

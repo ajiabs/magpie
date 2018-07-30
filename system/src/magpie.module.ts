@@ -73,6 +73,29 @@ import { NgxEditorModule } from 'ngx-editor';
     }),
     NgxEditorModule
   ],
+  exports: [
+    MagpieComponent,
+    MagpieIndexComponent,
+    MagpieLoginComponent,
+    MagpieDashboardComponent,
+    MagpieCreateComponent,
+    MagpieEditComponent,
+    MagpieViewComponent,
+    MagpieProfileEditComponent,
+    RolePermissionsDirective,
+    ChartDirective,
+    MenuToggleDirective,
+    DatepickerDirective,
+    FilterPipe,
+    KeyReturnPipe,
+    DynamicSource,
+    InArrayCheckPipe,
+    GetMapDetailsPipe,
+    ToArrayPipe,
+    GetFilePipe,
+    TagsDataPipe,
+    ToObjectPipe
+  ],
   providers: [SectionService,AuthGuard],
   bootstrap: [MagpieComponent]
 })

@@ -16,6 +16,9 @@
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
                     <input class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" type="text" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]" placeholder="Enter your {{column.label}}">
                     <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                    <div *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.pattern"  class="form-control-feedback">
+                        {{column.label}} is not valid.
+                    </div> 
                   </div>
                   <div *ngIf="column.type == 'textarea'" >
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
@@ -25,11 +28,14 @@
                   <div *ngIf="column.type == 'email'" >
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
                 
-                    <input type="email" class="form-control" *ngIf="section_alias =='users'" (input)="emailExist($event.target.value)" formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label}}"/>
-                    <input type="email" class="form-control" *ngIf="section_alias !='users'"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label}}"/>
+                    <input type="email" class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" *ngIf="section_alias =='users'" (input)="emailExist($event.target.value)" formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label}}"/>
+                    <input type="email" class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" *ngIf="section_alias !='users'"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label}}"/>
 
                     <div  *ngIf="user_email_exist" class="form-control-feedback">  Email is already exist.</div>
                     <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                    <div *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.pattern"  class="form-control-feedback">
+                        {{column.label}} is not valid.
+                    </div> 
                   </div>
                   <div *ngIf="column.type == 'hidden'" >
                   
