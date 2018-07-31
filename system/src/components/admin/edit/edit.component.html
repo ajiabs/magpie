@@ -119,6 +119,7 @@
                   </div>
 
                   <div *ngIf="column.type == 'tags'" >
+
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
 
                       <select2 id="{{column.field}}" class="select2 {{(sectionForm.controls[column.field].invalid)?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" [data]="column.source"

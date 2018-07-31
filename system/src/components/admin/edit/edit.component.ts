@@ -89,6 +89,7 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
 
   ngOnInit(){
     this.init();
+
     
   }
 
@@ -236,109 +237,99 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
 
     var th_service = this.section_service; 
     var th_router = this.router; 
-    this.section_service.getCurrentRolePermissionMenus('roles',localStorage.getItem("userDetails['roles_id']")).subscribe(res1 => {
+    var th = this;
+    this.section_service.getCurrentRolePermissionMenus('roles',localStorage.getItem("userDetails['roles_id']")).subscribe(res4 => {
    
       var current_route = this.router.url.split('/')[2].split("-").join(" ");
       current_route = current_route.toLowerCase().replace(/\b[a-z]/g, function(letter) {
                 return letter.toUpperCase();
             });
      
-      var current_module = JSON.parse(res1[0].permissions).sections.filter(itm => itm.name == current_route);	
+      var current_module = JSON.parse(res4[0].permissions).sections.filter(itm => itm.name == current_route);	
       var menus_actions = [];
       current_module[0].actions.forEach(function (menuItem) {
          menus_actions.push(menuItem.label);
          menus_actions[menuItem['label']] = menuItem.perm == 'true'?true:false;
       });
-       if(menus_actions['Edit']){  
-          this.route.params.subscribe(params => {
-            this.section_service.sectionConfig(this.router.url).subscribe(res => {
-              this.section_service.getRolePermissionMenus('menus').subscribe(res1 => {
-                
-                  var config_columns  = JSON.parse(res[0].section_config).column; 
-                  var th_tags = [];
-                  var th_files = [];
 
-                  config_columns.forEach(function (rowItem) { 
-                  
-                    if((rowItem.type == 'tags' || rowItem.type == 'selectbox' || rowItem.type == 'checkbox' || rowItem.type == 'radio') && rowItem.source_type == 'dynamic'){
-                      if(th_router.url.split('/')[2] == 'users' || th_router.url.split('/')[2] == 'roles' || th_router.url.split('/')[2] == 'menus' || th_router.url.split('/')[2] == 'sections')
-                        th_service.customRoute(th_router.url,rowItem.source_from).subscribe(res => {
-                          if(rowItem.type == 'tags'){
+
+    if(menus_actions['Edit']){  
+        this.route.params.subscribe(params => {
+            this.section_service.sectionConfig(this.router.url).subscribe(res => {
+                this.section_service.getRolePermissionMenus('menus').subscribe(res1 => {
+                    var config_columns  = JSON.parse(res[0].section_config).column; 
+                    var th_tags = [];
+                    var th_files = [];
+                    config_columns.forEach(function (rowItem) { 
+                      if((rowItem.type == 'tags' || rowItem.type == 'selectbox' || rowItem.type == 'checkbox' || rowItem.type == 'radio') && rowItem.source_type == 'dynamic'){
+                        if(th_router.url.split('/')[2] == 'users' || th_router.url.split('/')[2] == 'roles' || th_router.url.split('/')[2] == 'menus' || th_router.url.split('/')[2] == 'sections')
+                        {
+                          th_service.customRoute(th_router.url,rowItem.source_from).subscribe(res2 => {
+                           console.log("1");
+                            if(rowItem.type == 'tags'){
+
+                                var data_tags = [];
+                                for(var k in res2){
+                                  data_tags.push({'id':res2[k].value,'text':res2[k].label});
+                                }
+                                th_tags.push(rowItem.field);
+                                rowItem.source = data_tags;
+                            }
+                            else
+                            rowItem.source = res2;
+                          });
+                        }else{
+                          th_service.adminCustomRoute(th_router.url,rowItem.source_from).subscribe(res2 => {
+                            console.log("2");
+                            if(rowItem.type == 'tags'){
 
                               var data_tags = [];
-                              for(var k in res){
-                                data_tags.push({'id':res[k].value,'text':res[k].label});
+                              for(var k in res2){
+                                data_tags.push({'id':res2[k].value,'text':res2[k].label});
                               }
                               th_tags.push(rowItem.field);
                               rowItem.source = data_tags;
-                          }
-                          else
-                          rowItem.source = res;
-                        });
-                      else
-                        th_service.adminCustomRoute(th_router.url,rowItem.source_from).subscribe(res => {
-                          if(rowItem.type == 'tags'){
-
-                            var data_tags = [];
-                            for(var k in res){
-                              data_tags.push({'id':res[k].value,'text':res[k].label});
                             }
-                            th_tags.push(rowItem.field);
-                            rowItem.source = data_tags;
-                          }
-                          else
-                          rowItem.source = res;
-                        });
-                     
-              
-                    }
+                            else
+                            rowItem.source = res2;
+
+                            th_service.edit(params['id'],th_router.url).subscribe(res3 => {
+                              console.log("3");
+                              var dt  = res3;
+                              for(var k in th_tags){
+                                      var obj = JSON.parse(dt[th_tags[k]]);
+                                      dt[th_tags[k]+'_tags'] = Object.keys(obj).map(function(k) { return obj[k] })[0];
+                                }
+                               
+                                th.section_data = dt;
+                                th.columns = config_columns;
+                                th.getAllMenus  = res1;
+                                th.file_inputs = th_files;
+                                th.title = res[0].section_name;
+                                th.section_alias = res[0].section_alias;
+                            
+                            });
 
 
-                  
+
+                          });
+                        }
+                      }
                       if(rowItem.type == 'file' || rowItem.type == 'image')
                         th_files.push(rowItem.field);
-                
-                  });
-
-                  this.file_inputs = th_files;
-                  this.title = res[0].section_name;
-                  this.section_alias = res[0].section_alias;
-                 
-                    this.section_service.edit(params['id'],this.router.url).subscribe(res => {
-                      var dt  = res;
-                      for(var k in th_tags){
-                          var obj = JSON.parse(dt[th_tags[k]]);
-                          dt[th_tags[k]+'_tags'] = Object.keys(obj).map(function(k) { return obj[k] })[0];
-                        
-                      }
-                      this.section_data = dt;
-                      this.columns = config_columns;
-                      this.getAllMenus  = res1;
-                    
-
-                      
-                      
                     });
-
-                
+            
                 });
-
             });
-
-
           });
-
-        }else
+      }else
          this.router.navigate(['/admin/dashboard']);
-
-
-      });
-
-  
+    });
 
     this.options = {
       multiple: true
     }
+
   }
 
 
