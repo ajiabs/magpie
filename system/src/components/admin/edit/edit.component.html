@@ -1,4 +1,4 @@
-          
+
   <div class="row">
       <div class="col-md-12">
         <div class="tile">
@@ -120,6 +120,7 @@
 
                   <div *ngIf="column.type == 'tags'" >
 
+
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
 
                       <select2 id="{{column.field}}" class="select2 {{(sectionForm.controls[column.field].invalid)?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" [data]="column.source"
@@ -129,7 +130,7 @@
                             (valueChanged)="onTagsChange(column.field,$event)"
                     ></select2>
                 
-                      <input type="hidden" id="data-{{column.field}}" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]"  />
+                      <input type="hidden" id="data-{{column.field}}" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]" />
                       <div  *ngIf="sectionForm.controls[column.field].invalid   && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
 
                   </div>

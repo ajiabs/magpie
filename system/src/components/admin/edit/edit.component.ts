@@ -162,7 +162,8 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
    }
  
    onTagsChange = (field,data: {value: string[]})=>{
-       if(data.value.length>0)
+     
+       if(data.value != undefined && data.value.length>0)
         this.section_data[field] =  JSON.stringify({"selected_values":data.value});
        else
         this.section_data[field] = "";
@@ -233,6 +234,28 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
      
   }
 
+  setEditColumnsData = (params_id,th_router,config_columns,res1,th_files,th_tags,res)=>{
+
+    this.section_service.edit(params_id,th_router).subscribe(res3 => {
+                          
+      for(var k in th_tags){
+          var obj = JSON.parse(res3[th_tags[k]]);
+          res3[th_tags[k]+'_tags'] = Object.keys(obj).map(function(k) { return obj[k] })[0];
+          
+      }
+      this.section_data = res3;
+      this.columns = config_columns;
+      this.getAllMenus  = res1;
+      this.file_inputs = th_files;
+      this.title = res[0].section_name;
+      this.section_alias = res[0].section_alias;
+
+    });
+
+
+
+  }
+
   init = () =>{
 
     var th_service = this.section_service; 
@@ -260,65 +283,70 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
                     var config_columns  = JSON.parse(res[0].section_config).column; 
                     var th_tags = [];
                     var th_files = [];
-                    config_columns.forEach(function (rowItem) { 
-                      if((rowItem.type == 'tags' || rowItem.type == 'selectbox' || rowItem.type == 'checkbox' || rowItem.type == 'radio') && rowItem.source_type == 'dynamic'){
-                        if(th_router.url.split('/')[2] == 'users' || th_router.url.split('/')[2] == 'roles' || th_router.url.split('/')[2] == 'menus' || th_router.url.split('/')[2] == 'sections')
-                        {
-                          th_service.customRoute(th_router.url,rowItem.source_from).subscribe(res2 => {
-                           console.log("1");
-                            if(rowItem.type == 'tags'){
+                    
+                  
+                     
+                          config_columns.forEach(function (rowItem,key) { 
+                            if((rowItem.type == 'tags' || rowItem.type == 'selectbox' || rowItem.type == 'checkbox' || rowItem.type == 'radio') && rowItem.source_type == 'dynamic'){
+                              if(th_router.url.split('/')[2] == 'users' || th_router.url.split('/')[2] == 'roles' || th_router.url.split('/')[2] == 'menus' || th_router.url.split('/')[2] == 'sections')
+                              {
 
-                                var data_tags = [];
-                                for(var k in res2){
-                                  data_tags.push({'id':res2[k].value,'text':res2[k].label});
-                                }
-                                th_tags.push(rowItem.field);
-                                rowItem.source = data_tags;
-                            }
-                            else
-                            rowItem.source = res2;
-                          });
-                        }else{
-                          th_service.adminCustomRoute(th_router.url,rowItem.source_from).subscribe(res2 => {
-                            console.log("2");
-                            if(rowItem.type == 'tags'){
+                              
 
-                              var data_tags = [];
-                              for(var k in res2){
-                                data_tags.push({'id':res2[k].value,'text':res2[k].label});
-                              }
-                              th_tags.push(rowItem.field);
-                              rowItem.source = data_tags;
-                            }
-                            else
-                            rowItem.source = res2;
+                                    th_service.customRoute(th_router.url,rowItem.source_from).subscribe(res2 => {
+                                    
+                                      if(rowItem.type == 'tags'){
 
-                            th_service.edit(params['id'],th_router.url).subscribe(res3 => {
-                              console.log("3");
-                              var dt  = res3;
-                              for(var k in th_tags){
-                                      var obj = JSON.parse(dt[th_tags[k]]);
-                                      dt[th_tags[k]+'_tags'] = Object.keys(obj).map(function(k) { return obj[k] })[0];
-                                }
+                                          var data_tags = [];
+                                          for(var k in res2){
+                                            data_tags.push({'id':res2[k].value,'text':res2[k].label});
+                                          }
+                                          th_tags.push(rowItem.field);
+                                          rowItem.source = data_tags;
+                                          th.setEditColumnsData(params['id'],th_router.url,config_columns,res1,th_files,th_tags,res);
+
+                                      }
+                                      else
+                                      rowItem.source = res2;
+                                    });
+                                  
+
+                                 
+                                  
+                              }else{
+
+                              
+                                  th_service.adminCustomRoute(th_router.url,rowItem.source_from).subscribe(res2 => {
+                                    
+                                      if(rowItem.type == 'tags'){
+
+                                        var data_tags = [];
+                                        for(var k in res2){
+                                          data_tags.push({'id':res2[k].value,'text':res2[k].label});
+                                        }
+
+                                        th_tags.push(rowItem.field);
+                                        rowItem.source = data_tags;
+                                        th.setEditColumnsData(params['id'],th_router.url,config_columns,res1,th_files,th_tags,res);
+
+                                    }
+                                    else
+                                      rowItem.source = res2;
+
+                                  
+                                  });
+                                
                                
-                                th.section_data = dt;
-                                th.columns = config_columns;
-                                th.getAllMenus  = res1;
-                                th.file_inputs = th_files;
-                                th.title = res[0].section_name;
-                                th.section_alias = res[0].section_alias;
-                            
-                            });
+                                  
+                              }
+                            }
+                            if(rowItem.type == 'file' || rowItem.type == 'image')
+                              th_files.push(rowItem.field);
 
-
-
+                         
                           });
-                        }
-                      }
-                      if(rowItem.type == 'file' || rowItem.type == 'image')
-                        th_files.push(rowItem.field);
-                    });
-            
+
+                          th.setEditColumnsData(params['id'],th_router.url,config_columns,res1,th_files,th_tags,res);
                 });
             });
           });

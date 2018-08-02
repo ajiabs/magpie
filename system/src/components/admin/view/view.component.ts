@@ -96,7 +96,7 @@ export class MagpieViewComponent implements OnInit,OnDestroy {
                 
                   this.title = res[0].section_name;
                   this.section_alias = res[0].section_alias;
-                  this.actions =  JSON.parse(res[0].section_config).opertations;
+                 
                   
                     this.section_service.view(params['id'],this.router.url).subscribe(res => {
           
