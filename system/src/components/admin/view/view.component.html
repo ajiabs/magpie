@@ -11,7 +11,7 @@
           <div class="tile-body">
               <div class="row">
               
-                  <div *ngFor="let column of columns" class="form-group col-md-6"> 
+                  <div *ngFor="let column of columns | columnFilter : {view : true}" class="form-group col-md-6"> 
                       <div *ngIf="column.type == 'textbox' || column.type == 'textarea' || column.type == 'email' || column.type == 'readonly' ||  column.type == 'radio' ||  column.type =='selectbox' ||  column.type =='checkbox' || column.type =='custom' || column.type =='tags' || column.type =='datepicker'">
                           <label class="control-label"><strong>{{column.label}}</strong></label>
                           <p>{{(column.type == 'tags' ||  column.type =='selectbox' || column.type =='checkbox' ||  column.type =='radio')?(section_data[column.field] | dynamicSource:section_data[column.field]:column.source:column.type):section_data[column.field]}}</p>

@@ -37,6 +37,7 @@ export class MagpieDashboardComponent implements OnInit,OnDestroy {
     }
   }
 
+
   ngOnInit() {
     this.pie_data =  [
       {

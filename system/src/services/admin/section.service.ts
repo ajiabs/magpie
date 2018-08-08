@@ -121,6 +121,23 @@ export class SectionService {
             });
   }
 
+
+  export  = (value,searchable_fields,order_by,sortable_field,relation,current_route,columns)=>{
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    var section = current_route.split('/')[2];
+    const uri = server_url+section+'/export';
+    const obj = {'search':value,'searchable':searchable_fields,'sort_order':order_by,'sort_orderBy':sortable_field,'relation':relation,'role_id':localStorage.getItem("userDetails['roles_id']"),'columns':columns};
+    return this
+            .http
+            .post(uri,obj,httpOptions)
+            .map(res => {
+              return res;
+            });
+      
+  }
+
  
 
 

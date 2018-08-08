@@ -114,6 +114,18 @@ sectionAdminRoutes.route('/').post(passport.authenticate('jwt', { session: false
 
 });
 
+sectionAdminRoutes.route('/export').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+  var token = sectionGetToken(req.headers);
+  if (token) 
+      return sectionExport(req,res);
+  else 
+      return  res.json({success: false,  msg: 'Unauthorized'});
+
+});
+
+
+
+
 
 
 sectionAdminRoutes.route('/add').post(passport.authenticate('jwt', { session: false}),function (req, res) {
@@ -419,6 +431,117 @@ sectionSetPagination = (req,res,result) =>  {
           }
     })
 };
+
+
+
+sectionExport  = (req,res) =>{
+
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  var Section = require('../models/'+req.originalUrl.split('/')[2]);
+  else
+  var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
+
+  var token = sectionGetToken(req.headers);
+  var searchable = [];
+  var sort = req.body.sort_order == 'asc'?1:-1;
+  var sortBy = req.body.sort_orderBy;
+  var sortable = {};
+
+  var relation = [];
+  var relation_columns = [];
+  var columns = [];
+
+
+  var current_section = req.originalUrl.split('/')[2];
+  var where = {};
+  var fields = {};
+  fields['_id'] = 0;
+  req.body.columns.forEach(col=>{
+    columns.push(col.label);
+      fields[col.field]  = 1;
+   
+
+  });
+  if((current_section == 'users' || current_section == 'roles') && req.body.role_id != "1")
+  {
+  
+    if(current_section == 'users')
+     where = {"roles_id":{$ne: "1"}};
+    if(current_section == 'roles')
+     where = {"roles_id":{$ne: 1}};
+  }
+
+  /*if(JSON.parse(req.body.relation).length >0){
+
+      JSON.parse(req.body.relation).forEach(function(element) {
+         var relation_rules = {};
+         relation_rules["$lookup"] = element.$lookup;
+         relation.push(relation_rules);
+         relation_columns.push(element.$lookup.localField);
+         if( JSON.parse(req.body.searchable).indexOf(element.$lookup.localField) !== -1){
+           var searchable_rules = {};
+           searchable_rules[element.searchForeignField] = { '$regex' : req.body.search, '$options' : 'i' };
+           searchable.push(searchable_rules);
+         }
+         if(element.$lookup.localField == sortBy){
+            sortable[element.searchForeignField] =sort;
+         }
+      });
+    }*/
+  if(JSON.parse(req.body.searchable).length >0){
+    JSON.parse(req.body.searchable).forEach(function(element) {
+     if(relation_columns.length ==0 || relation_columns.indexOf(element) == -1){
+        var searchable_rules = {};
+        searchable_rules[element] = { '$regex' : req.body.search, '$options' : 'i' };
+        searchable.push(searchable_rules);
+      }
+    
+     });
+  }
+  if(searchable.length==0){
+       var searchable_rules = {};
+       searchable.push(searchable_rules);
+  }
+
+  if(Object.keys(sortable).length==0){
+     sortable[sortBy] =sort;
+  }
+
+  sortable[sortBy] =sort;
+  var column_config = [];
+  var column_total_config = [];
+  if(relation.length>0){
+    column_config.push(relation[0]);
+  }
+ column_config.push({ "$sort":  sortable});
+
+ if(searchable.length>0){
+  column_config.push( 
+            { "$match": { 
+               $and: [  
+                   {
+                       $or:searchable 
+                   },where]
+               }
+             },
+             { "$project" : fields });
+
+}
+
+
+
+
+
+Section.aggregate(column_config).collation({ locale: 'en', strength: 2 }).exec(function(err, result){
+      
+        if(err) 
+            return  res.json({success: false,  msg: err});
+        else
+            return  res.json({success: true, data:result ,columns:columns,msg: err});
+  });
+
+
+}
 
 
 sectionDeleteRow = (req,res) => {

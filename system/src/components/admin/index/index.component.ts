@@ -4,6 +4,7 @@ import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 declare var swal: any;
@@ -31,6 +32,8 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
     view_action:any;
     delete_action:any;
     search_action:any;
+    import_action:any;
+    export_action:any;
     searchable_fields:any;
     column_order:any;
     column_index:any;
@@ -70,7 +73,65 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
 
 
   ngOnInit(){
+
    
+  }
+
+  export_csv = ()=>{
+
+    var export_csv_data = true;
+    this.section_service.getCurrentRolePermissionMenus('roles',localStorage.getItem("userDetails['roles_id']")).subscribe(res1 => {
+         
+      var current_route = this.router.url.split('/')[2].split("-").join(" ");
+      current_route = current_route.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                return letter.toUpperCase();
+            });
+     
+      var current_module = JSON.parse(res1[0].permissions).sections.filter(itm => itm.name == current_route);	
+      var menus_actions = [];
+      current_module[0].actions.forEach(function (menuItem) {
+         menus_actions.push(menuItem.label);
+         menus_actions[menuItem['label']] = menuItem.perm == 'true'?true:false;
+      });
+
+      if(menus_actions['Export']){ 
+        this.section_service.sectionConfig(this.router.url).subscribe(res => {
+          const columns_array = JSON.parse(res[0].section_config).column;
+
+              this.route.params.subscribe(params => {
+                this.section_service.export(this.search_word,this.searchable_fields, this.order_fieldBy,this.order_field,this.column_relation,this.router.url,columns_array).subscribe(result => {
+                 
+              
+                  var options = {
+                    useBom: true,
+                    noDownload: false,
+                    showLabels: true, 
+                    headers: result['columns'],
+                   
+                  };
+
+                 if(export_csv_data){
+                  new Angular5Csv(result['data'], current_route,options);
+                  export_csv_data = false;
+                 }
+                 
+                 
+                
+                });
+
+              });
+        });
+      }  
+      else
+        this.router.navigate(['/admin/dashboard']);
+  
+        
+    });
+            
+
+    
+   
+
   }
 
   onSortClick = (sortable,field,i) =>{
@@ -242,6 +303,8 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
               this.create_action = menus_actions['Create'];
               this.delete_action = menus_actions['Delete'];
               this.view_action = menus_actions['View'];
+              this.import_action = menus_actions['Import'];
+              this.export_action = menus_actions['Export'];
               this.search_action = th_searchable.length>0?true:false;
               this.search_word = "";
               if(th_searchable.length>0)

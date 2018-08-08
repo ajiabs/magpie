@@ -64,6 +64,7 @@ export class MagpieProfileEditComponent implements OnInit {
             }, {
               validator:this.MatchPassword 
             });
+            this.init();
   
         }
       });

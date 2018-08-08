@@ -8,11 +8,15 @@ import { MagpieProfileEditComponent } from './components/admin/profile-edit/prof
 import { Routes,RouterModule } from '@angular/router';
 import { AuthGuard } from './services/admin/auth-guard.service';
 export const magpieRoutes:Routes = [
-      {
+        {
         path: 'admin',
         children: [ 
+          { path: '',
+            component: MagpieLoginComponent,
+            canActivate: [AuthGuard]
+          },
           { path: 'login',
-            component: MagpieLoginComponent
+            component: MagpieLoginComponent,
           },
           { path: 'dashboard',
             component: MagpieDashboardComponent,
