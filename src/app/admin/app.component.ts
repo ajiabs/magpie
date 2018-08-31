@@ -29,6 +29,8 @@ export class AppComponent extends  MagpieComponent{
       this.showNav = true;
       this.login_name = localStorage.getItem("userDetails['name']");
       this.login_id = localStorage.getItem("userDetails['users_id']");
+      this.login_image = localStorage.getItem("userDetails['image']");
+      
     
           this.isLoggedIn().subscribe(res=>{
              this.roles_menu = res;
