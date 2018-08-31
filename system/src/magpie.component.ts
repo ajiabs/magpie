@@ -20,6 +20,7 @@ export class MagpieComponent {
     showNavMethod = "";
     login_name = "";
     login_id = "";
+    login_image = "";
     all_menus:any;
     roles_menu:any;
    

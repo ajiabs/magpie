@@ -53,6 +53,7 @@ export class MagpieLoginComponent implements OnInit {
              localStorage.setItem("userDetails['name']", this.data.result.name);
              localStorage.setItem("userDetails['users_id']", this.data.result.users_id);
              localStorage.setItem("userDetails['roles_id']", this.data.result.roles_id);
+             localStorage.setItem("userDetails['image']", this.data.result.image);
              window.location.href = "/admin/dashboard";
           }else
             this.login_error = this.data.msg;

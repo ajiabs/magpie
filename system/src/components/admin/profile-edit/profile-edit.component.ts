@@ -25,6 +25,7 @@ export class MagpieProfileEditComponent implements OnInit {
     profileEditForm: FormGroup;
     changePasswordForm :FormGroup;
     navigationSubscription:any;
+    field_length:any;
     constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService) {
       this.navigationSubscription = this.router.events.subscribe((e: any) => {
         if (e instanceof NavigationEnd) {
@@ -33,8 +34,10 @@ export class MagpieProfileEditComponent implements OnInit {
            
                var column_config  = JSON.parse(res[0].section_config).column;
                var column_validation = {}; 
+               this.field_length = column_config.length;
                column_config.forEach(function(value, key) {
                 var validation_array = []; 
+                
 
                 if(column_config[key]['field'] != 'roles_id'){
                   if(column_config[key]['type'] == 'email')
@@ -121,6 +124,7 @@ export class MagpieProfileEditComponent implements OnInit {
      localStorage.setItem("userDetails['email']", this.section_data.email);
      localStorage.setItem("userDetails['name']", this.section_data.name);
     
+    
    
       $.notify({
         title: "Update! ",
@@ -174,6 +178,7 @@ export class MagpieProfileEditComponent implements OnInit {
          
         this.section_data = res2;
         this.columns = config_columns;
+        localStorage.setItem("userDetails['image']",this.section_data.image);
 
       });
     });

@@ -389,13 +389,22 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
 
                th.index();
              });
-              swal("Deleted!", "Record has been deleted.", "success");
+             swal.close();
+             $.notify({
+              title: "Update! ",
+              message: "Record has been deleted.",
+              icon: 'fa fa-check' 
+            },{
+              type: "success"
+            });
+        
        
              
            }
           
          } else {
-           swal("Cancelled", "", "error");
+          swal.close();
+     
          }
        });
           

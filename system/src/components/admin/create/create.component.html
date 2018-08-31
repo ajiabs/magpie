@@ -13,31 +13,31 @@
             <div *ngFor="let column of columns" class="form-group {{column.type == 'custom'?'col-md-12':'col-md-6'}}"> 
                   <div *ngIf="column.type == 'textbox'" class="" >
                         <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
-                        <input class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" type="text" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]" placeholder="Enter your {{column.label}}">
-                        <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                        <input class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" type="text" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]" placeholder="Enter your {{column.label | lowercase}}">
+                        <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required.</div>
                         <div *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.pattern"  class="form-control-feedback">
-                          {{column.label}} is not valid.
+                          {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is not valid.
                        </div>      
                  </div>
                     <div *ngIf="column.type == 'textarea'" >
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
-                      <textarea  class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]" cols="10"  rows="10" placeholder="Enter your {{column.label}}"></textarea>
-                      <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                      <textarea  class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]" cols="10"  rows="10" placeholder="Enter your {{column.label | lowercase}}"></textarea>
+                      <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required.</div>
                   </div>
                   <div *ngIf="column.type == 'email'" >
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
-                    <input type="email" *ngIf="section_alias =='users'" (input)="emailExist($event.target.value)" class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label}}"/>
-                    <input type="email" *ngIf="section_alias !='users'" class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label}}"/>
+                    <input type="email" *ngIf="section_alias =='users'" (input)="emailExist($event.target.value)" class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label | lowercase}}"/>
+                    <input type="email" *ngIf="section_alias !='users'" class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label | lowercase}}"/>
                     <div  *ngIf="user_email_exist" class="form-control-feedback">  Email is already exist.</div>
-                    <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                    <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required.</div>
                     <div *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.pattern"  class="form-control-feedback">
-                      {{column.label}} is not valid.
+                      {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is not valid.
                   </div> 
                   </div>
                   <div *ngIf="column.type == 'hidden'" >
                     <label ng-show="column.field == 'password'" class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
-                      <input type="{{column.field == 'password'?'password':'hidden'}}" class="form-control"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]" />
-                      <div  *ngIf="column.field == 'password' && sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                      <input type="{{column.field == 'password'?'password':'hidden'}}" class="form-control"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="Enter your {{column.label | lowercase}}"/>
+                      <div  *ngIf="column.field == 'password' && sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback" >   {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required.</div>
 
                     </div>
                   <div *ngIf="column.type == 'readonly'" >
@@ -53,14 +53,14 @@
                               </label>
                             </div>
                     </fieldset>
-                      <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                      <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required.</div>
                   </div>
                   <div *ngIf="column.type == 'selectbox'" >
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
                 <select class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]">
                   <option *ngFor="let col of column.source" value="{{col.value}}">  {{col.label}}</option>
                 </select>
-                  <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                  <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required.</div>
 
                   </div>
                   <div *ngIf="column.type == 'checkbox'" >
@@ -74,13 +74,13 @@
                             </div>
 
                               <input type="hidden" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]"  />
-                              <div  *ngIf="sectionForm.controls[column.field].invalid && validation_fields_onload[column.field] && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                              <div  *ngIf="sectionForm.controls[column.field].invalid && validation_fields_onload[column.field] && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required.</div>
                     </fieldset>
                   </div>
                   <div *ngIf="column.type == 'image' || column.type == 'file'" >
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
-                    <input class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" type="file" formControlName="{{column.field}}" #{{column.field}} (change)="onFileChangeEvent($event,column.field)"  multiple="{{column.multiple == 'true'?'multiple':''}}"  placeholder="Enter your {{column.label}}">
-                    <div  *ngIf="sectionForm.controls[column.field].invalid  &&  (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                    <input class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" type="file" formControlName="{{column.field}}" #{{column.field}} (change)="onFileChangeEvent($event,column.field)"  multiple="{{column.multiple == 'true'?'multiple':''}}"  placeholder="Enter your {{column.label | lowercase}}">
+                    <div  *ngIf="sectionForm.controls[column.field].invalid  &&  (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required.</div>
                     
                   </div>
                   <div *ngIf="column.type == 'tags'" >
@@ -93,7 +93,7 @@
                   ></select2>
 
                     <input type="hidden" id="data-{{column.field}}" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]" [required]="true" />
-                    <div  *ngIf="sectionForm.controls[column.field].invalid && validation_fields_onload[column.field]  && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                    <div  *ngIf="sectionForm.controls[column.field].invalid && validation_fields_onload[column.field]  && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required.</div>
                   </div>
               
 
@@ -101,14 +101,14 @@
                     <div role-permissions [formColumn]="column" [allMenus]="getAllMenus"   [customData] = "section_data[column.field]" (customDataChange)="section_data[column.field] = $event"  [customValidate]="validation_fields_onload[column.field]"  (customValidateChange)="validation_fields_onload[column.field]  = $event">
                     </div>
                     <input type="hidden" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]">
-                    <div  *ngIf="sectionForm.controls[column.field].invalid && validation_fields_onload[column.field]  && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                    <div  *ngIf="sectionForm.controls[column.field].invalid && validation_fields_onload[column.field]  && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required.</div>
                   </div>
 
                   <div *ngIf="column.type == 'datepicker'" >
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
                     <div  date-picker [formColumn]="column" [dateId]="column.field" [dateFormat]="date_format" [dateValue]="section_data[column.field]" [customData]="section_data[column.field]" (customDataChange)="section_data[column.field] = $event" ></div>
                     <input type="hidden" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]">
-                    <div  *ngIf="sectionForm.controls[column.field].invalid   && validation_fields_onload[column.field] && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                    <div  *ngIf="sectionForm.controls[column.field].invalid   && validation_fields_onload[column.field] && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required.</div>
   
                   </div>
                   <div *ngIf="column.type == 'texteditor'" >
@@ -120,7 +120,7 @@
                     ['orderedList', 'unorderedList'],
                     ['link', 'unlink']
                    ]" [height]="1000" [minHeight]="1000" [placeholder]="'Enter Your '+column.label" [spellcheck]="true"  formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]"></app-ngx-editor>
-                    <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                    <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required.</div>
                  </div>
                  <div *ngIf="column.type == 'map'" >
            
@@ -130,7 +130,7 @@
                     </agm-map>
                     <ng4geo-autocomplete [userSettings]='{ inputPlaceholderText: "Search Place",inputString: section_data[column.field] | getMapDetails:"address",showSearchButton: false}'  (componentCallback)="onMapChangeEvent($event,column.field)" ></ng4geo-autocomplete>
                     <input type="hidden" formControlName="{{column.field}}" #{{column.field}} [(ngModel)]= "section_data[column.field]">
-                    <div  *ngIf="sectionForm.controls[column.field].invalid   && validation_fields_onload[column.field] && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label}} is required.</div>
+                    <div  *ngIf="sectionForm.controls[column.field].invalid   && validation_fields_onload[column.field] && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required.</div>
                    
                   </div>
 

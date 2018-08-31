@@ -4,6 +4,8 @@ import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
+
+
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 declare var swal: any;
@@ -36,6 +38,7 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
     lng: number = 7.809007;
     geo_address = "";
     user_email_exist:any=false;
+    field_length:any;
   
   constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
@@ -43,6 +46,7 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
         this.sectionForm = this.fb.group({});
         this.section_service.sectionConfig(this.router.url).subscribe(res => {
              var column_config  = JSON.parse(res[0].section_config).column;
+             this.field_length = column_config.length;
              var column_validation = {}; 
              column_config.forEach(function(value, key) {
 
@@ -50,16 +54,18 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
                   var validation_array = []; 
                   if(column_config[key]['type'] == 'email')
                     validation_array.push(Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$'));
+                  if(typeof column_config[key]['validations'][0]['min_length'] != undefined)
+                    validation_array.push(Validators.minLength(column_config[key]['validations'][0]['min_length']));
+
                   if( column_config[key]['validations'][0]['required'] == 'true')
                     validation_array.push(Validators.required);
                   else
                    {
                      if(typeof column_config[key]['validations'][0]['pattern'] != undefined)
                         validation_array.push(Validators.pattern(column_config[key]['validations'][0]['pattern']));
+                    
                      
                    }
-
-
 
                   var req = column_config[key]['validations'][0]['required'] == 'true'?validation_array:'';
               
@@ -226,9 +232,11 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
   onFileChangeEvent = (fileInput: any,field) =>{
       var files = [];
       for ( var index=0; index<fileInput.target.files.length; index++ ) {
-  
+       
         files.push(fileInput.target.files[index]);
+    
       }
+     
       this.section_data[field] = files;
   
      
