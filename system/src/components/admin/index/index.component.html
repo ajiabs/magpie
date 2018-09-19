@@ -1,0 +1,61 @@
+           
+<div class="row">
+<div class="col-md-12">
+  <div class="tile">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="tile-title-w-btn">
+            <h3 class="title">List {{title}}</h3>
+            <input type="text" class="form-control form-control-sm col-md-3" id="search_word" ng-model="search_word" placeholder="Search" [hidden]="!search_action" (input)="onSearchChange($event.target.value)">
+            <div class="row">
+              <input type="file" class="form-control form-control-sm col-md-4" id="search_word" ng-model="search_word" placeholder="Search"  (input)="onSearchChange($event.target.value)"  [hidden]="!import_action">
+              <!-- &nbsp; <a class="btn btn-info btn-sm" (click)="import_csv()" [hidden]="!import_action"><i class="fa fa-arrow-circle-up"></i>Import</a> -->
+              &nbsp;<a class="btn btn-warning btn-sm" (click)="export_csv()"  [hidden]="!export_action"><i class="fa fa-arrow-circle-down"></i>Export</a>
+            </div>
+          
+            <p><a class="btn btn-primary icon-btn" [routerLink]="['/admin/'+section_alias+'/create']" [hidden]="!create_action"><i class="fa fa-plus"></i>Add</a></p>
+          </div>
+          <table class="table table-bordered dataTable">
+            <thead>
+              <tr>
+              
+                <th  *ngFor="let column of columns | columnFilter : {list : true};let i = index "  [ngClass]="column.sortable == 'true'?(i==column_index?(column_order ? 'sorting_asc' : 'sorting_desc'):'sorting'):''"  id="columnOrder{{i}}" (click)="onSortClick(column.sortable,column.field,i)"><strong>{{column.label}}</strong></th>
+                <th><strong>Actions</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of section_data"><td *ngFor="let column of columns | columnFilter : {list : true}">{{(column.type == 'tags' ||  column.type =='selectbox' || column.type =='checkbox' ||  column.type =='radio')?(data[column.field] | dynamicSource:data[column.field]:column.source:column.type):(column.type =='map')?(data[column.field] | getMapDetails:"address"):data[column.field]}}</td>
+                <td><a [routerLink]="['/admin/'+section_alias+'/edit', data._id]" class="btn btn-info btn-sm" [hidden]="!edit_action">&nbsp;<i class="fa fa-edit"></i></a>&nbsp;&nbsp;<a [routerLink]="['/admin/'+section_alias+'/view', data._id]" class="btn btn-success btn-sm" [hidden]="!view_action">&nbsp;<i class="fa fa-eye"></i></a>&nbsp;&nbsp;<a (click)="onDeleteClick(data._id)"  class="btn btn-danger btn-sm" [hidden]="!delete_action">&nbsp;<i class="fa fa-trash"></i></a></td>
+              </tr>
+            </tbody>
+          </table>
+
+        <div class="dataTables_wrapper" *ngIf="pages>0 && paginate">
+          <div class="row">
+              <div class="col-sm-12 col-md-5">
+                <div class="dataTables_info" id="sampleTable_info" role="status" aria-live="polite">Showing {{paginate_from}} to {{paginate_to}} of {{paginate_total}} entries</div>
+              </div>
+              <div class="col-sm-12 col-md-7">
+                <div class="dataTables_paginate paging_simple_numbers" id="sampleTable_paginate">
+
+
+                    <ul class="pagination">
+                      <li class="paginate_button page-item previous" [ngClass]="current==1?'disabled':''" id="sampleTable_previous"><a (click)="onPaginateClick(1)" aria-controls="sampleTable" data-dt-idx="0" tabindex="0" class="page-link"><span>First</span></a></li>
+
+                      <li *ngIf="start_no !== 1" class="paginate_button page-item"><a  (click)="onPaginateClick(start_no+1)" aria-controls="sampleTable" data-dt-idx="1" tabindex="0" class="page-link"><span>Prev</span></a></li>
+
+                      <li *ngFor="let i of paginate_array"  class="paginate_button page-item" [ngClass]="i == current?'active':''" ><a *ngIf="i == end_no && i < pages" (click)="onPaginateClick(i-1)" aria-controls="sampleTable" data-dt-idx="1" tabindex="0" class="page-link">Next</a><a *ngIf="i != end_no" (click)="onPaginateClick(i)" aria-controls="sampleTable" data-dt-idx="1" tabindex="0" class="page-link">{{i}}</a></li>
+                    
+                    
+
+                      <li class="paginate_button page-item next" id="sampleTable_next" [ngClass]="current==pages?'disabled':''"><a (click)="onPaginateClick(pages)" aria-controls="sampleTable" data-dt-idx="7" tabindex="0" class="page-link"><span>Last</span></a></li>
+                    </ul>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ </div>
+</div>
