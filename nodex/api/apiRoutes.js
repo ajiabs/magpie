@@ -9,7 +9,6 @@ var config = require('../../config/DB');
 
 //const Sections = require('../../system/nodex/admin/models/sections');
 const User = require('../../system/nodex/models/users');
-const Project = require('../../nodex/models/projects');
 const multer  = require('multer');
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
