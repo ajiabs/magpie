@@ -486,6 +486,20 @@ searchPackagesInstaller = (searchkey)=>{
 
 }
 
+getMenuNameFromUrl = (section,url)=>{
+  let httpOptions = {
+    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+  };
+  const uri = server_url+section+'/getMenuNameFromUrl';
+  let obj={ "url":url}
+  return this
+          .http
+          .post(uri,obj,httpOptions)
+          .map(res => {
+          return res;
+        });
+ }
+
 
 
 

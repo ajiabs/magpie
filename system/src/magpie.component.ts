@@ -17,6 +17,7 @@ export class MagpieComponent {
     showNav = true;
     showBeadcrumb = true;
     showNavTitle = "";
+    showNavDisplayTitle="";
     showNavMethod = "";
     login_name = "";
     login_id = "";
@@ -35,6 +36,16 @@ export class MagpieComponent {
       localStorage.removeItem('jwtToken');
       window.location.href = "/admin/login";
     }
+
+    @Input()
+      getMenuNameFromUrl=(url)=>{
+        return new Observable((observer) => {
+        this.section_service.getMenuNameFromUrl('menus',url).subscribe(res => {
+          var menuRow = res;
+          return  observer.next(menuRow);
+        });
+      });
+      }
 
     @Input()
     isLoggedIn   = () =>{

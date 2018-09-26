@@ -103,7 +103,7 @@
             <li *ngFor="let menus of main.sub" >
               <a class="treeview-item {{menus.url.split('/').indexOf(router.url.split('/')[2]) > -1?'active':''}}" [routerLink]="[menus.url]" routerLinkActive="active">
                 <i class="app-menu__icon fa {{menus.icon}}"></i>
-                <span class="app-menu__label">{{menus.name}}</span>
+                <span class="app-menu__label">{{menus.display_name}}</span>
               </a>
             </li>
         </ul>
@@ -117,11 +117,11 @@
   <main class="app-content">
     <div class="app-title" *ngIf="showBeadcrumb">
        <div>
-          <h1>{{showNavTitle.replace("-"," ") | titlecase}}</h1>
+          <h1>{{showNavDisplayTitle.replace("-"," ") | titlecase}}</h1>
       </div>
       <ul class="app-breadcrumb breadcrumb">
         <li class="breadcrumb-item"><i [routerLink]="['admin/dashboard']" class="fa fa-home fa-lg"></i></li>
-        <li class="breadcrumb-item"><a [routerLink]="['admin/'+(showNavTitle | lowercase)]" >{{showNavTitle.replace("-"," ") | titlecase}}</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['admin/'+(showNavTitle | lowercase)]" >{{showNavDisplayTitle.replace("-"," ") | titlecase}}</a></li>
          <li class="breadcrumb-item"  *ngIf="showNavMethod != undefined"><a >{{showNavMethod  | titlecase}}</a></li>
       </ul>
 

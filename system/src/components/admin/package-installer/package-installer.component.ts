@@ -45,6 +45,8 @@ export class MagpiePackageInstallerComponent implements OnInit {
     if(localStorage.getItem("userDetails['roles_id']") == '1'){
       this.section_service.installPackage(pkg.command_line_code).subscribe(res => {
       //  this.packagesData = res;
+
+      console.log(res);
       });
     }else
       this.router.navigate(['/admin/dashboard']);

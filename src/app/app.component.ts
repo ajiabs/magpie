@@ -14,6 +14,7 @@ import { Meta } from '@angular/platform-browser';
 export class AppComponent extends  MagpieComponent {
   angular_part:any=false;
   package_installer:any = false;
+  menuRow:any;
   constructor(router: Router,route: ActivatedRoute, http: HttpClient,section_service: SectionService,private meta: Meta) {
     super(route,router,http,section_service)
 
@@ -56,15 +57,18 @@ export class AppComponent extends  MagpieComponent {
         if(event.url == '/admin/login'){
           this.showNav = false;
         }else{
-           this.showNavTitle = event.url.split('/')[2];
-           this.showNavMethod = event.url.split('/')[3];
-           this.showBeadcrumb = true;
-          //  if(event.url == '/admin/dashboard')
-          //   this.showBeadcrumb = false;
-          //  else
-          //  {
-          //     this.showBeadcrumb = true;
-          //  }
+
+
+          var url = event.url.split("/");
+          var custom_url = url[1]+"/"+url[2];
+          this.getMenuNameFromUrl(custom_url).subscribe(res=>{
+          this.menuRow = res;
+          this.showNavDisplayTitle = this.menuRow.display_name;
+          this.showNavTitle = this.menuRow.name;
+          this.showNavMethod = event.url.split('/')[3];
+          this.showBeadcrumb = true;
+          });
+
         }
       }
     }); 

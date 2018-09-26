@@ -444,7 +444,7 @@ sectionAdminRoutes.route('/installPackage').post(passport.authenticate('jwt', { 
 
           // install module ffi
           npm.commands.install([req.body.command], function(er, data) {
-               console.log(data);
+            return  res.json(data);
             // log errors or data
           });
 
@@ -464,6 +464,33 @@ sectionAdminRoutes.route('/installPackage').post(passport.authenticate('jwt', { 
 
 
 
+
+ 
+ sectionAdminRoutes.route('/getMenuNameFromUrl').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+  var token = sectionGetToken(req.headers);
+  if (token) 
+      return sectiongetMenuNameFromUrl(req,res);
+  else 
+     return  res.json({success: false,  msg: 'Unauthorized'});
+ 
+ });
+
+
+
+
+ sectiongetMenuNameFromUrl= (req,res) =>  {
+ 
+  var Section = require('../models/'+req.originalUrl.split('/')[2]);
+  Section.findOne({'url':req.body.url,'status':'active'},function (err, result){
+    if(err){
+      return  res.json({success: false,  msg: err});
+    }
+    else {
+      return res.json(result);
+    }
+  });
+ 
+ };
 
 
 
