@@ -21,6 +21,7 @@ export class MagpieComponent {
     login_name = "";
     login_id = "";
     login_image = "";
+    login_role = "";
     all_menus:any;
     roles_menu:any;
    

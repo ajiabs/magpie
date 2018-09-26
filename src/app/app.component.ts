@@ -13,6 +13,7 @@ import { Meta } from '@angular/platform-browser';
 
 export class AppComponent extends  MagpieComponent {
   angular_part:any=false;
+  package_installer:any = false;
   constructor(router: Router,route: ActivatedRoute, http: HttpClient,section_service: SectionService,private meta: Meta) {
     super(route,router,http,section_service)
 
@@ -28,11 +29,21 @@ export class AppComponent extends  MagpieComponent {
       this.login_name = localStorage.getItem("userDetails['name']");
       this.login_id = localStorage.getItem("userDetails['users_id']");
       this.login_image = localStorage.getItem("userDetails['image']");
-      
     
-          this.isLoggedIn().subscribe(res=>{
-             this.roles_menu = res;
-          });
+      this.isLoggedIn().subscribe(res=>{
+          this.roles_menu = res;
+
+      
+
+      });
+      this.package_installer = localStorage.getItem("userDetails['roles_id']") == '1'?true:false;
+      this.section_service.getUserRole(localStorage.getItem("userDetails['roles_id']")).subscribe(res => {
+          this.login_role = res['name'];
+
+          
+      });
+
+
 
     } else 
     {

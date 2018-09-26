@@ -20,7 +20,7 @@ export class MagpiePackageInstallerComponent implements OnInit {
     packages: any;
     title = "Packages";
     packages_error:any;
-    packagesData = { search:'' };
+    packagesData:any;
     message = '';
     data: any;
     result_data:any;
@@ -30,9 +30,38 @@ export class MagpiePackageInstallerComponent implements OnInit {
     }
 
   ngOnInit(){
-    this.section_service.getPackagesInstaller("").subscribe(res => {
-    });
-   
+
+   if(localStorage.getItem("userDetails['roles_id']") == '1'){
+      this.section_service.getPackagesInstaller().subscribe(res => {
+        this.packagesData = res;
+      });
+    }else
+      this.router.navigate(['/admin/dashboard']);
+    
+  }
+
+  installPackage = (pkg)=>{
+
+    if(localStorage.getItem("userDetails['roles_id']") == '1'){
+      this.section_service.installPackage(pkg.command_line_code).subscribe(res => {
+      //  this.packagesData = res;
+      });
+    }else
+      this.router.navigate(['/admin/dashboard']);
+
+  }
+
+
+  onSearchChange = (value)=>{
+
+    if(localStorage.getItem("userDetails['roles_id']") == '1'){
+      this.section_service.searchPackagesInstaller(value).subscribe(res => {
+        this.packagesData = res;
+      });
+    }else
+      this.router.navigate(['/admin/dashboard']);
+
+
   }
 
 

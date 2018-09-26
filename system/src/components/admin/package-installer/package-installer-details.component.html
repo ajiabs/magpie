@@ -5,39 +5,41 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="tile-title-w-btn">
-              <h3 class="title">{{title}}</h3>
+              <h3 class="title">{{title | titlecase}}</h3>
               <p><a class="btn btn-secondary icon-btn btn-sm" [routerLink]="['/admin/package-installer']" ><i class="fa fa-arrow-left"></i></a></p>
             
             </div>
             <div class="row user">
                 <div class="col-md-12">
                   <ul class="nav nav-tabs user-tabs">
-                    <li class="nav-item"><a class="nav-link active" href="#package-info" data-toggle="tab">Info</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#packages-documentation" data-toggle="tab">Documentation</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#packages-configure" data-toggle="tab">Configure</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="" data-target="#packages-details" data-toggle="tab">Info</a></li>
+                    <li class="nav-item"><a class="nav-link" href="" data-target="#packages-documentation" data-toggle="tab">Documentation</a></li>
+                    <li class="nav-item"><a class="nav-link" href="" data-target="#packages-configure" data-toggle="tab">Configure</a></li>
+
                   </ul>
                 </div>
             
               <div class="col-md-12">
+                 
               <div class="tab-content">
-                <div class="tab-pane active" id="packages-info">
-                    <div class="row">
-                    <div class="col-md-12">
-                       Details
-                    </div>
-                   </div>
-                </div>
+                  <div class="tab-pane active" id="packages-details">
+                      <div class="row">
+                          <div class="col-md-12">
+                              {{packagesData.package_description}}a
+                          </div>
+                      </div>
+                  </div>
                 <div class="tab-pane fade" id="packages-documentation">
                     <div class="row">
                         <div class="col-md-12">
-                            Documentions
+                            {{packagesData.package_description}}b
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="packages-configure">
                     <div class="row">
                         <div class="col-md-12">
-                            Configure
+                          {{packagesData.package_description}}c
                         </div>
                     </div>
                 </div>

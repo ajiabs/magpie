@@ -6,7 +6,7 @@
         <div class="col-lg-12">
           <div class="tile-title-w-btn">
               <h3 class="title">List {{title}}</h3>
-              <input type="text" class="form-control form-control-sm col-md-3" id="search_word"  placeholder="Search" >
+              <input type="text" class="form-control form-control-sm col-md-3" id="search_word" (input)="onSearchChange($event.target.value)"  placeholder="Search" >
             
             </div>
             <div class="row user">
@@ -23,20 +23,20 @@
                     <div class="row">
 
 
-                    <div class="col-md-4">
+                    <div class="col-md-4" *ngFor="let packages of  packagesData">
                       <div class="timeline-post">
-                        <div class="post-media"><a  [routerLink]="['/admin/package-installer/Authorise.net']"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg"></a>
+                        <div class="post-media"><a  [routerLink]="['/admin/package-installer/'+packages.package_name]"><img src="http://52.91.195.127/packages/{{packages.package_name}}/{{packages.image}}"  width="48px" height="48px"></a>
                           <div class="content">
-                            <h5><a  [routerLink]="['/admin/package-installer/Authorise.net']">Authorise.net</a></h5>
-                            <p class="text-muted"><small>2 January at 9:30</small></p>
+                            <h5><a  [routerLink]="['/admin/package-installer/'+packages.package_name]">{{packages.package_name | titlecase}}</a></h5>
+                            <p class="text-muted"><small>{{packages.publish_date}}</small></p>
                           </div>
                         </div>
                         <div class="post-content">
-                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                          <p>{{packages.package_description}}</p>
                         </div>
                         <ul class="post-utility">
                           <li class="likes"><i class="fa fa-download"></i>2 Downloads</li>
-                          <li class="comments"><button class="btn btn-sm btn-primary">install</button></li>
+                          <li class="comments"><button class="btn btn-sm btn-primary" (click)="installPackage(packages)">install</button></li>
                         </ul>
                       </div>
                     </div>
@@ -49,21 +49,20 @@
                     <div class="row">
 
 
-                        <div class="col-md-12">
+                        <div class="col-md-12"  *ngFor="let packages of  packagesData">
                           <div class="timeline-post">
-                            <div class="post-media"><a  [routerLink]="['/admin/package-installer/Authorise.net']"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg"></a>
+                            <div class="post-media"><a  [routerLink]="['/admin/package-installer/'+packages.package_name]"><img src="http://52.91.195.127/packages/{{packages.package_name}}/{{packages.image}}"  width="48px" height="48px"></a>
                               <div class="content">
-                                <h5><a  [routerLink]="['/admin/package-installer/Authorise.net']">Authorise.net</a></h5>
-                                <p class="text-muted"><small>2 January at 9:30</small></p>
+                                <h5><a  [routerLink]="['/admin/package-installer/'+packages.package_name]">{{packages.package_name | titlecase}}</a></h5>
+                                <p class="text-muted"><small>{{packages.publish_date}}</small></p>
                               </div>
                             </div>
                             <div class="post-content">
-                              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                              <p>{{packages.package_description}}</p>
                             </div>
                             <ul class="post-utility">
                               <li class="likes"><i class="fa fa-download"></i>2 Downloads</li>
-                             
-                              <!-- <li class="comments"><button class="btn btn-sm btn-primary">install</button></li> -->
+                              <li class="comments"><button class="btn btn-sm btn-primary">install</button></li>
                             </ul>
                           </div>
                         </div>

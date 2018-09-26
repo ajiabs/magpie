@@ -3,6 +3,7 @@ var express = require('express');
 var app = express();
 var passport = require('passport');
 var sectionAdminRoutes = express.Router();
+var http = require("http");
 require('./passport')(passport);
 var jwt = require('jsonwebtoken');
 var config = require('../../../config/DB');
@@ -229,6 +230,18 @@ sectionAdminRoutes.route('/edit/:id').get(passport.authenticate('jwt', { session
 
 
 
+ sectionAdminRoutes.route('/getUserRole/:roles_id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
+
+  var token = sectionGetToken(req.headers);
+  if (token) 
+       return getUserRoleById(req,res);
+  else 
+       return  res.json({success: false,  msg: 'Unauthorized'});
+ 
+ 
+ });
+
+
  sectionAdminRoutes.route('/view/:id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
 
   var token = sectionGetToken(req.headers);
@@ -332,6 +345,127 @@ sectionAdminRoutes.route('/updateSettings').post(passport.authenticate('jwt', { 
 
   
 });
+
+
+
+sectionAdminRoutes.route('/getPackagesInstaller').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+  var token = sectionGetToken(req.headers);
+  if (token) 
+      {
+
+    
+        http.get('http://52.91.195.127/packages/package.php?action=get_all', (response) => {
+        
+          let result = '';
+
+          response.on('data', (chunk) => {
+            result += chunk;
+          });
+        
+          response.on('end', () => {
+            return  res.json(JSON.parse(result).data);
+  
+          });
+        
+
+         });
+      
+
+
+      }
+  else 
+      return  res.json({success: false,  msg: 'Unauthorized'});
+
+});
+
+
+
+sectionAdminRoutes.route('/searchPackagesInstaller').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+  var token = sectionGetToken(req.headers);
+  if (token) {
+      http.get('http://52.91.195.127/packages/package.php?action=search&package_name='+req.body.search_key, (response) => {
+            
+        let result = '';
+
+        response.on('data', (chunk) => {
+          result += chunk;
+        });
+      
+        response.on('end', () => {
+          return  res.json(JSON.parse(result).data);
+
+        });
+      
+
+      });
+
+
+
+    }
+  else 
+  return  res.json({success: false,  msg: 'Unauthorized'});
+
+});
+
+sectionAdminRoutes.route('/getOnePackagesInstaller').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+  var token = sectionGetToken(req.headers);
+  if (token) 
+      {
+        http.get('http://52.91.195.127/packages/package.php?action=get_one&package_name='+req.body.package_name, (response) => {
+            
+          let result = '';
+  
+          response.on('data', (chunk) => {
+            result += chunk;
+          });
+        
+          response.on('end', () => {
+            return  res.json(JSON.parse(result).data);
+  
+          });
+        
+  
+        });
+      }
+  else 
+      return  res.json({success: false,  msg: 'Unauthorized'});
+
+});
+
+
+sectionAdminRoutes.route('/installPackage').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+  var token = sectionGetToken(req.headers);
+  if (token) 
+      {
+
+        var npm = require('npm');
+        npm.load(function(err) {
+          // handle errors
+
+          // install module ffi
+          npm.commands.install([req.body.command], function(er, data) {
+               console.log(data);
+            // log errors or data
+          });
+
+          // npm.on('log', function(message) {
+          //   // log installation progress
+          //   console.log(message);
+          // });
+        });
+    
+       
+      }
+  else 
+      return  res.json({success: false,  msg: 'Unauthorized'});
+
+});
+
+
+
+
+
+
 
 
 getSettings=(req,res)=>{
@@ -821,6 +955,22 @@ sectionFetchDataById = (req,res) =>{
         return res.json(result);
   });
 };
+
+
+getUserRoleById = (req,res) =>{
+  var Roles = require('../models/roles');
+  var id = req.params.roles_id;
+  Roles.findOne({'roles_id':id}, function (err, result){
+     if(err) 
+        return  res.json({success: false,  msg: err});
+      else
+        return res.json(result);
+  });
+};
+
+
+
+
 
 profileFetchDataById = (req,res)=>{
   var Users = require('../models/users');

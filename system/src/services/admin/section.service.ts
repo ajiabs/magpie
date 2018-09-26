@@ -201,6 +201,23 @@ export class SectionService {
   }
 
 
+  getUserRole = (role_id) =>{
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+  
+    const uri = server_url+'roles/getUserRole/' +parseInt(role_id);
+    return this
+            .http
+            .get(uri,httpOptions)
+            .map(res => {
+              return res;
+            });
+
+  }
+
+
+
    update = (data,current_route) => {
 
 
@@ -410,14 +427,59 @@ updateSettings=(data,current_route)=>{
           });
 }
 
-getPackagesInstaller = (package_name)=>{
+getPackagesInstaller = ()=>{
   let httpOptions = {
     headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
   };
-  const uri = server_url+'packages/getPackagesInstaller/'+package_name;
+  const uri = server_url+'packages-installer/getPackagesInstaller';
+  const obj = {};
   return this
           .http
-          .get(uri,httpOptions)
+          .post(uri,obj,httpOptions)
+          .map(res => {
+          return res;
+        });
+
+}
+getOnePackagesInstaller = (package_name)=>{
+  let httpOptions = {
+    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+  };
+  const uri = server_url+'packages-installer/getOnePackagesInstaller';
+  const obj = {'package_name':package_name};
+  return this
+          .http
+          .post(uri,obj,httpOptions)
+          .map(res => {
+          return res;
+        });
+
+}
+
+installPackage = (command_line)=>{
+  let httpOptions = {
+    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+  };
+  const uri = server_url+'packages-installer/installPackage';
+  const obj = {'command':command_line};
+  return this
+          .http
+          .post(uri,obj,httpOptions)
+          .map(res => {
+          return res;
+        });
+}
+
+
+searchPackagesInstaller = (searchkey)=>{
+  let httpOptions = {
+    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+  };
+  const uri = server_url+'packages-installer/searchPackagesInstaller';
+  const obj = {'search_key':searchkey};
+  return this
+          .http
+          .post(uri,obj,httpOptions)
           .map(res => {
           return res;
         });

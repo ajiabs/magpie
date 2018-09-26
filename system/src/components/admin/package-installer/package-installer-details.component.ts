@@ -20,48 +20,37 @@ export class MagpiePackageInstallerDetailsComponent implements OnInit {
     packages: any;
     title = "";
     packages_error:any;
-    packagesData = { search:'' };
+    packagesData:any =[];
     message = '';
     data: any;
     result_data:any;
     packageInstallerForm: FormGroup;
     constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService) {
-    //   this.packageInstallerForm = this.fb.group({
-    //     email: ['', [Validators.required]]
-  
-    //  });
+
      
      
     }
 
   ngOnInit(){
-    this.route.params.subscribe(params => {
-     this.title = params['pacakge'];
-    });
+  
+
+    if(localStorage.getItem("userDetails['roles_id']") == '1'){
+      var th = this;
+      this.route.params.subscribe(params => {
+        th.title = params['pacakge'];
+        th.section_service.getOnePackagesInstaller(params['pacakge']).subscribe(res => {
+           th.packagesData = res; 
+        });
+
+       });
+
+
+    
+    }else
+      this.router.navigate(['/admin/dashboard']);
+
     
   }
-
-    // checkLogin = (data) =>{
-
-    //     this.section_service.checkLogin(data).subscribe(res=>{
-
-    //       this.data = res;
-  
-    //       if(this.data.success){
-    //          localStorage.setItem('jwtToken', this.data.token);
-    //          localStorage.setItem("userDetails['email']", this.data.result.email);
-    //          localStorage.setItem("userDetails['name']", this.data.result.name);
-    //          localStorage.setItem("userDetails['users_id']", this.data.result.users_id);
-    //          localStorage.setItem("userDetails['roles_id']", this.data.result.roles_id);
-    //          localStorage.setItem("userDetails['image']", this.data.result.image);
-    //          window.location.href = "/admin/dashboard";
-    //       }else
-    //         this.login_error = this.data.msg;
-         
-
-    //     });
-   
-    // }
 
 
 
