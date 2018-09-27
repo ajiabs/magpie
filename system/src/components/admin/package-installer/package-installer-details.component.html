@@ -37,9 +37,18 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="packages-configure">
-                    <div class="row">
+                    <div class="row user-settings">
                         <div class="col-md-12">
-                          {{packagesData.package_description}}c
+                          <form class="package-installer-form" [formGroup]="packageInstallerForm" novalidate>
+                                <div class="row">
+                                        <div class="col-md-6" *ngFor="let keys of configuration_keys;let j = index">
+                                                <label class="control-label">{{keys}}<span  class="required_field">*</span></label>
+                                                <input class="form-control">
+                                              
+                                        </div>
+                                </div>
+                          
+                          </form>
                         </div>
                     </div>
                 </div>

@@ -61,12 +61,21 @@ export class AppComponent extends  MagpieComponent {
 
           var url = event.url.split("/");
           var custom_url = url[1]+"/"+url[2];
-          this.getMenuNameFromUrl(custom_url).subscribe(res=>{
-          this.menuRow = res;
-          this.showNavDisplayTitle = this.menuRow.display_name;
-          this.showNavTitle = this.menuRow.name;
+        
           this.showNavMethod = event.url.split('/')[3];
           this.showBeadcrumb = true;
+
+          this.getMenuNameFromUrl(custom_url).subscribe(res=>{
+
+           if(res != null){
+              this.menuRow = res;
+              this.showNavDisplayTitle = this.menuRow.display_name;
+              this.showNavTitle = this.menuRow.name;
+           }else{
+            this.showNavDisplayTitle =  event.url.split('/')[2];
+            this.showNavTitle = event.url.split('/')[2];
+           }
+
           });
 
         }

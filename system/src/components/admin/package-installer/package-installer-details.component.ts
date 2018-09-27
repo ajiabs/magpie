@@ -25,10 +25,9 @@ export class MagpiePackageInstallerDetailsComponent implements OnInit {
     data: any;
     result_data:any;
     packageInstallerForm: FormGroup;
+    configuration_keys:any;
     constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService) {
-
-     
-     
+      this.packageInstallerForm = this.fb.group({});
     }
 
   ngOnInit(){
@@ -39,11 +38,21 @@ export class MagpiePackageInstallerDetailsComponent implements OnInit {
       this.route.params.subscribe(params => {
         th.title = params['pacakge'];
         th.section_service.getOnePackagesInstaller(params['pacakge']).subscribe(res => {
-           th.packagesData = res; 
+           th.packagesData = res;
+           var keys = JSON.parse(res['configuration_keys']);
+           var resultArray = Object.keys(keys).map(function(value){
+              let configurations = keys[value];
+              return configurations;
+          });
+
+        
+           
+          this.configuration_keys =  resultArray;
+
+         
         });
 
        });
-
 
     
     }else

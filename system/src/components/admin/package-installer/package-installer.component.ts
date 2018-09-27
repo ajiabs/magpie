@@ -22,6 +22,7 @@ export class MagpiePackageInstallerComponent implements OnInit {
     packages_error:any;
     packagesData:any;
     message = '';
+    install
     data: any;
     result_data:any;
     packageInstallerForm: FormGroup;

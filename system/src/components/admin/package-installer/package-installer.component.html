@@ -37,6 +37,8 @@
                         <ul class="post-utility">
                           <li class="likes"><i class="fa fa-download"></i>2 Downloads</li>
                           <li class="comments"><button class="btn btn-sm btn-primary" (click)="installPackage(packages)">install</button></li>
+                          <li class="comments"><button class="btn btn-sm btn-primary" [disabled]="true"> <i class="fa fa-spinner fa-spin"></i>installing</button></li>
+
                         </ul>
                       </div>
                     </div>
