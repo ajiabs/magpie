@@ -22,32 +22,66 @@ export class MagpiePackageInstallerComponent implements OnInit {
     packages_error:any;
     packagesData:any;
     message = '';
-    install
+    installing:any={};
     data: any;
     result_data:any;
+    localPackages:any;
+    installedPackages:any;
+
     packageInstallerForm: FormGroup;
     constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService) {
      
     }
 
   ngOnInit(){
-
-   if(localStorage.getItem("userDetails['roles_id']") == '1'){
-      this.section_service.getPackagesInstaller().subscribe(res => {
-        this.packagesData = res;
-      });
-    }else
-      this.router.navigate(['/admin/dashboard']);
+   this.getInstallerPackage();
+ 
     
   }
 
-  installPackage = (pkg)=>{
-
+  getInstallerPackage =()=>{
     if(localStorage.getItem("userDetails['roles_id']") == '1'){
-      this.section_service.installPackage(pkg.command_line_code).subscribe(res => {
-      //  this.packagesData = res;
+      this.section_service.getPackagesInstaller().subscribe(res => {
+        var th = this;
+        th.section_service.installedPackages().subscribe(pkgs => {
+            var packages = [];
+            if(pkgs  != null){
+              Object.keys(pkgs).forEach(key => {
+                  if(key=='package_name')
+                  packages.push(pkgs[key]);
+                  
+              });
+            }
+          
+           
+            Object.values(res).forEach(element => {
+              th.installing[element.package_name]  = false;
+            });
 
-      console.log(res);
+          
+            th.installedPackages = Object.values(res).filter(({package_name}) => packages.includes(package_name));
+            th.localPackages = packages;
+            th.packagesData = res;
+        });
+      });
+    }else
+      this.router.navigate(['/admin/dashboard']);
+  }
+
+  installPackage = (pkg)=>{
+     this.installing[pkg.package_name]  = true;
+    if(localStorage.getItem("userDetails['roles_id']") == '1'){
+      this.section_service.installPackage(pkg).subscribe(res => {
+        $.notify({
+          title: "Success! ",
+          message: pkg.package_name+" plugin has been installed.",
+          icon: 'fa fa-check' 
+        },{
+          type: "success"
+        });
+    
+        this.getInstallerPackage();
+        
       });
     }else
       this.router.navigate(['/admin/dashboard']);

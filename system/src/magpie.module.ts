@@ -34,6 +34,7 @@ import { Select2Module } from 'ng2-select2';
 import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 import { AgmCoreModule } from '@agm/core';
 import { NgxEditorModule } from 'ngx-editor';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 
 @NgModule({
@@ -77,7 +78,8 @@ import { NgxEditorModule } from 'ngx-editor';
       apiKey: 'AIzaSyDZ0qMJNqSxi8QJFuUDuPdE7Pwh3TPCjpo',
       libraries: ["places"]
     }),
-    NgxEditorModule
+    NgxEditorModule,
+    ColorPickerModule
   ],
   exports: [
     MagpieComponent,
@@ -103,7 +105,8 @@ import { NgxEditorModule } from 'ngx-editor';
     ToArrayPipe,
     GetFilePipe,
     TagsDataPipe,
-    ToObjectPipe
+    ToObjectPipe,
+    RouterModule
   ],
   providers: [SectionService,AuthGuard],
   bootstrap: [MagpieComponent]

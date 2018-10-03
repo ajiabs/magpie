@@ -24,32 +24,34 @@
               <div class="tab-content">
                   <div class="tab-pane active" id="packages-details">
                       <div class="row">
-                          <div class="col-md-12">
-                              {{packagesData.package_description}}a
-                          </div>
+                         <div [innerHTML]="packagesData.package_description" class="col-md-12"></div>
                       </div>
                   </div>
                 <div class="tab-pane fade" id="packages-documentation">
                     <div class="row">
-                        <div class="col-md-12">
-                            {{packagesData.package_description}}b
-                        </div>
+                       
+                      <div [innerHTML]="packagesData.readme" class="col-md-12"></div>
+                       
                     </div>
                 </div>
                 <div class="tab-pane fade" id="packages-configure">
                     <div class="row user-settings">
                         <div class="col-md-12">
-                          <form class="package-installer-form" [formGroup]="packageInstallerForm" novalidate>
+                            <form class="package-installer-form" [formGroup]="packageInstallerForm" novalidate>
                                 <div class="row">
-                                        <div class="col-md-6" *ngFor="let keys of configuration_keys;let j = index">
-                                                <label class="control-label">{{keys}}<span  class="required_field">*</span></label>
-                                                <input class="form-control">
-                                              
-                                        </div>
+                                <div class="col-md-6" *ngFor="let keys of configuration_keys;let j = index">
+                                    <label class="control-label">{{keys}}<span class="required_field">*</span></label>
+                                    <input class="form-control {{(packageInstallerForm.controls[keys].invalid && (packageInstallerForm.controls[keys].dirty || packageInstallerForm.controls[keys].touched))?'is-invalid':packageInstallerForm.controls[keys].valid?'is-valid':''}}" type="text" formControlName="{{keys}}" #{{keys}} [(ngModel)] = "package_form_data[keys]" placeholder="Enter your {{keys}}">
+                                    <div *ngIf="packageInstallerForm.controls[keys].invalid && (packageInstallerForm.controls[keys].dirty || packageInstallerForm.controls[keys].touched) && packageInstallerForm.controls[keys].errors.required" class="form-control-feedback"> 
+                                    {{keys}} is required</div>
                                 </div>
-                          
-                          </form>
+                                </div>
+                                <div class="tile-footer">
+                                  <button (click)="configureUpdate(package_form_data)" [disabled]="packageInstallerForm.invalid" class="btn btn-primary" ><i class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>
+                                </div>
+                            </form>
                         </div>
+                            
                     </div>
                 </div>
               </div>

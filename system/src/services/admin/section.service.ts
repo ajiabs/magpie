@@ -456,12 +456,29 @@ getOnePackagesInstaller = (package_name)=>{
 
 }
 
-installPackage = (command_line)=>{
+installPackage = (pkg)=>{
   let httpOptions = {
     headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
   };
   const uri = server_url+'packages-installer/installPackage';
-  const obj = {'command':command_line};
+  //.command_line_code
+  const obj = pkg;
+  return this
+          .http
+          .post(uri,obj,httpOptions)
+          .map(res => {
+          return res;
+        });
+}
+
+
+installedPackages = ()=>{
+  let httpOptions = {
+    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+  };
+  const uri = server_url+'packages-installer/installedPackages';
+  //.command_line_code
+  const obj = {};
   return this
           .http
           .post(uri,obj,httpOptions)
@@ -499,6 +516,37 @@ getMenuNameFromUrl = (section,url)=>{
           return res;
         });
  }
+
+
+ updatePackageConfiguration = (packagedata)=>{
+  let httpOptions = {
+  headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+  };
+  const uri = server_url+'packages-installer/updatePackageConfiguration';
+  const obj = packagedata;
+  
+  return this
+  .http
+  .post(uri,obj,httpOptions)
+  .map(res => {
+  return res;
+  });
+  }
+  getPackageData = (package_name)=>{
+  let httpOptions = {
+  headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+  };
+  const uri = server_url+'packages-installer/getPackageData';
+  
+  const obj = {'package_name':package_name};
+  
+  return this
+  .http
+  .post(uri,obj,httpOptions)
+  .map(res => {
+  return res;
+  });
+  }
 
 
 

@@ -21,6 +21,8 @@ export class MagpiePackageInstallerDetailsComponent implements OnInit {
     title = "";
     packages_error:any;
     packagesData:any =[];
+    packageConfigData:any;
+    package_form_data:any={};
     message = '';
     data: any;
     result_data:any;
@@ -38,19 +40,31 @@ export class MagpiePackageInstallerDetailsComponent implements OnInit {
       this.route.params.subscribe(params => {
         th.title = params['pacakge'];
         th.section_service.getOnePackagesInstaller(params['pacakge']).subscribe(res => {
-           th.packagesData = res;
-           var keys = JSON.parse(res['configuration_keys']);
-           var resultArray = Object.keys(keys).map(function(value){
-              let configurations = keys[value];
-              return configurations;
+          th.packagesData = res;
+          var column_validation={};
+          var keys = JSON.parse(res['configuration_keys']);
+          var resultArray = Object.keys(keys).map(function(value){
+          let configurations = keys[value];
+          column_validation[configurations] = ['', Validators.required ];
+          return configurations;
           });
+          this.packageInstallerForm = this.fb.group(column_validation);
+          this.configuration_keys = resultArray;
 
         
-           
-          this.configuration_keys =  resultArray;
 
          
         });
+
+        th.section_service.getPackageData(params['pacakge']).subscribe(res => {
+          this.packageConfigData = res;
+          var package_config = JSON.parse(this.packageConfigData.package_config);
+          Object.keys(package_config).map(function(value){
+             th.package_form_data[value] = package_config[value];
+          });
+        });
+
+
 
        });
 
@@ -60,6 +74,24 @@ export class MagpiePackageInstallerDetailsComponent implements OnInit {
 
     
   }
+
+  configureUpdate =()=>{
+    if(localStorage.getItem("userDetails['roles_id']") == '1'){
+      this.packageConfigData.package_config = JSON.stringify(this.package_form_data);
+        this.section_service.updatePackageConfiguration( this.packageConfigData).subscribe(res => {
+          this.packagesData = res;
+          $.notify({
+          title: "Update! ",
+          message: "Configuration has been updated.",
+          icon: 'fa fa-check' 
+          },{
+          type: "success"
+          });
+      });
+
+     }else
+      this.router.navigate(['/admin/dashboard']);
+    }
 
 
 

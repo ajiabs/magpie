@@ -57,6 +57,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
   constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
+
         this.index();
       }
     });

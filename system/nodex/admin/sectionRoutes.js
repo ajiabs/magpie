@@ -431,7 +431,27 @@ sectionAdminRoutes.route('/getOnePackagesInstaller').post(passport.authenticate(
       return  res.json({success: false,  msg: 'Unauthorized'});
 
 });
+  sectionAdminRoutes.route('/installedPackages').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+    var token = sectionGetToken(req.headers);
+    if (token) 
+    {
 
+      var PackageInstaller = require('../models/package-installer');
+      PackageInstaller.findOne({},function (err, result){
+        if(err){
+          return  res.json({success: false,  msg: err});
+        }
+        else {
+          return res.json(result);
+        }
+      });
+
+    
+    }
+    else 
+        return  res.json({success: false,  msg: 'Unauthorized'});
+  
+  });
 
 sectionAdminRoutes.route('/installPackage').post(passport.authenticate('jwt', { session: false}),function (req, res) {
   var token = sectionGetToken(req.headers);
@@ -443,8 +463,8 @@ sectionAdminRoutes.route('/installPackage').post(passport.authenticate('jwt', { 
           // handle errors
 
           // install module ffi
-          npm.commands.install([req.body.command], function(er, data) {
-            return  res.json(data);
+          npm.commands.install([req.body.command_line_code], (er, data)=> {
+            return  res.json({success:true,msg:"successfully installed"});
             // log errors or data
           });
 
@@ -453,6 +473,41 @@ sectionAdminRoutes.route('/installPackage').post(passport.authenticate('jwt', { 
           //   console.log(message);
           // });
         });
+
+        setTimeout(function(){
+
+           
+            var i = 0;
+            var conf = {}; 
+            var data_conf = JSON.parse(req.body['configuration_keys']);
+
+            
+            Object.values(data_conf).forEach(v=>{
+                conf[String(v)] = "";
+
+                if(parseInt(i)+parseInt(1) ==  Object.keys(data_conf).length)
+                {
+
+                  var PackageInstaller = require('../models/package-installer');
+                  var package_installer = new PackageInstaller({"package_name":req.body.package_name,"package_config":JSON.stringify(conf)});
+                  package_installer.save().then(item => {
+                    return  res.status(200).json({success:true,msg:"successfully installed"});
+                    })
+                    .catch(err => {
+                    return  res.json({success: false,  msg: err});
+                    
+                    });
+                  
+                }
+                i++;
+
+
+            });
+
+
+        },10000)
+
+
     
        
       }
@@ -460,6 +515,63 @@ sectionAdminRoutes.route('/installPackage').post(passport.authenticate('jwt', { 
       return  res.json({success: false,  msg: 'Unauthorized'});
 
 });
+
+  sectionAdminRoutes.route('/updatePackageConfiguration').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+        var token = sectionGetToken(req.headers);
+        var result={};
+        if (token) 
+        {
+        var PackageInstaller = require('../models/package-installer');
+        result = req.body;
+        PackageInstaller.findOneAndUpdate({'_id':req.body._id},result).exec(function(err, updated) {
+        if(err) 
+           return res.json({success: false, msg: err});
+        else
+           return res.status(200).json('Updated successfully');
+        });
+        }
+        else 
+           return res.json({success: false, msg: 'Unauthorized'});
+    
+    });
+    
+    sectionAdminRoutes.route('/getPackageData').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+        var token = sectionGetToken(req.headers);
+        if (token) 
+            return sectiongetPackageData(req,res);
+        else 
+            return res.json({success: false, msg: 'Unauthorized'});
+        
+        });
+        sectiongetPackageData= (req,res) => {
+        var Section = require('../models/package-installer');
+        Section.findOne({'package_name':req.body.package_name},function (err, result){
+        if(err){
+            return res.json({success: false, msg: err});
+        }
+        else {
+            return res.json(result);
+        }
+        });
+    };
+    sectionAdminRoutes.route('/updatePackageConfiguration').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+    var token = sectionGetToken(req.headers);
+    var result={};
+    if (token) 
+    {
+    var PackageInstaller = require('../models/package-installer');
+    result = req.body;
+    PackageInstaller.findOneAndUpdate({'_id':req.body._id},result).exec(function(err, updated) {
+    if(err) 
+    return res.json({success: false, msg: err});
+    else
+    return res.status(200).json('Updated successfully');
+    });
+    }
+    else 
+    return res.json({success: false, msg: 'Unauthorized'});
+  
+  });
 
 
 

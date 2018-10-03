@@ -32,12 +32,12 @@
                           </div>
                         </div>
                         <div class="post-content">
-                          <p>{{packages.package_description}}</p>
+                          <p>{{packages.short_description}}</p>
                         </div>
                         <ul class="post-utility">
-                          <li class="likes"><i class="fa fa-download"></i>2 Downloads</li>
-                          <li class="comments"><button class="btn btn-sm btn-primary" (click)="installPackage(packages)">install</button></li>
-                          <li class="comments"><button class="btn btn-sm btn-primary" [disabled]="true"> <i class="fa fa-spinner fa-spin"></i>installing</button></li>
+                          <li class="likes"><i class="fa fa-download"></i>2 Downloads </li>
+                          <li class="comments" *ngIf="(localPackages.indexOf(packages.package_name) == -1 && installing[packages.package_name] == false)"><button class="btn btn-sm btn-primary" (click)="installPackage(packages)"><b>install</b></button></li>
+                          <li class="comments" *ngIf="(localPackages.indexOf(packages.package_name) == -1 && installing[packages.package_name]  == true) || localPackages.indexOf(packages.package_name) >= 0"><button class="btn btn-sm btn-primary" [disabled]="true"> <b *ngIf="(localPackages.indexOf(packages.package_name) == -1 && installing[packages.package_name] == true)"><i class="fa fa-spinner fa-spin"></i>installing</b><b *ngIf="localPackages.indexOf(packages.package_name) >= 0">installed</b></button></li>
 
                         </ul>
                       </div>
@@ -51,7 +51,7 @@
                     <div class="row">
 
 
-                        <div class="col-md-12"  *ngFor="let packages of  packagesData">
+                        <div class="col-md-12"  *ngFor="let packages of  installedPackages">
                           <div class="timeline-post">
                             <div class="post-media"><a  [routerLink]="['/admin/package-installer/'+packages.package_name]"><img src="http://52.91.195.127/packages/{{packages.package_name}}/{{packages.image}}"  width="48px" height="48px"></a>
                               <div class="content">
@@ -60,11 +60,11 @@
                               </div>
                             </div>
                             <div class="post-content">
-                              <p>{{packages.package_description}}</p>
+                              <p>{{packages.short_description}}</p>
                             </div>
                             <ul class="post-utility">
                               <li class="likes"><i class="fa fa-download"></i>2 Downloads</li>
-                              <li class="comments"><button class="btn btn-sm btn-primary">install</button></li>
+                              <li class="comments"><button class="btn btn-sm btn-primary" [disabled]="true">installed</button></li>
                             </ul>
                           </div>
                         </div>

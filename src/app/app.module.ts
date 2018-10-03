@@ -25,6 +25,7 @@ const appRoutes: Routes = [];
     BrowserModule,RouterModule.forRoot(appRoutes), MagpieModule,HttpClientModule, ReactiveFormsModule
   ],
   providers: [DashboardService,AuthGuard,SectionService],
+  exports: [RouterModule],
   bootstrap: [AppComponent]
 })
 export class AppModule  { }

@@ -52,6 +52,11 @@
                                           </div>
                                         </div>
                                   </div>
+                                  <div *ngIf="column.type == 'color-picker'" > 
+                                        <input class="form-control" formControlName="{{column.slug}}" #{{column.slug}} [(ngModel)] = "settings_form_data[column.slug]" placeholder="Enter your {{column.label}}" [cpOutputFormat]="'hex'" [cpCancelButton]="true" [(colorPicker)]="settings_form_data[column.slug]" [style.background]="settings_form_data[column.slug]" [value]="settings_form_data[column.slug]" (colorPickerChange)="cmyk=onChangeColor($event,column.slug)"/>
+                                  </div>
+                                        
+                                        
                             </div>
                         </div>
                         <div class="tile-footer">
