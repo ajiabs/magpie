@@ -25,6 +25,7 @@ export class MagpieComponent {
     login_role = "";
     all_menus:any;
     roles_menu:any;
+    website_name:any
    
   constructor(public route: ActivatedRoute, public router: Router,public http_client: HttpClient,public section_service: SectionService) {
   }

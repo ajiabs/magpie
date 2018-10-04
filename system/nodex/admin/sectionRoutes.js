@@ -324,6 +324,22 @@ sectionAdminRoutes.route('/getSettings').get(function (req, res) {
 
 });
 
+sectionAdminRoutes.route('/getThemeColorSettings').post(function (req, res) {
+   req.body.slug = "admin_theme_color";
+   return getRowSettings(req,res);
+
+
+});
+sectionAdminRoutes.route('/getWebsiteNameSettings').post(function (req, res) {
+  req.body.slug = "site_name";
+  return getRowSettings(req,res);
+
+
+});
+
+
+
+
 sectionAdminRoutes.route('/getRowSettings').post(function (req, res) {
   var token = sectionGetToken(req.headers);
   if (token) 

@@ -548,6 +548,40 @@ getMenuNameFromUrl = (section,url)=>{
     });
   }
 
+  getThemeColorSettings = ()=>{
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url+'general-settings/getThemeColorSettings';
+    
+    const obj = {};
+    
+    return this
+      .http
+      .post(uri,obj)
+      .map(res => {
+        return res;
+      });
+
+}
+
+getWebsiteNameSettings = ()=>{
+  let httpOptions = {
+    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+  };
+  const uri = server_url+'general-settings/getWebsiteNameSettings';
+  
+  const obj = {};
+  
+  return this
+    .http
+    .post(uri,obj)
+    .map(res => {
+      return res;
+    });
+
+}
+
   getRowSettings = (settings_key)=>{
       let httpOptions = {
         headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
@@ -558,7 +592,7 @@ getMenuNameFromUrl = (section,url)=>{
       
       return this
         .http
-        .post(uri,obj,httpOptions)
+        .post(uri,obj)
         .map(res => {
           return res;
         });

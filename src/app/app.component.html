@@ -13,7 +13,7 @@
 
 <div *ngIf="showNav && angular_part">
       
-  <header class="app-header"><a class="app-header__logo" [routerLink]="['admin/dashboard']" routerLinkActive="active">Magpie</a>
+  <header class="app-header"><a class="app-header__logo" [routerLink]="['admin/dashboard']" routerLinkActive="active">{{website_name}}</a>
    <a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
    
     <ul class="app-nav">
@@ -141,7 +141,7 @@
 </section>
 <section class="login-content">
 <div class="logo">
-  <h1>Magpie</h1>
+  <h1>{{website_name}}</h1>
 </div>    
 <div class="login-box">
   <router-outlet></router-outlet>

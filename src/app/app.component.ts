@@ -20,17 +20,25 @@ export class AppComponent extends  MagpieComponent {
 
   }
   ngOnInit() {
-    this.section_service.getRowSettings("admin_theme_color").subscribe(res=>{
-      console.log(res);
-      $("body").css({"--some-color-dark":this.colorLuminance(res[0].value, -0.3),"--some-color":this.colorLuminance(res[0].value, 0),"--some-hovercolor":this.colorLuminance(res[0].value, -0.2)});
+  
 
-    });
-
-    if(window.location.pathname.split('/')[1] == 'admin')
+    if(window.location.pathname.split('/')[1] == 'admin'){
      this.angular_part = true;
+     this.section_service.getThemeColorSettings().subscribe(res=>{
+        $("body").css({"--some-color-dark":this.colorLuminance(res[0].value, -0.3),"--some-color":this.colorLuminance(res[0].value, 0),"--some-hovercolor":this.colorLuminance(res[0].value, -0.2)});
+
+      });
+      this.section_service.getWebsiteNameSettings().subscribe(res=>{
+        this.website_name = res[0].value;
+
+      });
+    }
        
 
     if (localStorage.getItem('jwtToken')) {
+   
+
+
       this.showNav = true;
       this.login_name = localStorage.getItem("userDetails['name']");
       this.login_id = localStorage.getItem("userDetails['users_id']");
@@ -39,6 +47,8 @@ export class AppComponent extends  MagpieComponent {
       this.isLoggedIn().subscribe(res=>{
           this.roles_menu = res;
       });
+   
+
       this.package_installer = localStorage.getItem("userDetails['roles_id']") == '1'?true:false;
       this.section_service.getUserRole(localStorage.getItem("userDetails['roles_id']")).subscribe(res => {
           this.login_role = res['name'];
