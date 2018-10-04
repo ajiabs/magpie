@@ -526,11 +526,11 @@ getMenuNameFromUrl = (section,url)=>{
   const obj = packagedata;
   
   return this
-  .http
-  .post(uri,obj,httpOptions)
-  .map(res => {
-  return res;
-  });
+    .http
+    .post(uri,obj,httpOptions)
+    .map(res => {
+      return res;
+    });
   }
   getPackageData = (package_name)=>{
   let httpOptions = {
@@ -541,11 +541,28 @@ getMenuNameFromUrl = (section,url)=>{
   const obj = {'package_name':package_name};
   
   return this
-  .http
-  .post(uri,obj,httpOptions)
-  .map(res => {
-  return res;
-  });
+    .http
+    .post(uri,obj,httpOptions)
+    .map(res => {
+      return res;
+    });
+  }
+
+  getRowSettings = (settings_key)=>{
+      let httpOptions = {
+        headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+      };
+      const uri = server_url+'general-settings/getRowSettings';
+      
+      const obj = {'slug':settings_key};
+      
+      return this
+        .http
+        .post(uri,obj,httpOptions)
+        .map(res => {
+          return res;
+        });
+
   }
 
 

@@ -324,6 +324,15 @@ sectionAdminRoutes.route('/getSettings').get(function (req, res) {
 
 });
 
+sectionAdminRoutes.route('/getRowSettings').post(function (req, res) {
+  var token = sectionGetToken(req.headers);
+  if (token) 
+     return getRowSettings(req,res);
+  else 
+    return res.status(403).send({success: false, msg: 'Unauthorized.'});
+
+});
+
 sectionAdminRoutes.route('/updateSettings').post(passport.authenticate('jwt', { session: false}),function (req, res) {
 
 
@@ -620,6 +629,22 @@ getSettings=(req,res)=>{
     }
   });
 };
+
+
+getRowSettings=(req,res)=>{
+
+  var Settings = require('../models/'+req.originalUrl.split('/')[2]);
+  var token = getToken(req.headers);
+  Settings.find({'slug':req.body.slug},function (err, result){
+    if(err){
+      return  res.json({success: false,  msg: err});
+    }
+    else {
+      return res.json(result);
+    }
+  });
+};
+ 
  
 
 sectionGetAllMenus = (req,res) =>  {

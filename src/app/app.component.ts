@@ -20,6 +20,11 @@ export class AppComponent extends  MagpieComponent {
 
   }
   ngOnInit() {
+    this.section_service.getRowSettings("admin_theme_color").subscribe(res=>{
+      console.log(res);
+      $("body").css({"--some-color-dark":this.colorLuminance(res[0].value, -0.3),"--some-color":this.colorLuminance(res[0].value, 0),"--some-hovercolor":this.colorLuminance(res[0].value, -0.2)});
+
+    });
 
     if(window.location.pathname.split('/')[1] == 'admin')
      this.angular_part = true;
@@ -33,9 +38,6 @@ export class AppComponent extends  MagpieComponent {
     
       this.isLoggedIn().subscribe(res=>{
           this.roles_menu = res;
-
-      
-
       });
       this.package_installer = localStorage.getItem("userDetails['roles_id']") == '1'?true:false;
       this.section_service.getUserRole(localStorage.getItem("userDetails['roles_id']")).subscribe(res => {
@@ -83,4 +85,26 @@ export class AppComponent extends  MagpieComponent {
     }); 
 
   }
+
+  colorLuminance=(hex, lum) =>{
+
+   
+    hex = String(hex).replace(/[^0-9a-f]/gi, '');
+    if (hex.length < 6) {
+      hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    }
+    lum = lum || 0;
+  
+    var rgb = "#", c, i;
+    for (i = 0; i < 3; i++) {
+      c = parseInt(hex.substr(i*2,2), 16);
+      c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+      rgb += ("00"+c).substr(c.length);
+    }
+  
+    return rgb;
+  }
+
+
 }
+
