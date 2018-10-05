@@ -22,7 +22,9 @@ const appRoutes: Routes = [];
 
   ],
   imports: [
-    BrowserModule,RouterModule.forRoot(appRoutes), MagpieModule,HttpClientModule, ReactiveFormsModule
+    BrowserModule,RouterModule.forRoot(appRoutes,{
+      onSameUrlNavigation: 'reload'
+      }), MagpieModule,HttpClientModule, ReactiveFormsModule
   ],
   providers: [DashboardService,AuthGuard,SectionService],
   exports: [RouterModule],

@@ -61,6 +61,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
         this.index();
       }
     });
+
     
 
   }
