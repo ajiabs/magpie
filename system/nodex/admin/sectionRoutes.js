@@ -744,8 +744,10 @@ sectionGetList = (req,res) =>  {
     var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
 
   var orderField =  req.body.sort_orderBy;
+  var sortBy = req.body.sort_order;
   var order = {};
-  order[orderField] = 1;
+  order[orderField] = sortBy;
+ 
   Section.find(where)
       .collation({ locale: 'en', strength: 2 })
       .limit(req.body.per_page)

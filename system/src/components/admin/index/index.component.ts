@@ -325,12 +325,11 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
               this.paginate_total = 1;
               this.paginate_from = 1;
               this.paginate_to = 1;
+              this.order_field= this.section_alias+"_id";
+              this.order_fieldBy='desc';
 
-              this.order_field= this.columns[0].field;
-              this.order_fieldBy='asc';
 
-
-              this.section_service.get(this.current_page,this.per_page,this.order_field,this.router.url).subscribe(result => {
+              this.section_service.get(this.current_page,this.per_page,this.order_field,this.order_fieldBy,this.router.url).subscribe(result => {
                  
                 this.section_data = result['data'];
                     this.pages = result['pages'];

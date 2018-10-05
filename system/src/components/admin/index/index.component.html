@@ -30,6 +30,10 @@
             </tbody>
           </table>
 
+          <div *ngIf="section_data==''">
+              <p class="no-data-found">No data found.</p>
+          </div>
+
         <div class="dataTables_wrapper" *ngIf="pages>0 && paginate">
           <div class="row">
               <div class="col-sm-12 col-md-5">

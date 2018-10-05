@@ -142,14 +142,14 @@ export class SectionService {
 
 
 
-   get = (current_page,per_page,sortable_field,current_route) =>{
+   get = (current_page,per_page,sortable_field,order_by,current_route) =>{
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
 
     var section = current_route.split('/')[2];
     const uri = server_url+section;
-    const obj = {'current_page':current_page,'per_page':per_page,'sort_orderBy':sortable_field,'role_id':localStorage.getItem("userDetails['roles_id']")};
+    const obj = {'current_page':current_page,'per_page':per_page,'sort_orderBy':sortable_field,sort_order:order_by,'role_id':localStorage.getItem("userDetails['roles_id']")};
     return this
             .http
             .post(uri,obj,httpOptions)
