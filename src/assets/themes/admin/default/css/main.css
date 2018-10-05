@@ -11,7 +11,7 @@
  * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
- :root {
+:root {
   --blue: #007bff;
   --indigo: #6610f2;
   --purple: #6f42c1;
@@ -41,7 +41,6 @@
   --font-family-sans-serif: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
-
 *,
 *::before,
 *::after {
@@ -112,7 +111,9 @@ address {
   font-style: normal;
   line-height: inherit;
 }
-
+.no-data-found{
+text-align: center;
+}
 ol,
 ul,
 dl {
@@ -139,7 +140,24 @@ dd {
 blockquote {
   margin: 0 0 1rem;
 }
-
+.color-picker{
+  top: 40px !important;
+  left: 277px !important;
+}
+@media (max-width: 1024px) and (min-width:768px) {
+  .color-picker{
+    top: 40px !important;
+    left: 100px !important;
+    width:150px !important;
+  }
+}
+@media (max-width: 768px) {
+  .color-picker{
+    width:230px ;
+    top: 40px !important;
+    left: 100px !important;
+  }
+}
 dfn {
   font-style: italic;
 }
@@ -177,7 +195,7 @@ a {
 }
 
 a:hover {
-  color: var(--some-color-dark);;
+  color: var(--some-color-dark);
   text-decoration: underline;
 }
 
@@ -326,7 +344,10 @@ legend {
   color: inherit;
   white-space: normal;
 }
-
+.profile-pic-small img{
+  width: 100%;
+  height: auto;
+}
 progress {
   vertical-align: baseline;
 }
@@ -2529,9 +2550,9 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary:hover {
-  color: #FFF;
-  background-color: var(--some-hovercolor);
-  border-color: var(--some-hovercolor);;
+  color:var(--some-hovercolor);
+  background-color: var(--some-hovercolor)
+  border-color: var(--some-hovercolor);
 }
 
 .btn-primary:focus, .btn-primary.focus {
@@ -2548,8 +2569,8 @@ fieldset:disabled a.btn {
 .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
   color: #FFF;
-  background-color: var(--some-hovercolor);;
-  border-color: var(--some-hovercolor);;
+  background-color: var(--some-hovercolor);
+  border-color:var(--some-hovercolor);
 }
 
 .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
@@ -3105,7 +3126,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-link:hover {
-  color: var(--some-color-dark);;
+  color: var(--some-color-dark);
   text-decoration: underline;
   background-color: transparent;
   border-color: transparent;
@@ -4799,7 +4820,7 @@ tbody.collapse.show {
 }
 
 .page-link:hover {
-  color: var(--some-color-dark);;
+  color: var(--some-color-dark);
   text-decoration: none;
   background-color: #e9ecef;
   border-color: #dee2e6;
@@ -4909,7 +4930,7 @@ tbody.collapse.show {
 .badge-primary[href]:hover, .badge-primary[href]:focus {
   color: #FFF;
   text-decoration: none;
-  background-color: var(--some-hovercolor);;
+  background-color: var(--some-hovercolor);
 }
 
 .badge-secondary {
@@ -5460,6 +5481,14 @@ button.close {
 .modal-open {
   overflow: hidden;
 }
+agm-map  .gmnoprint a, .gmnoprint span, .gm-style-cc {
+  display:none !important;
+}
+agm-map .gmnoprint div {
+  background:none !important;
+}
+agm-map a[href^="http://maps.google.com/maps"]{display:none !important}
+agm-map a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .modal {
   position: fixed;
@@ -6153,7 +6182,7 @@ button.close {
 a.bg-primary:hover, a.bg-primary:focus,
 button.bg-primary:hover,
 button.bg-primary:focus {
-  background-color: var(--some-hovercolor); !important;
+  background-color: var(--some-hovercolor) !important;
 }
 
 .bg-secondary {
@@ -8901,7 +8930,7 @@ button.bg-dark:focus {
 }
 
 a.text-primary:hover, a.text-primary:focus {
-  color: var(--some-hovercolor); !important;
+  color: var(--some-hovercolor) !important;
 }
 
 .text-secondary {
@@ -9164,7 +9193,7 @@ table.dataTable thead .sorting_desc_disabled:after {
   position: absolute;
   bottom: 0.9em;
   display: block;
-  opacity: 0.3;
+  opacity: 1;
 }
 
 table.dataTable thead .sorting:before,
@@ -9188,6 +9217,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 table.dataTable thead .sorting_asc:before,
 table.dataTable thead .sorting_desc:after {
   opacity: 1;
+  color:#bd2130
 }
 
 table.dataTable thead .sorting_asc_disabled:before,
@@ -9875,7 +9905,7 @@ fieldset[disabled] .datepicker table tr td.selected.highlighted.focus {
 .datepicker table tr td.active.highlighted:hover {
   color: #ffffff;
   background-color: var(--some-color);
-  border-color: var(--some-color-dark);;
+  border-color: var(--some-color-dark);
 }
 
 .datepicker table tr td.active:active,
@@ -9886,7 +9916,7 @@ fieldset[disabled] .datepicker table tr td.selected.highlighted.focus {
 .open > .dropdown-toggle.datepicker table tr td.active.highlighted {
   color: #ffffff;
   background-color: var(--some-color);
-  border-color: var(--some-color-dark);;
+  border-color: var(--some-color-dark);
 }
 
 .datepicker table tr td.active:active:hover,
@@ -9908,7 +9938,7 @@ fieldset[disabled] .datepicker table tr td.selected.highlighted.focus {
 .open > .dropdown-toggle.datepicker table tr td.active.focus,
 .open > .dropdown-toggle.datepicker table tr td.active.highlighted.focus {
   color: #ffffff;
-  background-color: var(--some-color-dark);;
+  background-color: var(--some-color-dark);
   border-color: #193c5a;
 }
 
@@ -9994,7 +10024,7 @@ fieldset[disabled] .datepicker table tr td.active.highlighted.focus {
 .datepicker table tr td span.active.disabled:hover:hover {
   color: #ffffff;
   background-color: var(--some-color);
-  border-color: var(--some-color-dark);;
+  border-color: var(--some-color-dark);
 }
 
 .datepicker table tr td span.active:active,
@@ -10011,7 +10041,7 @@ fieldset[disabled] .datepicker table tr td.active.highlighted.focus {
 .open > .dropdown-toggle.datepicker table tr td span.active.disabled:hover {
   color: #ffffff;
   background-color: var(--some-color);
-  border-color: var(--some-color-dark);;
+  border-color: var(--some-color-dark);
 }
 
 .datepicker table tr td span.active:active:hover,
@@ -10051,7 +10081,7 @@ fieldset[disabled] .datepicker table tr td.active.highlighted.focus {
 .open > .dropdown-toggle.datepicker table tr td span.active.disabled.focus,
 .open > .dropdown-toggle.datepicker table tr td span.active.disabled:hover.focus {
   color: #ffffff;
-  background-color: var(--some-color-dark);;
+  background-color: var(--some-color-dark);
   border-color: #193c5a;
 }
 
@@ -10440,7 +10470,7 @@ body.stop-scrolling {
 }
 
 .sweet-alert button:active {
-  background-color: var(--some-hovercolor);;
+  background-color: var(--some-hovercolor);
 }
 
 .sweet-alert button.cancel {
@@ -13033,12 +13063,12 @@ be a descendant of the grid when it is being dragged.
 
 ::-moz-selection {
   color: #FFF;
-  background-color: var(--some-hovercolor);;
+  background-color: var(--some-hovercolor);
 }
 
 ::selection {
   color: #FFF;
-  background-color: var(--some-hovercolor);;
+  background-color: var(--some-hovercolor);
 }
 
 @media (min-width: 768px) {
@@ -13171,7 +13201,7 @@ be a descendant of the grid when it is being dragged.
             flex: 0 0 auto;
     display: block;
     width: 230px;
-    background-color: var(--some-color-dark);;
+    background-color: var(--some-color-dark);
   }
 }
 
@@ -13205,7 +13235,7 @@ be a descendant of the grid when it is being dragged.
 
 .app-sidebar__toggle:focus, .app-sidebar__toggle:hover {
   color: #fff;
-  background-color: var(--some-hovercolor);;
+  background-color: var(--some-hovercolor);
   text-decoration: none;
 }
 
@@ -13421,11 +13451,15 @@ be a descendant of the grid when it is being dragged.
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
   margin-right: 15px;
+  
 }
 
 .app-sidebar__user-name {
   font-size: 17px;
   line-height: 1.3;
+  text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 150px;
 }
 
 .app-sidebar__user-name,
@@ -13516,6 +13550,8 @@ be a descendant of the grid when it is being dragged.
   padding: 5px 5px 5px 20px;
   font-size: 1em;
   color: #fff;
+  height: 35px;
+
 }
 
 .treeview-item.active, .treeview-item:hover, .treeview-item:focus {
@@ -13575,7 +13611,7 @@ be a descendant of the grid when it is being dragged.
   .sidebar-mini.sidenav-toggled .app-menu__label {
     display: block;
     position: absolute;
-    top: 0;
+    /*top: 0;*/
     left: 50px;
     min-width: 180px;
     padding: 12px 5px 12px 20px;
@@ -13585,6 +13621,8 @@ be a descendant of the grid when it is being dragged.
     background: #0d1214;
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
+    width: 200px;
+
   }
   .sidebar-mini.sidenav-toggled .treeview:hover .app-menu__item {
     overflow: visible;
@@ -13607,8 +13645,8 @@ be a descendant of the grid when it is being dragged.
   .sidebar-mini.sidenav-toggled .treeview-menu {
     position: absolute;
     left: 50px;
-    min-width: 180px;
-    padding: 12px 0;
+    min-width:200px;
+   /* padding: 12px 0;*/
     opacity: 0;
     border-bottom-right-radius: 4px;
     z-index: 9;
@@ -14472,7 +14510,7 @@ be a descendant of the grid when it is being dragged.
 .login-content .login-box {
   position: relative;
   min-width: 350px;
-  min-height: 390px;
+  min-height: 410px;
   background-color: #fff;
   -webkit-box-shadow: 0px 29px 147.5px 102.5px rgba(0, 0, 0, 0.05), 0px 29px 95px 0px rgba(0, 0, 0, 0.16);
           box-shadow: 0px 29px 147.5px 102.5px rgba(0, 0, 0, 0.05), 0px 29px 95px 0px rgba(0, 0, 0, 0.16);
