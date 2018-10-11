@@ -35,6 +35,7 @@ import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 import { AgmCoreModule } from '@agm/core';
 import { NgxEditorModule } from 'ngx-editor';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 
 @NgModule({
@@ -79,7 +80,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
       libraries: ["places"]
     }),
     NgxEditorModule,
-    ColorPickerModule
+    ColorPickerModule,
+    Ng4LoadingSpinnerModule.forRoot()
   ],
   exports: [
     MagpieComponent,

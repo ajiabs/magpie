@@ -11,8 +11,7 @@ import { DashboardComponent } from './../../src/app/admin/components/dashboard/d
 import { DashboardService } from './../../src/app/admin/services/dashboard.service';
 import { AuthGuard } from './../../system/src/services/admin/auth-guard.service';
 import { SectionService } from './../../system/src/services/admin/section.service';
-
-
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 const appRoutes: Routes = [];
 
 @NgModule({
@@ -24,7 +23,7 @@ const appRoutes: Routes = [];
   imports: [
     BrowserModule,RouterModule.forRoot(appRoutes,{
       onSameUrlNavigation: 'reload'
-      }), MagpieModule,HttpClientModule, ReactiveFormsModule
+      }), MagpieModule,HttpClientModule, ReactiveFormsModule,Ng4LoadingSpinnerModule.forRoot()
   ],
   providers: [DashboardService,AuthGuard,SectionService],
   exports: [RouterModule],

@@ -7,6 +7,7 @@ import { SectionService } from './../../../../../system/src/services/admin/secti
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 declare var swal: any;
 declare var $: any;
 
@@ -54,10 +55,11 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
     paginate_to:any;
     paginate:any;
     navigationSubscription:any;
-  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService) {
+    template: string ='<img class="custom-spinner-template" src="http://pa1.narvii.com/5722/2c617cd9674417d272084884b61e4bb7dd5f0b15_hq.gif">';
+  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public spinnerService: Ng4LoadingSpinnerService) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
-
+        this.spinnerService.show();
         this.index();
       }
     });
@@ -137,7 +139,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
   }
 
   onSortClick = (sortable,field,i) =>{
-
+          this.spinnerService.show();
 
           this.current_page = 1;
           var order_by = 'asc';
@@ -173,6 +175,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
                           temp_paginate_array.push(i);
                       }
                     this.paginate_array = temp_paginate_array;
+                    this.spinnerService.hide();
                    
 
 
@@ -188,7 +191,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
   
   onPaginateClick = (page) =>{
    
-
+      this.spinnerService.show();
       this.route.params.subscribe(params => {
         this.section_service.search(this.search_word,this.searchable_fields,this.order_fieldBy,this.order_field,this.column_relation,page,this.per_page,this.router.url).subscribe(result => {
               this.section_data = result['data'];
@@ -207,7 +210,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
                   temp_paginate_array.push(i);
               }
             this.paginate_array = temp_paginate_array;
-        
+            this.spinnerService.hide();
             
         });
       });
@@ -218,6 +221,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
     onSearchChange  = (value) =>{
       this.current_page = 1;
       this.search_word = value;
+      this.spinnerService.show();
  
           this.route.params.subscribe(params => {
             this.section_service.search(value,this.searchable_fields,'asc',this.columns[0].field,this.column_relation,this.current_page,this.per_page,this.router.url).subscribe(result => {
@@ -239,6 +243,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
                         temp_paginate_array.push(i);
                     }
                   this.paginate_array = temp_paginate_array;
+                  this.spinnerService.hide();
                 
       
                 
@@ -249,6 +254,8 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
 
 
     }
+
+
  
 
     index = () =>{
@@ -348,7 +355,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
                           temp_paginate_array.push(i);
                       }
                     this.paginate_array = temp_paginate_array;
-                   
+                    this.spinnerService.hide();
 
 
                 });

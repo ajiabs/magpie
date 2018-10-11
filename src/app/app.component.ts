@@ -15,12 +15,13 @@ export class AppComponent extends  MagpieComponent {
   angular_part:any=false;
   package_installer:any = false;
   menuRow:any;
+
   constructor(router: Router,route: ActivatedRoute, http: HttpClient,section_service: SectionService,private meta: Meta) {
     super(route,router,http,section_service)
 
   }
   ngOnInit() {
-  
+    
 
     if(window.location.pathname.split('/')[1] == 'admin'){
      this.angular_part = true;
@@ -74,7 +75,7 @@ export class AppComponent extends  MagpieComponent {
           var url = event.url.split("/");
           var custom_url = url[1]+"/"+url[2];
         
-          this.showNavMethod = event.url.split('/')[3];
+          this.showNavMethod = event.url.split('/')[3] != undefined && event.url.split('/')[3].split('?')[0]?event.url.split('/')[3].split('?')[0]:event.url.split('/')[3];
           this.showBeadcrumb = true;
 
           this.getMenuNameFromUrl(custom_url).subscribe(res=>{
