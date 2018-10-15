@@ -599,6 +599,28 @@ getWebsiteNameSettings = ()=>{
 
   }
 
+  changeStatus =(current_route,id,value,field,source)=>{
+    var obj = "";
+    Object.keys(source).forEach((v)=>{
+
+      if(source[v].value  != value)
+       obj = source[v].value;
+    });
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    var section = current_route.split('/')[2];
+    const uri = server_url+section+'/changeStatus/'+id;
+    return this
+        .http
+        .post(uri,{'status':obj,'field':field},httpOptions)
+        .map(res => {
+          return res;
+        });
+    
+
+  }
+
 
 
 

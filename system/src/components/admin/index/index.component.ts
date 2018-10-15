@@ -255,6 +255,26 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
 
     }
 
+    onClickChangeStatus =(id,value,field,source)=>{
+
+
+      this.route.params.subscribe(params => {
+        this.section_service.changeStatus(this.router.url,id,value,field,source).subscribe(result => {
+          this.index();
+          $.notify({
+            title: "Update! ",
+            message: "Status has been changed  successfully.",
+            icon: 'fa fa-check' 
+          },{
+            type: "success"
+          });
+
+        });
+      });
+
+
+    }
+
 
  
 

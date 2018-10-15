@@ -26,7 +26,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let data of section_data"><td *ngFor="let column of columns | columnFilter : {list : true}">{{(column.type == 'tags' ||  column.type =='selectbox' || column.type =='checkbox' ||  column.type =='radio')?(data[column.field] | dynamicSource:data[column.field]:column.source:column.type):(column.type =='map')?(data[column.field] | getMapDetails:"address"):data[column.field]}}</td>
+              <tr *ngFor="let data of section_data"><td *ngFor="let column of columns | columnFilter : {list : true}"><span *ngIf="column.toggle_status == undefined">{{(column.type == 'tags' ||  column.type =='selectbox' || column.type =='checkbox' ||  column.type =='radio')?(data[column.field] | dynamicSource:data[column.field]:column.source:column.type):(column.type =='map')?(data[column.field] | getMapDetails:"address"):data[column.field]}}</span><a (click)="onClickChangeStatus(data._id,data[column.field],column.field,column.source)"><span *ngIf="column.toggle_status == 'true'" class="badge {{data[column.field]== column.source[0]['value']?'badge-primary':'badge-warning'}}">{{data[column.field]}}</span></a></td>
                 <td><a [routerLink]="['/admin/'+section_alias+'/edit', data._id]" class="btn btn-info btn-sm" [hidden]="!edit_action">&nbsp;<i class="fa fa-edit"></i></a>&nbsp;&nbsp;<a [routerLink]="['/admin/'+section_alias+'/view', data._id]" class="btn btn-success btn-sm" [hidden]="!view_action">&nbsp;<i class="fa fa-eye"></i></a>&nbsp;&nbsp;<a (click)="onDeleteClick(data._id)"  class="btn btn-danger btn-sm" [hidden]="!delete_action">&nbsp;<i class="fa fa-trash"></i></a></td>
               </tr>
             </tbody>
