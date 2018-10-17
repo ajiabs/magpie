@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { SectionService } from './../../system/src/services/admin/section.service';
-import { Meta } from '@angular/platform-browser';
+import { Meta,Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,13 +16,20 @@ export class AppComponent extends  MagpieComponent {
   package_installer:any = false;
   menuRow:any;
 
-  constructor(router: Router,route: ActivatedRoute, http: HttpClient,section_service: SectionService,private meta: Meta) {
+  constructor(router: Router,route: ActivatedRoute, http: HttpClient,section_service: SectionService,private meta: Meta,private titleService: Title) {
     super(route,router,http,section_service)
+
 
   }
   ngOnInit() {
-    
+       
+    // this.meta.addTags([
+    //   {name: 'description', content: ''},
+    //   {name: 'author', content: ''},
+    //   {name: 'keywords', content: ''}
+    //   ]);
 
+      
     if(window.location.pathname.split('/')[1] == 'admin'){
      this.angular_part = true;
      this.section_service.getThemeColorSettings().subscribe(res=>{
@@ -31,7 +38,7 @@ export class AppComponent extends  MagpieComponent {
       });
       this.section_service.getWebsiteNameSettings().subscribe(res=>{
         this.website_name = res[0].value;
-
+        this.titleService.setTitle(this.website_name );
       });
     }
        
