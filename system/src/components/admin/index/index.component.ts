@@ -445,7 +445,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
                           temp_paginate_array.push(i);
                       }
                     this.paginate_array = temp_paginate_array;
-                   // this.spinnerService.hide();
+                    this.spinnerService.hide();
 
 
                 });
