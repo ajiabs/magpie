@@ -12,6 +12,7 @@ import { Routes,RouterModule } from '@angular/router';
 import { customRoutes } from './../../src/app/routerConfig';
 import { AuthGuard } from './services/admin/auth-guard.service';
 import { ModuleWithProviders } from '@angular/core';
+import { MagpieResetPasswordComponent } from './components/admin/reset-password/reset-password.component';
 
 const mainRoutes = [
 
@@ -30,6 +31,9 @@ const routes:Routes = [
         children: [ 
           { path: 'login',
             component: MagpieLoginComponent,
+          },
+          { path: 'reset-password',
+            component: MagpieResetPasswordComponent,
           },
           { path: 'dashboard',
             component: MagpieDashboardComponent,

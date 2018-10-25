@@ -14,6 +14,7 @@ import { MagpieProfileEditComponent } from './components/admin/profile-edit/prof
 import { MagpieSettingsComponent } from './components/admin/settings/settings.component';
 import { MagpiePackageInstallerComponent } from './components/admin/package-installer/package-installer.component';
 import { MagpiePackageInstallerDetailsComponent } from './components/admin/package-installer/package-installer-details.component';
+import { MagpieResetPasswordComponent } from './components/admin/reset-password/reset-password.component';
 import { magpieRoutes } from './../../system/src/routerConfig';
 import { SectionService } from './../../system/src/services/admin/section.service';
 import { AuthGuard } from './../../system/src/services/admin/auth-guard.service';
@@ -51,6 +52,7 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     MagpieSettingsComponent,
     MagpiePackageInstallerComponent,
     MagpiePackageInstallerDetailsComponent,
+    MagpieResetPasswordComponent,
     RolePermissionsDirective,
     ChartDirective,
     MenuToggleDirective,
@@ -95,6 +97,7 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     MagpieSettingsComponent,
     MagpiePackageInstallerComponent,
     MagpiePackageInstallerDetailsComponent,
+    MagpieResetPasswordComponent,
     RolePermissionsDirective,
     ChartDirective,
     MenuToggleDirective,

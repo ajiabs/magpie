@@ -58,7 +58,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
     file_import:any;
     file_import_button:boolean=true;
     file_import_type:boolean=false;
-    template: string ='<img class="custom-spinner-template" src="http://pa1.narvii.com/5722/2c617cd9674417d272084884b61e4bb7dd5f0b15_hq.gif">';
+    template: string ='<img class="custom-spinner-template" src="https://www.sony.net/SonyInfo/csr/ForTheNextGeneration/eyesee/img/parts/loading.gif">';
   constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public spinnerService: Ng4LoadingSpinnerService) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
@@ -445,7 +445,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
                           temp_paginate_array.push(i);
                       }
                     this.paginate_array = temp_paginate_array;
-                    this.spinnerService.hide();
+                   // this.spinnerService.hide();
 
 
                 });

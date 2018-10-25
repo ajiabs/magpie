@@ -7,22 +7,25 @@
       <div class="col-lg-12">
         <div class="tile-title-w-btn">
             <h3 class="title">List {{title}}</h3>
-
-  
-            
             <input type="text" class="form-control form-control-sm col-md-3" id="search_word" ng-model="search_word" placeholder="Search" [hidden]="!search_action" (input)="onSearchChange($event.target.value)">
 
            
             <p><a class="btn btn-primary icon-btn" [routerLink]="['/admin/'+section_alias+'/create']" [hidden]="!create_action"><i class="fa fa-plus"></i>Add</a></p>
           </div>
-          <div class="row pull-right">
+          <div class="clearfix"></div>
+          <div class="pull-right">
+             <div class="">
             
-              <input type="file" class="form-control form-control-sm col-md-4"   (change)="onImportEvent($event)"  [hidden]="!import_action">
+              <input type="file" class="form-control-sm col-md-5  pull-left"   (change)="onImportEvent($event)"  [hidden]="!import_action">
             
-              &nbsp; <button class="btn btn-info btn-sm col-md-3" (click)="import_csv()" [disabled]="file_import_button" [hidden]="!import_action"><i class="fa fa-arrow-circle-up"></i>Import</button>
-              &nbsp;  <button class="btn btn-warning btn-sm col-md-3" (click)="export_csv()"  [hidden]="!export_action"><i class="fa fa-arrow-circle-down"></i>Export</button>
+              &nbsp; <button class="btn btn-info btn-sm col-md-3  pull-left" (click)="import_csv()" [disabled]="file_import_button" [hidden]="!import_action"><i class="fa fa-arrow-circle-up"></i>Import</button>
+              &nbsp;  <button class="btn btn-warning btn-sm col-md-3  pull-right" (click)="export_csv()"  [hidden]="!export_action"><i class="fa fa-arrow-circle-down"></i>Export</button>
+           
+             </div>
+             <div class="clearfix"></div>
              <p class="form-control-feedback" *ngIf="file_import_type">Csv Upload Only</p>
-          </div>
+           </div>
+          <div class="clearfix"></div>
           <table class="table table-bordered dataTable">
             <thead>
               <tr>

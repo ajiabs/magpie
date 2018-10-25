@@ -165,7 +165,7 @@ apiGetList = (req,res) =>  {
   }
 
 
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
     var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
     var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -189,7 +189,7 @@ apiGetList = (req,res) =>  {
 
 
 apiDeleteRow = (req,res) => {
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
   var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
   var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -261,7 +261,7 @@ apiAdd = (req,res) =>{
 
 apiInsertData = (req,res,result) =>{
 
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
   var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
   var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -278,7 +278,7 @@ apiInsertData = (req,res,result) =>{
 
 
 apiFetchDataById = (req,res) =>{
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
   var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
   var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -361,7 +361,7 @@ apiUpdate = (req,res) =>{
 
   }else{
 
-    if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+    if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
       var Section = require('../models/'+req.originalUrl.split('/')[2]);
     else
       var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -390,7 +390,7 @@ apiUpdate = (req,res) =>{
 
 apiUpdateData = (req,res,result) => {
 
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
     var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
     var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);

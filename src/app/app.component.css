@@ -1,5 +1,6 @@
 :host ::ng-deep .custom-spinner-template {
    
-    top: 26% !important;
-    left: 24% !important;
+   top: 24% !important;
+    left: 35% !important;
+    /* bottom: 5% !important; */
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
+import { environment } from './../../../../../src/environments/environment';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 declare var swal: any;
@@ -60,6 +61,34 @@ export class MagpieLoginComponent implements OnInit {
 
         });
    
+    }
+
+    forgotPassword = (resetMail) => {
+      this.section_service.forgotPassword(resetMail).subscribe(res => {
+        if (res['success']) {
+          this.forgotPasswordForm.reset();
+          $.notify({
+            title: "Success! ",
+            message: res['msg'],
+            icon: 'fa fa-check'
+          }, {
+            type: "success"
+          });
+          setTimeout(() => {
+            window.location.href = environment.site_url + 'admin/login'
+          }, 2000);
+        } else {
+          this.forgotPasswordForm.reset();
+          $.notify({
+            title: "Sorry! ",
+            message: res['msg'],
+            icon: 'fa fa-times'
+          }, {
+            type: "danger"
+          });
+        }
+      });
+    
     }
 
 

@@ -9,7 +9,7 @@ import 'rxjs/add/observable/of';
 
 
 var server_url = environment.server_url;
-
+var site_url = environment.site_url;
 
 
 @Injectable()
@@ -156,10 +156,34 @@ export class SectionService {
       
   }
 
-
-
+  forgotPassword(data) {
+    const uri = server_url + 'users/sendPasswordResetMail';
+    const obj = {
+      email: data,
+      site_url: site_url
+    };
+    return this
+      .http
+      .post(uri, obj)
+      .map(res => {
+        return res;
+      });
+  }
   
- 
+  resetPassword(passwordInfo) {
+    const uri = server_url + 'users/resetPassword';
+    const obj = {
+      token: passwordInfo.token,
+      new_password: passwordInfo.newPwd
+    };
+    return this
+      .http
+      .post(uri, obj)
+      .map(res => {
+        return res;
+      });
+  }
+
 
 
 

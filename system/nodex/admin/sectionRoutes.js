@@ -12,6 +12,7 @@ const Sections = require('../models/sections');
 const User = require('../models/users');
 const multer  = require('multer');
 const bodyParser = require('body-parser');
+const mailService = require('../../../packages/mailService');
 app.use(bodyParser.json());
 
 const storage =   multer.diskStorage({
@@ -180,32 +181,50 @@ sectionAdminRoutes.route('/add').post(passport.authenticate('jwt', { session: fa
 
 });
 
-sectionAdminRoutes.route('/changePassword').post(passport.authenticate('jwt', { session: false}),function (req, res) {
-   
-  var token = sectionGetToken(req.headers);
-  if (token) 
-    {
-      var Users = require('../models/users');
-      var result = jwt.verify(token,config.secret);
-      Users.findById( result._id, function(err, users) {
-        if (err) return false;
-        users.password = req.body.new_password;
-        users.save().then(item => {
-          res.status(200).json('password changed successfully');
-          })
-          .catch(err => {
-           return  res.json({success: false,  msg: err});
-           
-          });
-      });
+sectionAdminRoutes.route('/changePassword').post(passport.authenticate('jwt', {
+	session: false
+}), function (req, res) {
 
-
-    }
-  else 
-      return  res.json({success: false,  msg: 'Unauthorized'});
-
+	var token = sectionGetToken(req.headers);
+	if (token) {
+		return changePassword(req, res, token)
+	} else
+		return res.json({
+			success: false,
+			msg: 'Unauthorized'
+		});
 });
 
+
+  sectionAdminRoutes.route('/resetPassword').post(function (req, res) {
+    var moment = require('moment');
+    var token = req.body.token;
+    var Password = require('../models/reset-password');
+  
+    Password.findOne({
+      "token": token
+    }, {
+      "time": 1
+    }).exec(function (err, result) {
+      if (result) {
+        var logTime = moment(result.time);
+        var currentTime = moment();
+        if (currentTime.isSameOrBefore(logTime.add(15, 'm'))) {
+          return changePassword(req, res, token);
+        } else {
+          return res.json({
+            success: false,
+            msg: 'Your token has been expired.Please try again.'
+          });
+        }
+      } else {
+        return res.json({
+          success: false,
+          msg: 'Unauthorized'
+        });
+      }
+    });
+  });
 
 sectionAdminRoutes.route('/checkEmailExist/:email/:users_id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
    
@@ -784,7 +803,7 @@ sectionGetList = (req,res) =>  {
   }
 
 
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus' ||  req.originalUrl.split('/')[2] == 'mail-templates')
     var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
     var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -820,7 +839,7 @@ sectionSetPagination = (req,res,result) =>  {
     where = {"roles_id":{$ne: 1}};
     }
 
-    if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+    if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus' || req.originalUrl.split('/')[2] == 'mail-templates')
     var Section = require('../models/'+req.originalUrl.split('/')[2]);
     else
     var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -842,7 +861,7 @@ sectionSetPagination = (req,res,result) =>  {
 
 sectionImport = (req,res)=>{
 
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
   var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
   var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -861,8 +880,9 @@ sectionImport = (req,res)=>{
        const columns = JSON.parse(req.body.columns);
        import_columns.forEach((k)=>{
         columns.forEach((v)=>{
-             if(k ==v.label && (typeof v['export'] == 'undefined' || (typeof v['export'] != 'undefined' && v.export == 'true')  )  )
-             {  
+            // if(k ==v.label && (typeof v['export'] == 'undefined' || (typeof v['export'] != 'undefined' && v.export == 'true')  )  )
+            if(k ==v.label)
+            {  
                  const column_index = import_columns.indexOf(k);
                  import_columns[column_index]  = v.field;
              }
@@ -918,7 +938,7 @@ sectionImport = (req,res)=>{
 
 sectionExport  = (req,res) =>{
 
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
   var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
   var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -1027,7 +1047,7 @@ Section.aggregate(column_config).collation({ locale: 'en', strength: 2 }).exec(f
 
 
 sectionDeleteRow = (req,res) => {
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
   var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
   var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -1044,7 +1064,7 @@ sectionDeleteRow = (req,res) => {
 sectionSearch = (req,res) =>{
 
 
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
   var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
   var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -1150,7 +1170,7 @@ Section.aggregate(column_config).collation({ locale: 'en', strength: 2 }).exec(f
 
 sectionSearchPagination =  (req,res,column_config,column_total_config,result) =>{
 
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
   var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
   var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -1228,7 +1248,7 @@ sectionAdd = (req,res) =>{
 
 insertData = (req,res,result) =>{
 
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
   var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
   var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -1245,7 +1265,7 @@ insertData = (req,res,result) =>{
 
 
 sectionFetchDataById = (req,res) =>{
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
   var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
   var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -1370,7 +1390,7 @@ sectionUpdate = (req,res) =>{
 
   }else{
 
-    if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+    if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
       var Section = require('../models/'+req.originalUrl.split('/')[2]);
     else
       var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -1399,7 +1419,7 @@ sectionUpdate = (req,res) =>{
 sectionChangeStatus =(req,res)=>{
 
 
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
     var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
     var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -1419,7 +1439,7 @@ sectionChangeStatus =(req,res)=>{
 
 sectionUpdateData = (req,res,result) => {
 
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
     var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
     var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -1437,7 +1457,7 @@ sectionUpdateData = (req,res,result) => {
 
 
 sectionDeleteFile = (req,res) =>{
-  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
    var Section = require('../models/'+req.originalUrl.split('/')[2]);
   else
     var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
@@ -1523,7 +1543,6 @@ sectionUpdateSettings= (req,res) =>{
            if(req.body.file_fields.indexOf(p) == -1)
             result[p] = req.body[p];
       }
-       //console.log(result);
         return sectionUpdateSettingsData(req,res,result);
       }
     });
@@ -1551,8 +1570,7 @@ sectionUpdateSettingsData = (req,res,result) => {
     });
     if(l==settingLengthArr){
       settingsFlag =1;
-      console.log(settingsFlag);
-      //return settingsFlag;
+      
     }
   
     l++;
@@ -1562,6 +1580,73 @@ sectionUpdateSettingsData = (req,res,result) => {
   return res.status(200).json('Updated successfully');
 };
 
+sectionAdminRoutes.route('/sendPasswordResetMail').post(function (req, res) {
+	var params = [];
+	var Users = require('../models/users');
+	var moment = require('moment');
+	var Password = require('../models/reset-password');
+
+	Users.findOne({
+		"email": req.body.email
+	}).exec(function (err, result) {
+		if (result) {
+			var userId = result['users_id'];
+			result['date'] = moment().format();
+			var token = jwt.sign(result.toJSON(), config.secret);
+
+			var password = new Password({
+				"token": token,
+				"users_id": userId,
+				"time": moment().format()
+			});
+			password.save().then(item => {
+
+				mailIds = req.body.email;
+				params['link'] = req.body.site_url + 'admin/reset-password' + '?token=' + token;
+
+				mailService.sendMailSMTP(res, mailIds, 'forgot-password', params);
+				return res.json({
+					success: true,
+					msg: 'Follow the link in your mail to reset your password.'
+				});
+
+			})
+		} else {
+			return res.json({
+				success: false,
+				msg: 'User is not exist.'
+			});
+		}
+	});
+});
+
+
+changePassword = (req, res, token) => {
+
+	var result = jwt.verify(token, config.secret);
+	var Users = require('../models/users');
+	Users.findOne({
+		users_id: result.users_id
+	}, function (err, users) {
+		if (err) return false;
+
+
+		users.password = req.body.new_password;
+
+		users.save().then(item => {
+				return res.status(200).json({
+					success: true,
+					msg: 'password changed successfully'
+				});
+			})
+			.catch(err => {
+				return res.json({
+					success: false,
+					msg: 'You are timed'
+				});
+			});
+	});
+}
 
 
 
