@@ -24,6 +24,16 @@ const storage =   multer.diskStorage({
   }
 });
 
+const temp_storage =   multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './temp/');
+   },
+  filename: function (req, file, callback) {
+    var filename = file.originalname.replace(/[\[\]']/g,'' );
+    callback(null, filename + '-' + Date.now());
+  }
+});
+
 
 
 // Defined Login route
@@ -123,6 +133,28 @@ sectionAdminRoutes.route('/export').post(passport.authenticate('jwt', { session:
       return  res.json({success: false,  msg: 'Unauthorized'});
 
 });
+
+sectionAdminRoutes.route('/import').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+  var token = sectionGetToken(req.headers);
+
+ 
+  if (token) 
+      {
+           var upload = multer({ storage : temp_storage}).any();
+           upload(req,res,function(err) {
+               if(err) 
+                   return  res.json({success: false,  msg: 'Error uploading file..'});
+               else
+                   return sectionImport(req,res);
+            });
+ 
+      }
+  else 
+      return  res.json({success: false,  msg: 'Unauthorized'});
+});
+
+
+
 
 
 
@@ -808,6 +840,80 @@ sectionSetPagination = (req,res,result) =>  {
     })
 };
 
+sectionImport = (req,res)=>{
+
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus')
+  var Section = require('../models/'+req.originalUrl.split('/')[2]);
+  else
+  var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
+
+
+
+   const csv = require('fast-csv');
+   const csv_data = []; 
+   csv
+   .fromPath("./temp/"+req.files[0].filename)
+   .on("data", function(data){
+     csv_data.push(data);
+   })
+   .on("end", function(){
+       const import_columns =  csv_data[0];
+       const columns = JSON.parse(req.body.columns);
+       import_columns.forEach((k)=>{
+        columns.forEach((v)=>{
+             if(k ==v.label && (typeof v['export'] == 'undefined' || (typeof v['export'] != 'undefined' && v.export == 'true')  )  )
+             {  
+                 const column_index = import_columns.indexOf(k);
+                 import_columns[column_index]  = v.field;
+             }
+        }) 
+
+       })
+       csv_data[0] = import_columns;
+
+  
+       Object.keys(csv_data).forEach(async(j,k)=>{
+        var data_csv = {};
+    
+        if(j>0){
+          Object.keys(import_columns).forEach(async(i,v)=>{
+          
+            data_csv[import_columns[i]] = csv_data[k][v];
+
+          })
+          var import_field = req.body.import_unique_field.replace(/['"]+/g, '');
+
+        
+          var section = new Section(data_csv);
+          var where_value = {}
+          where_value[import_field] = data_csv[import_field]
+          var where = where_value;
+          Section.findOne(where ,function(err,obj) { 
+            if(obj != null)
+               Section.findOneAndUpdate({'_id':obj._id},data_csv).exec();
+            else
+              section.save();
+             
+           });
+
+          
+            
+        }
+       })
+      
+       var fs = require('fs');
+       fs.unlink("./temp/"+req.files[0].filename,function(err){
+        if(err) 
+          return res.status(403).send({success: false, msg: err});
+        else
+          return  res.json('Successfully imported');
+      });  
+
+   });
+
+    
+}
+
 
 
 sectionExport  = (req,res) =>{
@@ -833,10 +939,12 @@ sectionExport  = (req,res) =>{
   var fields = {};
   fields['_id'] = 0;
   req.body.columns.forEach(col=>{
-    columns.push(col.label);
-      fields[col.field]  = 1;
-   
 
+    if((typeof col['export'] == 'undefined' || (typeof col['export'] != 'undefined' && col.export == 'true')  ) ){
+      columns.push(col.label);
+      fields[col.field]  = "$"+col.field;
+    }
+   
   });
   if((current_section == 'users' || current_section == 'roles') && req.body.role_id != "1")
   {
@@ -903,8 +1011,6 @@ sectionExport  = (req,res) =>{
              { "$project" : fields });
 
 }
-
-
 
 
 

@@ -138,6 +138,27 @@ export class SectionService {
       
   }
 
+  import  = (data,columns_array,import_unique_field,current_route)=>{
+    let httpOptions = {
+     
+      headers: new HttpHeaders({ 'Accept':'application/json','enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    let formData = new FormData();
+    formData.append('csv_import', data, data['name']);
+    formData.append('columns',columns_array);
+    formData.append('import_unique_field',import_unique_field);
+
+    var section = current_route.split('/')[2];
+    const uri = server_url+section+'/import';
+    const obj = formData;
+    return  this.http.post(uri, obj,httpOptions)
+        .map(res => console.log('Done'));
+      
+  }
+
+
+
+  
  
 
 

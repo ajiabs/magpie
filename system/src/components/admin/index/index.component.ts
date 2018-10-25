@@ -55,12 +55,17 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
     paginate_to:any;
     paginate:any;
     navigationSubscription:any;
+    file_import:any;
+    file_import_button:boolean=true;
+    file_import_type:boolean=false;
     template: string ='<img class="custom-spinner-template" src="http://pa1.narvii.com/5722/2c617cd9674417d272084884b61e4bb7dd5f0b15_hq.gif">';
   constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public spinnerService: Ng4LoadingSpinnerService) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
         this.spinnerService.show();
         this.index();
+       
+
       }
     });
 
@@ -77,6 +82,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
 
 
   ngOnInit(){
+
 
    
   }
@@ -113,6 +119,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
                     headers: result['columns'],
                    
                   };
+                
 
                  if(export_csv_data){
                   new Angular5Csv(result['data'], current_route,options);
@@ -129,12 +136,75 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
       else
         this.router.navigate(['/admin/dashboard']);
   
-        
     });
             
 
-    
-   
+  }
+
+  onImportEvent  = (fileInput: any) => {
+    this.file_import = fileInput.target.files[0];
+
+    if(this.file_import.type != 'text/csv')
+    {
+      this.file_import_type = true;
+      this.file_import_button = true;
+    }else
+    {
+      this.file_import_type = false;
+      this.file_import_button = false;
+
+    } 
+
+}
+
+
+
+  import_csv = ()=>{
+
+
+
+    var import_csv_data = true;
+    this.section_service.getCurrentRolePermissionMenus('roles',localStorage.getItem("userDetails['roles_id']")).subscribe(res1 => {
+         
+      var current_route = this.router.url.split('/')[2].split("-").join(" ");
+      current_route = current_route.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                return letter.toUpperCase();
+            });
+     
+      var current_module = JSON.parse(res1[0].permissions).sections.filter(itm => itm.name == current_route);	
+      var menus_actions = [];
+      current_module[0].actions.forEach(function (menuItem) {
+         menus_actions.push(menuItem.label);
+         menus_actions[menuItem['label']] = menuItem.perm == 'true'?true:false;
+      });
+
+      if(menus_actions['Import']){ 
+        this.section_service.sectionConfig(this.router.url).subscribe(res => {
+              const columns_array = JSON.stringify(JSON.parse(res[0].section_config).column);
+              const import_unique_field = JSON.stringify(JSON.parse(res[0].section_config).import_unique_field);
+
+              this.route.params.subscribe(params => {
+               this.section_service.import(this.file_import,columns_array,import_unique_field,this.router.url).subscribe(result => {
+
+                 this.index();
+                 $.notify({
+                    title: "Imported! ",
+                    message: "Csv has been successfully imported.",
+                    icon: 'fa fa-check' 
+                  },{
+                    type: "success"
+                  });
+                
+                });
+
+              });
+        });
+      }  
+      else
+        this.router.navigate(['/admin/dashboard']);
+  
+    });
+            
 
   }
 
