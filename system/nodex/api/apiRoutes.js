@@ -74,11 +74,15 @@ ApiAdminRoutes.route('/checkLogin').post(function (req, res) {
   var token = apiGetToken(req.headers);
   if (token) 
      {
+
           var upload = multer({ storage : storage}).any();
+        
           upload(req,res,function(err) {
               if(err) 
                   return  res.json({success: false,  msg: 'Error uploading file..'});
-              else
+              else{
+                  
+                }
                   return apiAdd(req,res);
            });
 
@@ -208,6 +212,8 @@ apiDeleteRow = (req,res) => {
 
 
 apiAdd = (req,res) =>{
+
+
   var total_files =  Object.keys(req.files).length;
   var i =1;
   var file_column_array =[];
