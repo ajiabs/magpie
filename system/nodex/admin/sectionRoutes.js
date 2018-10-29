@@ -730,7 +730,7 @@ getRowSettings=(req,res)=>{
 
 sectionGetAllMenus = (req,res) =>  {
   var Section = require('../models/'+req.originalUrl.split('/')[2]);
-  Section.find({'status':'active'},function (err, result){
+  Section.find({'status':'active'},null, {sort: {menu_order: 1}},function (err, result){
     if(err){
       return  res.json({success: false,  msg: err});
     }
@@ -763,7 +763,7 @@ sectionGetRolePermissionMenus = (req,res) =>  {
     where = {'parent_id':{$ne: 0},"menus_id":{$nin: [3,5]}};
 
     var Section = require('../models/'+req.originalUrl.split('/')[2]);
-    Section.find(where,function (err, result){
+    Section.find(where,null, {sort: {menu_order: 1}},function (err, result){
       if(err){
         return  res.json({success: false,  msg: err});
       }

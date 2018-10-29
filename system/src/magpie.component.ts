@@ -58,6 +58,7 @@ export class MagpieComponent {
                 var all_menus = [];
                 var k = 0;
                 for (var i = 0; i < current_roles_menus.length; i++) {
+                
                   var  module_actions = current_roles_menus[i].actions;
                   for(var j=0;j<module_actions.length;j++){
                     var  module = current_roles_menus[i];
@@ -75,8 +76,11 @@ export class MagpieComponent {
                 var tmp_main = [];
                 var main_menu = [];
                 var k = 0;
+
+                console.log(menus);
                 for(var i =0;i<menus.length;i++){
                 if(menus[i] != undefined){
+                 
                     var parent_key = Object.keys(res).find(x => res[x].menus_id === Number.parseInt(menus[i].parent_id));
                     if(tmp_main.indexOf(res[parent_key].name) == -1){
                       tmp_main.push(res[parent_key].name);
@@ -93,6 +97,8 @@ export class MagpieComponent {
                   }
                     
                 }
+
+                
                 
             
                 return observer.next(main_menu);

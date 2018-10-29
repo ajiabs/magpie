@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
 import {ImageValidator} from './../../../../../system/src/validators/image.validators'
+import { LatLngLiteral } from '@agm/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 import { Select2OptionData } from 'ng2-select2';
@@ -39,6 +40,11 @@ export class MagpieCreateComponent implements OnInit,OnDestroy {
     lng: number = 7.809007;
     geo_address = "";
     user_email_exist:any=false;
+    map: any;
+    button:any;
+    paths: Array<LatLngLiteral> = [];
+    cordArray=[];
+    geofence=[];
   
      
   constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public ref:ChangeDetectorRef) {
@@ -188,6 +194,55 @@ onTagsChange = (field,data)=>{
         }
  
    }
+
+   deletePoly() {
+  
+    this.paths = [];
+    this.cordArray = [];
+   }
+
+   public drawPolygon(evt, field) {
+
+    if (this.validation_fields_onload[field] != undefined) {
+  
+      let coord = [evt.coords.lat, evt.coords.lng];
+      this.cordArray.push(coord);
+  
+  
+      let clickCrd = {
+        lat: evt.coords.lat,
+        lng: evt.coords.lng
+      };
+      this.paths.push(clickCrd);
+      let newArray = Array < LatLngLiteral > ();
+  
+      this.paths.forEach((item) => {
+        newArray.push(item);
+      });
+  
+      this.paths = newArray;
+  
+      if (this.section_data[field] == undefined) {
+        let json_array = {};
+        json_array['geofence'] = this.paths;
+        this.section_data[field] = JSON.stringify(json_array);
+      } else {
+        let json_array = JSON.parse(this.section_data[field]);
+        json_array['geofence'] = this.paths;
+        this.section_data[field] = JSON.stringify(json_array);
+      }
+  
+  
+    } else {
+      $.notify({
+        title: "Warning! ",
+        message: "Please select a location from map.",
+        icon: 'fa fa-exclamation-triangle'
+      }, {
+        type: "danger"
+      });
+    }
+  }
 
 
 

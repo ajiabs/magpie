@@ -137,12 +137,23 @@
                    ]" [height]="1000" [minHeight]="1000" [placeholder]="'Enter Your '+column.label" [spellcheck]="true"  formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]"></app-ngx-editor>
                     <div  *ngIf="sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.validations_msg[0].required}}</div>
                  </div>
+
+                 
                  <div *ngIf="column.type == 'map'" >
            
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
-                    <agm-map [latitude]="lat" [longitude]="lng">
-                      <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-                    </agm-map>
+                    <button *ngIf="column.geofence == 'true'" id="clearBtn" value="Delete Polygon" (click)="deletePoly()" >Delete Polygon</button>
+                    <agm-map id="map" [latitude]="lat" [longitude]="lng" (mapClick)="column.geofence == 'true'?drawPolygon($event,column.field):''" tabindex="{{j+1}}"> 
+                      <agm-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true" (dragEnd)="markerDragEnd(column.field, $event)"> 
+                      </agm-marker> 
+                      <agm-polygon *ngIf="column.geofence == 'true'" 
+                      [paths]="paths"
+                      [editable]="true" 
+                      [fillColor]="ffff00" 
+                      [strokeWeight]="3" 
+                      [fillOpacity]="0.2" >
+                      </agm-polygon> 
+                      </agm-map>
                     <ng4geo-autocomplete [userSettings]='{ inputPlaceholderText: "Search Place",inputString: section_data[column.field] | getMapDetails:"address",showSearchButton: false}'  (componentCallback)="onMapChangeEvent($event,column.field)" ></ng4geo-autocomplete>
                     <input type="hidden" formControlName="{{column.field}}" #{{column.field}} [(ngModel)]= "section_data[column.field]">
                     <div  *ngIf="sectionForm.controls[column.field].invalid   && validation_fields_onload[column.field] && sectionForm.controls[column.field].errors.required" class="form-control-feedback">   {{column.validations_msg[0].required}}</div>

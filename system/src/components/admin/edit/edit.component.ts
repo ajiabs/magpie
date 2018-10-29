@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
 import {ImageValidator} from './../../../../../system/src/validators/image.validators'
-
+import { LatLngLiteral } from '@agm/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 declare var swal: any;
@@ -39,6 +39,12 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
     geo_address = "";
     user_email_exist:any=false;
     field_length:any;
+    map: any;
+    button:any;
+    paths: Array<LatLngLiteral> = [];
+    cordArray=[];
+    geofence=[];
+    
   
   constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public ref:ChangeDetectorRef) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
@@ -171,6 +177,41 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
         this.section_data[field] = "";
  
    }
+   deletePoly(field) {
+    let pathArray = JSON.parse(this.section_data[field]);
+    pathArray['geofence'] = [];
+    this.section_data[field] = JSON.stringify(pathArray);
+    this.section_data['geofence'].coordinates = [];
+  }
+
+  public drawPolygon(evt, field) {
+    let clickCrd = {
+      lat: evt.coords.lat,
+      lng: evt.coords.lng
+    };
+    this.paths.push(clickCrd);
+  
+    let coord = [evt.coords.lat, evt.coords.lng];
+    this.cordArray.push(coord);
+  
+    let newArray = Array < LatLngLiteral > ();
+    this.paths.forEach((item) => {
+      newArray.push(item);
+    });
+  
+    this.paths = newArray;
+  
+    if (this.section_data[field] == undefined) {
+      let json_array = {};
+      json_array['geofence'] = this.paths;
+      this.section_data[field] = JSON.stringify(json_array);
+    } else {
+      let json_array = JSON.parse(this.section_data[field]);
+      json_array['geofence'] = this.paths;
+      this.section_data[field] = JSON.stringify(json_array);
+    }
+  }
+    
 
  
 
