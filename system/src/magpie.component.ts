@@ -77,8 +77,15 @@ export class MagpieComponent {
                 var main_menu = [];
                 var k = 0;
 
-                console.log(menus);
-                for(var i =0;i<menus.length;i++){
+              
+                var sortedMenus = Object.keys(menus).sort( function(keyA, keyB) {
+                  return menus[keyA].menu_order - menus[keyB].menu_order;
+                });
+
+               
+              
+                sortedMenus.forEach(function(element) {
+                  var i = element;
                 if(menus[i] != undefined){
                  
                     var parent_key = Object.keys(res).find(x => res[x].menus_id === Number.parseInt(menus[i].parent_id));
@@ -96,7 +103,7 @@ export class MagpieComponent {
                     }
                   }
                     
-                }
+                });
 
                 
                 
