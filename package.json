@@ -29,6 +29,7 @@
     "angular2-csv": "^0.2.5",
     "angular2-jwt": "^0.2.3",
     "angular5-csv": "^0.2.10",
+    "aws-sdk": "^2.344.0",
     "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
