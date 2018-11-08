@@ -185,15 +185,17 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
 
               this.route.params.subscribe(params => {
                this.section_service.import(this.file_import,columns_array,import_unique_field,this.router.url).subscribe(result => {
-
-                 this.index();
-                 $.notify({
-                    title: "Imported! ",
-                    message: "Csv has been successfully imported.",
-                    icon: 'fa fa-check' 
-                  },{
-                    type: "success"
-                  });
+                if(import_csv_data){
+                  this.index();
+                  $.notify({
+                      title: "Imported! ",
+                      message: "Csv has been successfully imported.",
+                      icon: 'fa fa-check' 
+                    },{
+                      type: "success"
+                    });
+                    import_csv_data = false;
+                  }
                 
                 });
 
@@ -327,17 +329,20 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
 
     onClickChangeStatus =(id,value,field,source)=>{
 
-
+      var  change_status = true;
       this.route.params.subscribe(params => {
         this.section_service.changeStatus(this.router.url,id,value,field,source).subscribe(result => {
-          this.index();
-          $.notify({
-            title: "Update! ",
-            message: "Status has been changed  successfully.",
-            icon: 'fa fa-check' 
-          },{
-            type: "success"
-          });
+          if(change_status){
+            $.notify({
+              title: "Update! ",
+              message: "Status has been changed  successfully.",
+              icon: 'fa fa-check' 
+            },{
+              type: "success"
+            });
+            this.index();
+            change_status=false;
+          }
 
         });
       });

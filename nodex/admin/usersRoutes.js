@@ -23,6 +23,29 @@ const storage =   multer.diskStorage({
   }
 });
 
+usersAdminRoutes.route('/getDashboardUsers').get(passport.authenticate('jwt', { session: false}),function (req, res) {
+
+  var token = usersGetToken(req.headers);
+  if (token) 
+      return getDashboardUsers(req,res);
+  else 
+      return  res.json({success: false,  msg: 'Unauthorized'});
+   
+
+});
+
+getDashboardUsers = (req,res) =>  {
+  const User = require('../../system/nodex/models/users');
+  User.aggregate([  { "$project": { "Email":"$email","Name": "$name"}}]).limit(5).exec(function(err, result) {
+     if(err){
+      return  res.json({success: false,  msg: err});
+     }
+     else {
+       return res.json(result);
+     }
+   });
+
+};
 
 
 usersAdminRoutes.route('/getUsersCount').get(passport.authenticate('jwt', { session: false}),function (req, res) {

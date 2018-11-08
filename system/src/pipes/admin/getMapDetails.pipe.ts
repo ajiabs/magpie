@@ -18,7 +18,11 @@ export class GetMapDetailsPipe implements PipeTransform {
     if (items == '') return [];
       if(items !== undefined){
         let data = JSON.parse(items);
-        return data[field];
+
+        if(data[field] != undefined)
+          return data[field];
+        else
+         return [];
         
       }
     }

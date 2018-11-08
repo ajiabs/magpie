@@ -27,6 +27,7 @@ import { GetFilePipe} from './../../system/src/pipes/admin/getFile.pipe';
 import { TagsDataPipe} from './../../system/src/pipes/admin/tagsData.pipe';
 import { ToObjectPipe} from './../../system/src/pipes/admin/toObject.pipe';
 import { GetMapDetailsPipe} from './../../system/src/pipes/admin/getMapDetails.pipe';
+import { KeysPipe } from './../../system/src/pipes/admin/arrayKeys.pipe';
 import { ChartDirective } from './../../system/src/directives/admin/chart.directive';
 import { RolePermissionsDirective } from './../../system/src/directives/admin/rolePermissions.directive';
 import { MenuToggleDirective } from './../../system/src/directives/admin/menuToggle.directive';
@@ -62,6 +63,7 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     DynamicSource,
     InArrayCheckPipe,
     GetMapDetailsPipe,
+    KeysPipe,
     ToArrayPipe,
     GetFilePipe,
     TagsDataPipe,
@@ -107,6 +109,7 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     DynamicSource,
     InArrayCheckPipe,
     GetMapDetailsPipe,
+    KeysPipe,
     ToArrayPipe,
     GetFilePipe,
     TagsDataPipe,

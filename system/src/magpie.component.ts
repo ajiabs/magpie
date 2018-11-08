@@ -79,7 +79,8 @@ export class MagpieComponent {
 
               
                 var sortedMenus = Object.keys(menus).sort( function(keyA, keyB) {
-                  return menus[keyA].menu_order - menus[keyB].menu_order;
+                  if(typeof menus[keyB] != 'undefined')
+                     return (menus[keyA].menu_order - menus[keyB].menu_order);
                 });
 
                

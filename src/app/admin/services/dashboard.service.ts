@@ -13,6 +13,32 @@ export class DashboardService {
   result: any;
   constructor(private http: HttpClient) { }
 
+
+  getDashboardConfig = (role_id)=>{
+    
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url+'dashboard-config/getDashboardConfig/'+role_id;
+    return this.http.get(uri,httpOptions)
+       .map(res => {
+              return res;
+            });
+  }
+
+  dashboardCustomRoute = (current_route,fn)=>{
+
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url+current_route+'/'+fn;
+    return this.http.get(uri,httpOptions)
+       .map(res => {
+              return res;
+            });
+
+  }
+
   getUsersCount = (current_route) =>{
     let httpOptions = {
        headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })

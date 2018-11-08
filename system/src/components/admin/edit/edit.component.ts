@@ -180,6 +180,7 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
    deletePoly(field) {
     let pathArray = JSON.parse(this.section_data[field]);
     pathArray['geofence'] = [];
+    this.paths = [];
     this.section_data[field] = JSON.stringify(pathArray);
     this.section_data['geofence'].coordinates = [];
   }

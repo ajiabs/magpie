@@ -21,12 +21,14 @@ export class ChartDirective{
 
 	    }
 		ngAfterContentInit(): void {
-                const chart_data = this.chartData;
-			    const element = this.elRef.nativeElement.id;
-		        const current_chart = this.chartType;
+                
+				var th = this;
 				setTimeout(function(){
 					"use strict";
-
+					const chart_data = th.chartData;
+					const element = th.elRef.nativeElement.id;
+					const current_chart = th.chartType;
+					
 					if(current_chart == "line")
 					{
 				
@@ -50,7 +52,7 @@ export class ChartDirective{
 
 					}else if(current_chart == "pie"){
 						var pdata = chart_data;
-						
+					
 						var ctxp = $("#"+element).get(0).getContext("2d");
 						var pieChart = new Chart(ctxp).Pie(pdata);
 

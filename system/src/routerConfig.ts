@@ -8,11 +8,12 @@ import { MagpieProfileEditComponent } from './components/admin/profile-edit/prof
 import { MagpieSettingsComponent } from './components/admin/settings/settings.component';
 import { MagpiePackageInstallerComponent } from './components/admin/package-installer/package-installer.component';
 import { MagpiePackageInstallerDetailsComponent } from './components/admin/package-installer/package-installer-details.component';
+import { MagpieResetPasswordComponent } from './components/admin/reset-password/reset-password.component';
 import { Routes,RouterModule } from '@angular/router';
 import { customRoutes } from './../../src/app/routerConfig';
 import { AuthGuard } from './services/admin/auth-guard.service';
 import { ModuleWithProviders } from '@angular/core';
-import { MagpieResetPasswordComponent } from './components/admin/reset-password/reset-password.component';
+
 
 const mainRoutes = [
 
@@ -49,7 +50,7 @@ const routes:Routes = [
             component: MagpieSettingsComponent,
             canActivate: [AuthGuard],
             runGuardsAndResolvers: 'always',
-          },
+          }
           { path: 'package-installer',
             component: MagpiePackageInstallerComponent,
             canActivate: [AuthGuard],

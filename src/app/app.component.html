@@ -94,7 +94,7 @@
   
    <ul class="app-menu">
       
-        <li class="treeview"><a class="app-menu__item" data-toggle="treeview" [routerLink]="['admin/dashboard']" routerLinkActive="active"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a></li>
+        <li class="treeview {{router.url.split('/')[2] == 'dashboard'?'is-expanded':''}}"><a class="app-menu__item" data-toggle="treeview" [routerLink]="['admin/dashboard']" routerLinkActive="active"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a></li>
         <li  *ngFor="let main of roles_menu;let last = last" menu-toggle [isLast]="last"  class="treeview {{main.submenu.indexOf(router.url.split('/')[2]) > -1?'is-expanded':''}}"  >
           <a class="app-menu__item"  data-toggle="treeview">
             <i class="app-menu__icon fa {{main.icon}}"></i>

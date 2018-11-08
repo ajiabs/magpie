@@ -23,15 +23,11 @@ export class MenuToggleDirective{
 
 	    }
 		ngAfterContentInit(): void {
-
-
 			if (this.isLast){
 
 					"use strict";
-				
 					var treeviewMenu = $('.app-menu');
-					
-	
+					treeviewMenu.find("li:first").removeClass('is-expanded');
 					// Toggle Sidebar
 					$('[data-toggle="sidebar"]').click(function(event) {
 						event.preventDefault();
@@ -46,10 +42,12 @@ export class MenuToggleDirective{
 						}
 						$(this).parent().toggleClass('is-expanded');
 					});
+
+				
 	
-					// Set initial active toggle
-					//$("[data-toggle='treeview.'].is-expanded").parent().toggleClass('is-expanded');
-					//$('.app-menu').find("a.active").closest('.treeview').toggleClass('is-expanded');
+					// // Set initial active toggle
+				    // $("[data-toggle='treeview.'].is-expanded").parent().toggleClass('is-expanded');
+					// $('.app-menu').find("a.active").closest('.treeview').toggleClass('is-expanded');
                   
 				}
 

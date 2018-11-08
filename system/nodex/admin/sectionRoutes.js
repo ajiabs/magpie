@@ -95,6 +95,48 @@ sectionAdminRoutes.route('/getRolePermissionMenus').post(passport.authenticate('
 });
 
 
+sectionAdminRoutes.route('/getDashboardConfig/:role_id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
+  var token = sectionGetToken(req.headers);
+  if (token) 
+      {
+
+        var Dashboard_config = require('../../../nodex/models/dashboard-config');
+        var a = 1;
+        var role = new RegExp("\\b"+req.params.role_id+"\\b"); 
+        var where =  {$in:[role]};
+        Dashboard_config.find({'assigned_roles':where}).sort({'entity_order':1,'entity_type':1}).exec(function (err, result){
+          if(err) 
+            return res.status(403).send({success: false, msg: err});
+          else{
+
+            if(result.length>0)
+               return res.json(result);
+
+            else{
+
+                Dashboard_config.find({}).sort({'entity_order':1,'entity_type':1}).exec(function (err2, result2){
+                  if(err2) 
+                    return res.status(403).send({success: false, msg: err});
+                  else
+                  return res.json(result2);
+                });
+            }
+
+
+           
+          }
+        
+        
+        });
+      }
+  else 
+      return res.status(403).send({success: false, msg: 'Unauthorized.'});
+
+});
+
+
+
+
 
 sectionAdminRoutes.route('/getCurrentRolePermissionMenus/:id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
   var token = sectionGetToken(req.headers);
@@ -453,6 +495,8 @@ sectionAdminRoutes.route('/getPackagesInstaller').post(passport.authenticate('jw
           });
         
           response.on('end', () => {
+
+  
             return  res.json(JSON.parse(result).data);
   
           });
@@ -1240,8 +1284,19 @@ sectionAdd = (req,res) =>{
       });
 
   }else{
-
-   return insertData(req,res,req.body); 
+     
+               
+    var result = {};
+    Object.keys(req.body).forEach(l=>{
+     if(l != 'file_fields')
+       result[l] = req.body[l];
+    
+    });
+     
+     for(var m of req.body['file_fields'].split(',')) {
+        result[m] = "";
+     }
+    return insertData(req,res,result); 
   }
 
 };

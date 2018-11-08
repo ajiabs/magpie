@@ -260,7 +260,18 @@ apiAdd = (req,res) =>{
 
   }else{
 
-   return apiInsertData(req,res,req.body); 
+    var result = {};
+    Object.keys(req.body).forEach(l=>{
+     if(l != 'file_fields')
+       result[l] = req.body[l];
+    
+    });
+     
+     for(var m of req.body['file_fields'].split(',')) {
+        result[m] = "";
+     }
+
+   return apiInsertData(req,res,result); 
   }
 
 };

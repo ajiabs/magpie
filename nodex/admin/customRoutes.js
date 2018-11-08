@@ -24,12 +24,19 @@ const storage =   multer.diskStorage({
 });
 
 
-customRoutes.route('/getProjects').post(function (req, res) {
-  const Project = require('../../nodex/models/projects');
-  var token = getToken(req.headers);
+
+customRoutes.route('/getRoles').post(function (req, res) {
+  var Section = require('../../system/nodex/models/roles');
+  var token = customGetToken(req.headers);
+
+  
+  var where = {};
+  if(req.body.role_id != "1")
+     where = {"roles_id":{$ne: 1}};
+  
  
    if (token) {
-       Project.find({},'project_name projects_id',function (err, result){
+        Section.find(where,'name roles_id',function (err, result){
          if(err){
            console.log(err);
          }
@@ -37,8 +44,8 @@ customRoutes.route('/getProjects').post(function (req, res) {
              var temp =[];
              var i =0;
              result.forEach(function (rowItem) { 
-               
-                temp[i] = {'label':rowItem.project_name,'value':rowItem.projects_id};
+    
+                temp[i] = {'label':rowItem.name,'value':rowItem.roles_id};
                 i++;
  
              });
@@ -52,6 +59,7 @@ customRoutes.route('/getProjects').post(function (req, res) {
  
      
   });
+
 
 
 
