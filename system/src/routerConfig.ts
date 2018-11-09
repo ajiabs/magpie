@@ -50,7 +50,7 @@ const routes:Routes = [
             component: MagpieSettingsComponent,
             canActivate: [AuthGuard],
             runGuardsAndResolvers: 'always',
-          }
+          },
           { path: 'package-installer',
             component: MagpiePackageInstallerComponent,
             canActivate: [AuthGuard],
