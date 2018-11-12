@@ -211,7 +211,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
   }
 
   onSortClick = (sortable,field,i) =>{
-          this.spinnerService.show();
+        
 
           this.current_page = 1;
           var order_by = 'asc';
@@ -224,7 +224,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
           this.column_index  = i;
           if(sortable == 'true')
           {
-
+            this.spinnerService.show();
             this.order_field=field;
             this.order_fieldBy=order_by;
 
