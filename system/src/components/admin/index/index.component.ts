@@ -58,6 +58,11 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
     file_import:any;
     file_import_button:boolean=true;
     file_import_type:boolean=false;
+    multiple_delete:boolean=false;
+    multiple_delete_button:boolean=false;
+    checkboxSelectAll:boolean=false;
+    checkBoxArr:any=[];
+    selectedRows:number=0;
     template: string ='<img class="custom-spinner-template" src="https://www.sony.net/SonyInfo/csr/ForTheNextGeneration/eyesee/img/parts/loading.gif">';
   constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public spinnerService: Ng4LoadingSpinnerService) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
@@ -157,7 +162,98 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
 
 }
 
+singleRowDelete=(event, id)=> {
 
+    if (event.target.checked) {
+      this.selectedRows++;
+  
+      if (this.section_data.length == this.selectedRows) {
+        this.checkboxSelectAll = true;
+      }
+  
+      this.checkBoxArr.push(id);
+  
+    } else {
+      this.checkboxSelectAll = false;
+      var index = this.checkBoxArr.indexOf(id);
+      if (index > -1) {
+        this.checkBoxArr.splice(index, 1);
+      }
+      this.selectedRows--;
+    }
+  
+    if (this.selectedRows >= 1) {
+      this.multiple_delete_button = true;
+    } else {
+      this.multiple_delete_button = false;
+    }
+}
+
+
+multipleRowsDelete=(event, id)=> {
+  this.checkboxSelectAll = true;
+  this.selectedRows = this.section_data.length;
+  
+  if (event.target.checked) {
+    for (var i = 0; i < this.section_data.length; i++) {
+      this.checkBoxArr[i] = this.section_data[i]._id;
+  
+    }
+    this.multiple_delete_button = true;
+  } else {
+    this.checkBoxArr = [];
+    this.multiple_delete_button = false;
+    this.selectedRows = 0;
+    this.checkboxSelectAll = false;
+  }
+
+
+}
+
+
+
+bulkDelete =()=>{
+
+  var th = this;
+
+  swal({
+     title: "Are you sure?",
+     text: "You will not be able to recover this data!",
+     type: "warning",
+     showCancelButton: true,
+     confirmButtonText: "Yes, delete it!",
+     cancelButtonText: "No",
+     closeOnConfirm: false,
+     closeOnCancel: false
+   }, function(isConfirm) {
+     if (isConfirm) {
+       if(th.delete_action){
+         th.section_service.bulkDelete(th.checkBoxArr,th.router.url).subscribe(res => {
+           
+
+           th.index();
+         });
+         swal.close();
+         $.notify({
+          title: "Update! ",
+          message: "Record has been deleted.",
+          icon: 'fa fa-check' 
+        },{
+          type: "success"
+        });
+    
+   
+         
+       }
+      
+     } else {
+      swal.close();
+ 
+     }
+   });
+
+  
+}
 
   import_csv = ()=>{
 
@@ -420,6 +516,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
               this.column_relation = JSON.stringify(th_column_relations);
               this.current_page = 1;
               this.paginate = JSON.parse(res[0].section_config).pagination == 'true'?true:false;
+              this.multiple_delete = (typeof JSON.parse(res[0].section_config).multiple_delete != 'undefined') && JSON.parse(res[0].section_config).multiple_delete == 'true' ?true:false;
               this.pages = 0;
               this.current = 1;
               var per_pagecount = parseInt(JSON.parse(res[0].section_config).per_pagecount);

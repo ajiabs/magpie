@@ -333,6 +333,26 @@ export class SectionService {
             });
   }
 
+
+  bulkDelete=(ids,current_route) => {
+
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+      var section = current_route.split('/')[2];
+      const uri = server_url+section+'/bulk-delete';
+      var obj = {'ids':ids};
+        return this
+            .http
+            .post(uri,obj,httpOptions)
+            .map(res => {
+              return res;
+            });
+  }
+
+
+
+
   getImage = (id,current_route) =>{
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })

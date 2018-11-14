@@ -9,6 +9,7 @@ flash    = require('connect-flash'),
 config = require('./config/DB'),
 LocalStrategy = require('passport-local').Strategy,
 RedisStore = require('connect-redis')(session);
+const http = require('http');
 
 
 magpieAdminRoutes  = require('./system/nodex/admin/sectionRoutes');
@@ -30,6 +31,7 @@ app.use(cors());
 const port = process.env.PORT || 4000;
 
 
+app.use(express.static(path.join(__dirname, 'dist')));
 
 
 app.use(passport.initialize());
@@ -67,6 +69,10 @@ app.use('/admin/:section', magpieAdminRoutes);
 app.use('/api/:section', apiCustomRoutes);
 app.use('/api/:section', magpieApiRoutes);
 
-const server = app.listen(port, function(){
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/index.html'));
+});
+const server = http.createServer(app);
+server.listen(port, function(){
     console.log('Listening on port ' + port);
   });

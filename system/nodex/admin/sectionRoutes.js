@@ -400,6 +400,19 @@ sectionAdminRoutes.route('/delete/:id').get(passport.authenticate('jwt', { sessi
 });
 
 
+sectionAdminRoutes.route('/bulk-delete').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+  var token = sectionGetToken(req.headers);
+  if (token) 
+     return sectionBulkDeleteRows(req,res);
+  else 
+     return  res.json({success: false,  msg: 'Unauthorized'});
+
+});
+
+
+
+
+
 sectionAdminRoutes.route('/changeStatus/:id').post(passport.authenticate('jwt', { session: false}),function (req, res) {
   var token = sectionGetToken(req.headers);
   if (token) 
@@ -1102,6 +1115,22 @@ sectionDeleteRow = (req,res) => {
        else
          return  res.json('Successfully removed');
    });
+
+};
+
+
+sectionBulkDeleteRows = (req,res) => {
+  if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' ||  req.originalUrl.split('/')[2] == 'menus'  || req.originalUrl.split('/')[2] == 'mail-templates')
+  var Section = require('../models/'+req.originalUrl.split('/')[2]);
+  else
+  var Section = require('../../../nodex/models/'+req.originalUrl.split('/')[2]);
+  Section.remove({ _id: { $in: req.body.ids } }, function (err) {
+    if(err) 
+      return res.status(403).send({success: false, msg: err});
+    else
+    return  res.json('Successfully removed');
+  });
+
 
 };
 
