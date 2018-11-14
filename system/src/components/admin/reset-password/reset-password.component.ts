@@ -16,6 +16,7 @@ export class MagpieResetPasswordComponent implements OnInit {
   resetPasswordForm: FormGroup;
   passwordInfo = { newPwd: '', confirmPwd: '' };
   token: any;
+  login_error:any;
 
 
   constructor(public route: ActivatedRoute, public router: Router, public fb: FormBuilder, public http: HttpClient, public section_service: SectionService) {

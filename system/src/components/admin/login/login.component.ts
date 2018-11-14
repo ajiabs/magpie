@@ -25,6 +25,7 @@ export class MagpieLoginComponent implements OnInit {
     message = '';
     data: any;
     result_data:any;
+    resetMail:any;
     userLoginForm: FormGroup;
     forgotPasswordForm :FormGroup;
     constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService) {
