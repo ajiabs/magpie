@@ -10,6 +10,7 @@ config = require('./config/DB'),
 LocalStrategy = require('passport-local').Strategy,
 RedisStore = require('connect-redis')(session);
 const http = require('http');
+const forceSsl = require('force-ssl-heroku');
 
 
 magpieAdminRoutes  = require('./system/nodex/admin/sectionRoutes');
@@ -30,7 +31,7 @@ app.use(bodyParser.json());
 app.use(cors());
 const port = process.env.PORT || 4000;
 
-
+app.use(forceSsl);
 app.use(express.static(path.join(__dirname, 'dist')));
 
 
