@@ -299,7 +299,7 @@ sectionAdminRoutes.route('/checkEmailExist/:email/:users_id').get(passport.authe
 
 
 
-sectionAdminRoutes.route('/edit/:id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
+sectionAdminRoutes.route('/edit_details/:id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
 
   var token = sectionGetToken(req.headers);
   if (token) 
@@ -335,7 +335,7 @@ sectionAdminRoutes.route('/edit/:id').get(passport.authenticate('jwt', { session
  });
 
 
- sectionAdminRoutes.route('/view/:id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
+ sectionAdminRoutes.route('/view_details/:id').get(passport.authenticate('jwt', { session: false}),function (req, res) {
 
   var token = sectionGetToken(req.headers);
   if (token) 

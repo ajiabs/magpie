@@ -208,7 +208,7 @@ export class SectionService {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
       var section = current_route.split('/')[2];
-    const uri = server_url+section+'/edit/' + id;
+    const uri = server_url+section+'/edit_details/' + id;
     return this
             .http
             .get(uri,httpOptions)
@@ -235,7 +235,7 @@ export class SectionService {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
       var section = current_route.split('/')[2];
-    const uri = server_url+section+'/view/' + id;
+    const uri = server_url+section+'/view_details/' + id;
     return this
             .http
             .get(uri,httpOptions)
