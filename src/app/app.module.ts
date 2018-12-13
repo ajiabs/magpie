@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule,Routes } from '@angular/router';
+import { RouterModule,Routes,PreloadAllModules } from '@angular/router';
 
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -22,7 +22,8 @@ const appRoutes: Routes = [];
   ],
   imports: [
     BrowserModule,RouterModule.forRoot(appRoutes,{
-      onSameUrlNavigation: 'reload'
+      onSameUrlNavigation: 'reload',
+      preloadingStrategy: PreloadAllModules
       }), MagpieModule,HttpClientModule, ReactiveFormsModule,Ng4LoadingSpinnerModule.forRoot()
   ],
   providers: [DashboardService,AuthGuard,SectionService],

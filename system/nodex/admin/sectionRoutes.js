@@ -53,7 +53,8 @@ sectionAdminRoutes.route('/checkLogin').post(function (req, res) {
           // if user is found and password is right create a token
           var token = jwt.sign(user.toJSON(), config.secret);
           // return the information including token as JSON
-         return  res.json({success: true, token: 'JWT ' + token,result:user});
+         var now_date =  new Date(Date.now()).toLocaleString();
+         return  res.json({success: true, token: 'JWT ' + token,result:user,todays_date:now_date});
         } else {
          return  res.json({success: false,  msg: 'Authentication failed. Wrong password.'});
         }

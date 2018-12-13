@@ -50,6 +50,7 @@ export class MagpieLoginComponent implements OnInit {
   
           if(this.data.success){
              localStorage.setItem('jwtToken', this.data.token);
+             localStorage.setItem('todays_date', this.data.todays_date);
              localStorage.setItem("userDetails['email']", this.data.result.email);
              localStorage.setItem("userDetails['name']", this.data.result.name);
              localStorage.setItem("userDetails['users_id']", this.data.result.users_id);

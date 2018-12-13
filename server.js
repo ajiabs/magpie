@@ -11,6 +11,7 @@ LocalStrategy = require('passport-local').Strategy,
 RedisStore = require('connect-redis')(session);
 const http = require('http');
 const forceSsl = require('force-ssl-heroku');
+var compression = require('compression');
 
 
 magpieAdminRoutes  = require('./system/nodex/admin/sectionRoutes');
@@ -39,7 +40,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: true, }));
-
+app.use(compression());
 
 
 app.use(flash());
@@ -70,7 +71,7 @@ app.use('/admin/:section', magpieAdminRoutes);
 app.use('/api/:section', apiCustomRoutes);
 app.use('/api/:section', magpieApiRoutes);
 
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 const server = http.createServer(app);

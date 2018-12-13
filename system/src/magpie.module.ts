@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule,Input } from '@angular/core';
-import { RouterModule,Routes } from '@angular/router';
+import { RouterModule,Routes,PreloadAllModules } from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MagpieComponent } from './magpie.component';
@@ -74,7 +74,8 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
   imports: [
     BrowserModule,HttpClientModule,
     RouterModule.forRoot(magpieRoutes,{
-      onSameUrlNavigation: 'reload'
+      onSameUrlNavigation: 'reload',
+      preloadingStrategy: PreloadAllModules
     }), 
     ReactiveFormsModule,
     Select2Module,
