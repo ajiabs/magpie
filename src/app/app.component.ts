@@ -29,80 +29,110 @@ export class AppComponent extends  MagpieComponent {
     //   {name: 'keywords', content: ''}
     //   ]);
 
-      
-    if(window.location.pathname.split('/')[1] == 'admin'){
-     this.angular_part = true;
-     this.section_service.getThemeColorSettings().subscribe(res=>{
-        $("body").css({"--some-color-dark":this.colorLuminance(res[0].value, -0.3),"--some-color":this.colorLuminance(res[0].value, 0),"--some-hovercolor":this.colorLuminance(res[0].value, -0.2)});
 
-      });
-      this.section_service.getWebsiteNameSettings().subscribe(res=>{
-        this.website_name = res[0].value;
-        this.titleService.setTitle(this.website_name );
-      });
-    }
-       
+
+    var th = this;
+
+
+    this.router.events.subscribe(event => {
+
 
     if (localStorage.getItem('jwtToken')) {
    
 
 
-      this.showNav = true;
-      this.login_name = localStorage.getItem("userDetails['name']");
-      this.login_id = localStorage.getItem("userDetails['users_id']");
-      this.login_image = localStorage.getItem("userDetails['image']");
+        th.showNav = true;
+        th.login_name = localStorage.getItem("userDetails['name']");
+        th.login_id = localStorage.getItem("userDetails['users_id']");
+        th.login_image = localStorage.getItem("userDetails['image']");
+      
+        th.isLoggedIn().subscribe(res=>{
+            th.roles_menu = res;
+        });
     
-      this.isLoggedIn().subscribe(res=>{
-          this.roles_menu = res;
-      });
-   
 
-      this.package_installer = localStorage.getItem("userDetails['roles_id']") == '1'?true:false;
-      this.section_service.getUserRole(localStorage.getItem("userDetails['roles_id']")).subscribe(res => {
-          this.login_role = res['name'];
+        th.package_installer = localStorage.getItem("userDetails['roles_id']") == '1'?true:false;
+        th.section_service.getUserRole(localStorage.getItem("userDetails['roles_id']")).subscribe(res => {
+            th.login_role = res['name'];
 
-          
-      });
+            
+        });
 
 
 
-    } else 
-    {
-      this.showNav = false;
-    }
+      } else 
+      {
+        th.showNav = false;
+      }
 
-    this.router.events.subscribe(event => {
+      
 
       if (event instanceof NavigationEnd ) {
-        if(event.url == '/admin/login'){
+        
+        if(event.urlAfterRedirects.split('/')[1] == 'admin'){
+
+           
+          //Admin script
+          this.admin_script_init();
+
+          th.angular_part = true;
+          th.section_service.getThemeColorSettings().subscribe(res=>{
+             $("body").css({"--some-color-dark":this.colorLuminance(res[0].value, -0.3),"--some-color":this.colorLuminance(res[0].value, 0),"--some-hovercolor":this.colorLuminance(res[0].value, -0.2)});
+     
+           });
+           th.section_service.getWebsiteNameSettings().subscribe(res=>{
+             th.website_name = res[0].value;
+             th.titleService.setTitle(this.website_name );
+           });
+         
+        }
+        if(event.urlAfterRedirects == '/admin/login'){
           this.showNav = false;
         }else{
 
 
-          var url = event.url.split("/");
+          var url = event.urlAfterRedirects.split("/");
           var custom_url = url[1]+"/"+url[2];
         
-          this.showNavMethod = event.url.split('/')[3] != undefined && event.url.split('/')[3].split('?')[0]?event.url.split('/')[3].split('?')[0]:event.url.split('/')[3];
-          this.showBeadcrumb = true;
+          th.showNavMethod = event.urlAfterRedirects.split('/')[3] != undefined && event.urlAfterRedirects.split('/')[3].split('?')[0]?event.urlAfterRedirects.split('/')[3].split('?')[0]:event.urlAfterRedirects.split('/')[3];
+          th.showBeadcrumb = true;
 
-          this.getMenuNameFromUrl(custom_url).subscribe(res=>{
+          th.getMenuNameFromUrl(custom_url).subscribe(res=>{
 
            if(res != null){
-              this.menuRow = res;
-              this.showNavDisplayTitle = this.menuRow.display_name;
-              this.showNavTitle = this.menuRow.name;
+              th.menuRow = res;
+              th.showNavDisplayTitle = this.menuRow.display_name;
+              th.showNavTitle = this.menuRow.name;
            }else{
-            this.showNavDisplayTitle =  event.url.split('/')[2];
-            this.showNavTitle = event.url.split('/')[2];
+            th.showNavDisplayTitle =  event.urlAfterRedirects.split('/')[2];
+            th.showNavTitle = event.urlAfterRedirects.split('/')[2];
            }
 
           });
 
         }
       }
-    }); 
+    });
+
 
   }
+
+  admin_script_init=()=>{
+      setTimeout(function(){
+        $('.login-content [data-toggle="flip"]').click(function() {
+            $('.login-box').toggleClass('flipped');
+            return false;
+          });
+      
+
+          
+    },1000)
+
+
+
+  }
+
+
 
   colorLuminance=(hex, lum) =>{
 

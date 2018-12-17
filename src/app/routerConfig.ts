@@ -15,9 +15,9 @@ import { DashboardComponent } from './../../src/app/admin/components/dashboard/d
         },
       ]
      }
-    , 
-    // { path: 'aboutus',
-    //   redirectTo:"admin/dashboard",
+    // , 
+    // { path: '',
+    //   redirectTo:"admin/login",
     //   pathMatch:"full"
     // }
         

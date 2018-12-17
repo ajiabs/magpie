@@ -13,7 +13,7 @@
   </script>
 
   <script>
-    if(window.location.pathname.split('/')[1] == 'admin'){
+    if(window.location.pathname.split('/')[3] == 'admin'){
       var root_folder = "assets/themes/admin/"+defaul_theme;
       var styles = [
         {"css":"css/main.css","type":"internal"},
@@ -31,7 +31,6 @@
          {"js":"js/chart.js","type":"internal"},
          {"js":" https://maps.google.com/maps/api/js?sensor=true&key=AIzaSyDZ0qMJNqSxi8QJFuUDuPdE7Pwh3TPCjpo&libraries=places&language=en-US","type":"external"}
 
-        
  
        ];
     }
@@ -80,22 +79,7 @@
 <body class="app sidebar-mini rtl">
 	
   <app-root></app-root>
-<script>
 
-    if(window.location.pathname.split('/')[1] == 'admin'){
-      setTimeout(function(){
-           $('.login-content [data-toggle="flip"]').click(function() {
-              $('.login-box').toggleClass('flipped');
-              return false;
-            });
-         
-
-            
-      },1000)
-     
-    }
-
-</script>
 
 </body> 
 </html>

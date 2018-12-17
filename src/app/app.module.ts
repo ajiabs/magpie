@@ -23,6 +23,7 @@ const appRoutes: Routes = [];
   imports: [
     BrowserModule,RouterModule.forRoot(appRoutes,{
       onSameUrlNavigation: 'reload',
+      enableTracing: true ,
       preloadingStrategy: PreloadAllModules
       }), MagpieModule,HttpClientModule, ReactiveFormsModule,Ng4LoadingSpinnerModule.forRoot()
   ],
