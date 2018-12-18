@@ -12,6 +12,7 @@ RedisStore = require('connect-redis')(session);
 const http = require('http');
 const forceSsl = require('force-ssl-heroku');
 var compression = require('compression');
+var expressStaticGzip = require('express-static-gzip');
 
 
 magpieAdminRoutes  = require('./system/nodex/admin/sectionRoutes');
@@ -33,8 +34,11 @@ app.use(cors());
 const port = process.env.PORT || 4000;
 
 app.use(forceSsl);
-app.use(express.static(path.join(__dirname, 'dist')));
-
+// app.use(express.static(path.join(__dirname, 'dist')));
+app.use('/', expressStaticGzip(__dirname+'/dist', {
+  enableBrotli: true, 
+  orderPreference: ['br','gzip','deflate']
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -71,9 +75,15 @@ app.use('/admin/:section', magpieAdminRoutes);
 app.use('/api/:section', apiCustomRoutes);
 app.use('/api/:section', magpieApiRoutes);
 
+
+
+
+
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
+
+
 const server = http.createServer(app);
 server.listen(port, function(){
     console.log('Listening on port ' + port);

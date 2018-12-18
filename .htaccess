@@ -1,8 +1,44 @@
+FileETag None
+
+<Files *.html.gz>
+ AddType "text/html" .gz
+ AddEncoding gz .gz
+</Files>
+
+<Files *.js.gz>
+  AddType "text/javascript" .gz
+  AddEncoding gzip .gz
+</Files>
+
+<Files *.css.gz>
+  AddType "text/css" .gz
+  AddEncoding gzip .gz
+</Files>
+
+<Files *.html.br>
+ AddType "text/html" .br
+ AddEncoding br .br
+</Files>
+
+<Files *.js.br>
+ AddType "text/javascript" .br
+ AddEncoding br .br
+</Files>
+<Files *.css.br>
+ AddType "text/css" .br
+ AddEncoding br .br
+</Files>
+
 <IfModule mod_rewrite.c>
-   RewriteEngine on
-   RewriteCond %{REQUEST_FILENAME} -s [OR]
-   RewriteCond %{REQUEST_FILENAME} -l [OR]
-   RewriteCond %{REQUEST_FILENAME} -d
-   RewriteRule ^.*$ - [NC,L]
-   RewriteRule ^(.*) index.html [NC,L]
+  RewriteEngine on 
+  RewriteCond %{REQUEST_FILENAME} -s [OR]
+  RewriteCond %{REQUEST_FILENAME} -l [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^.*$ - [NC,L]
+
+  RewriteCond %{HTTP:Accept-Encoding} br
+  RewriteRule ^(.*) index.html.br [NC,L]
+
+  RewriteCond %{HTTP:Accept-Encoding} gzip
+  RewriteRule ^(.*) index.html.gz [NC,L]
 </IfModule>
