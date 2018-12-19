@@ -74,6 +74,11 @@
          scripts.src= type=="internal"?root_folder+'/'+js:js;
          document.head.appendChild(scripts);
        }
+
+       var current_segment = window.location.pathname.split('/')[1] == 'admin'?'admin':'site';
+
+      localStorage.setItem("current_segment",current_segment);
+     
    </script>
 </head>
 <body class="app sidebar-mini rtl">

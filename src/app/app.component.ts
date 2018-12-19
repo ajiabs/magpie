@@ -29,17 +29,9 @@ export class AppComponent extends  MagpieComponent {
     //   {name: 'keywords', content: ''}
     //   ]);
 
-
-
     var th = this;
 
-
-    this.router.events.subscribe(event => {
-
-
     if (localStorage.getItem('jwtToken')) {
-   
-
 
         th.showNav = true;
         th.login_name = localStorage.getItem("userDetails['name']");
@@ -55,64 +47,70 @@ export class AppComponent extends  MagpieComponent {
         th.section_service.getUserRole(localStorage.getItem("userDetails['roles_id']")).subscribe(res => {
             th.login_role = res['name'];
 
-            
         });
-
-
 
       } else 
       {
         th.showNav = false;
       }
 
-      
+    if(localStorage.getItem("current_segment") == 'admin'){
 
-      if (event instanceof NavigationEnd ) {
         
-        if(event.urlAfterRedirects.split('/')[1] == 'admin'){
+      //Admin script
+      this.admin_script_init();
 
-           
-          //Admin script
-          this.admin_script_init();
+      th.angular_part = true;
+      th.section_service.getThemeColorSettings().subscribe(res=>{
+          $("body").css({"--some-color-dark":this.colorLuminance(res[0].value, -0.3),"--some-color":this.colorLuminance(res[0].value, 0),"--some-hovercolor":this.colorLuminance(res[0].value, -0.2)});
+  
+        });
+        th.section_service.getWebsiteNameSettings().subscribe(res=>{
+          th.website_name = res[0].value;
+          th.titleService.setTitle(this.website_name );
+        });
+      
+    }
 
-          th.angular_part = true;
-          th.section_service.getThemeColorSettings().subscribe(res=>{
-             $("body").css({"--some-color-dark":this.colorLuminance(res[0].value, -0.3),"--some-color":this.colorLuminance(res[0].value, 0),"--some-hovercolor":this.colorLuminance(res[0].value, -0.2)});
-     
-           });
-           th.section_service.getWebsiteNameSettings().subscribe(res=>{
-             th.website_name = res[0].value;
-             th.titleService.setTitle(this.website_name );
-           });
-         
-        }
+
+    this.router.events.subscribe(event => {
+
+     if (event instanceof NavigationEnd ) {
         if(event.urlAfterRedirects == '/admin/login'){
           this.showNav = false;
         }else{
 
+          var newUrl = event.url.split("?");
+          if (newUrl[0] == '/admin/reset-password') {
+            this.showNav = false;
+          } else {
 
-          var url = event.urlAfterRedirects.split("/");
-          var custom_url = url[1]+"/"+url[2];
-        
-          th.showNavMethod = event.urlAfterRedirects.split('/')[3] != undefined && event.urlAfterRedirects.split('/')[3].split('?')[0]?event.urlAfterRedirects.split('/')[3].split('?')[0]:event.urlAfterRedirects.split('/')[3];
-          th.showBeadcrumb = true;
 
-          th.getMenuNameFromUrl(custom_url).subscribe(res=>{
 
-           if(res != null){
-              th.menuRow = res;
-              th.showNavDisplayTitle = this.menuRow.display_name;
-              th.showNavTitle = this.menuRow.name;
-           }else{
-            th.showNavDisplayTitle =  event.urlAfterRedirects.split('/')[2];
-            th.showNavTitle = event.urlAfterRedirects.split('/')[2];
-           }
+              var url = event.urlAfterRedirects.split("/");
+              var custom_url = url[1]+"/"+url[2];
+            
+              th.showNavMethod = event.urlAfterRedirects.split('/')[3] != undefined && event.urlAfterRedirects.split('/')[3].split('?')[0]?event.urlAfterRedirects.split('/')[3].split('?')[0]:event.urlAfterRedirects.split('/')[3];
+              th.showBeadcrumb = true;
 
-          });
+              th.getMenuNameFromUrl(custom_url).subscribe(res=>{
+
+              if(res != null){
+                  th.menuRow = res;
+                  th.showNavDisplayTitle = this.menuRow.display_name;
+                  th.showNavTitle = this.menuRow.name;
+              }else{
+                th.showNavDisplayTitle =  event.urlAfterRedirects.split('/')[2];
+                th.showNavTitle = event.urlAfterRedirects.split('/')[2];
+              }
+
+              });
+            }
 
         }
       }
     });
+  
 
 
   }
