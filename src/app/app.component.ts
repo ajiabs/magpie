@@ -109,8 +109,8 @@ export class AppComponent extends  MagpieComponent {
               }else{
                 
 
-              
                 th.showNavDisplayTitle =  event.urlAfterRedirects.split('/')[2];
+                th.titleService.setTitle(th.website_name + ' | ' + th.showNavDisplayTitle.replace("-"," "));
                 th.showNavTitle = event.urlAfterRedirects.split('/')[2];
 
                

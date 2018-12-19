@@ -500,7 +500,7 @@ sectionAdminRoutes.route('/getPackagesInstaller').post(passport.authenticate('jw
       {
 
     
-        http.get('http://52.91.195.127/packages/package.php?action=get_all', (response) => {
+        http.get('http://34.239.133.96/packages_plugins/package.php?action=get_all', (response) => {
         
           let result = '';
 
@@ -531,7 +531,7 @@ sectionAdminRoutes.route('/getPackagesInstaller').post(passport.authenticate('jw
 sectionAdminRoutes.route('/searchPackagesInstaller').post(passport.authenticate('jwt', { session: false}),function (req, res) {
   var token = sectionGetToken(req.headers);
   if (token) {
-      http.get('http://52.91.195.127/packages/package.php?action=search&package_name='+req.body.search_key, (response) => {
+      http.get('http://34.239.133.96/packages_plugins/package.php?action=search&package_name='+req.body.search_key, (response) => {
             
         let result = '';
 
@@ -559,7 +559,7 @@ sectionAdminRoutes.route('/getOnePackagesInstaller').post(passport.authenticate(
   var token = sectionGetToken(req.headers);
   if (token) 
       {
-        http.get('http://52.91.195.127/packages/package.php?action=get_one&package_name='+req.body.package_name, (response) => {
+        http.get('http://34.239.133.96/packages_plugins/package.php?action=get_one&package_name='+req.body.package_name, (response) => {
             
           let result = '';
   
