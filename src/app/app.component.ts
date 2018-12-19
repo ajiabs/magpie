@@ -54,6 +54,7 @@ export class AppComponent extends  MagpieComponent {
         th.showNav = false;
       }
 
+
     if(localStorage.getItem("current_segment") == 'admin'){
 
         
@@ -74,7 +75,6 @@ export class AppComponent extends  MagpieComponent {
 
 
     this.router.events.subscribe(event => {
-
      if (event instanceof NavigationEnd ) {
         if(event.urlAfterRedirects == '/admin/login'){
           this.showNav = false;

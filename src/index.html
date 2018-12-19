@@ -75,9 +75,9 @@
          document.head.appendChild(scripts);
        }
 
+      // var current_segment = window.location.pathname.split('/')[1] == 'admin' || window.location.pathname.split('/')[1] == ''?'admin':'site';
        var current_segment = window.location.pathname.split('/')[1] == 'admin'?'admin':'site';
-
-      localStorage.setItem("current_segment",current_segment);
+       localStorage.setItem("current_segment",current_segment);
      
    </script>
 </head>

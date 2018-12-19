@@ -5,21 +5,21 @@ import { DashboardComponent } from './../../src/app/admin/components/dashboard/d
 
 
   const routes:Routes = [
-    // {
-    //   path: 'admin',
-    //   children: [ 
-    //     { path: 'dashboard',
-    //       component:DashboardComponent,
-    //       canActivate: [AuthGuard],
-    //       runGuardsAndResolvers: 'always',
-    //     },
-    //   ]
-    //  }
+    {
+      path: 'admin',
+      children: [ 
+        { path: 'dashboard',
+          component:DashboardComponent,
+          canActivate: [AuthGuard],
+          runGuardsAndResolvers: 'always',
+        },
+      ]
+     }
     // , 
-    { path: 'admin/dashboard',
-      redirectTo:"admin/users",
-      pathMatch:"full"
-    }
+    // { path: 'admin/dashboard',
+    //   redirectTo:"admin/users",
+    //   pathMatch:"full"
+    // }
         
    
 ];
