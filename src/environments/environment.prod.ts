@@ -9,10 +9,10 @@
 
 export const environment = {
     production: true,
-    server_url : "magpie.iscriptsdemo:4000/admin/",
-    upload_url : "magpie.iscriptsdemo:4000/",
-    site_server_url : "magpie.iscriptsdemo:4000/site/",
-    site_url: "magpie.iscriptsdemo:4200/"
+    server_url : "http://magpie.iscriptsdemo.com:4000/admin/",
+    upload_url : "http://magpie.iscriptsdemo.com:4000/",
+    site_server_url : "http://magpie.iscriptsdemo.com:4000/site/",
+    site_url: "http://magpie.iscriptsdemo.com:4200/"
   
   };
   
