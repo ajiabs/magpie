@@ -69,6 +69,7 @@ export class AppComponent extends  MagpieComponent {
         th.section_service.getWebsiteNameSettings().subscribe(res=>{
           th.website_name = res[0].value;
           th.titleService.setTitle(this.website_name );
+        
         });
       
     }
@@ -76,6 +77,8 @@ export class AppComponent extends  MagpieComponent {
 
     this.router.events.subscribe(event => {
      if (event instanceof NavigationEnd ) {
+
+     
         if(event.urlAfterRedirects == '/admin/login'){
           this.showNav = false;
         }else{
@@ -98,10 +101,19 @@ export class AppComponent extends  MagpieComponent {
               if(res != null){
                   th.menuRow = res;
                   th.showNavDisplayTitle = this.menuRow.display_name;
-                  th.showNavTitle = this.menuRow.name;
+                  th.titleService.setTitle(th.website_name + ' | ' + th.showNavDisplayTitle);
+                  if(th.showNavDisplayTitle != 'Dashboard')
+                    th.showNavTitle = this.menuRow.name;
+                  else
+                    th.showNavTitle = undefined;
               }else{
+                
+
+              
                 th.showNavDisplayTitle =  event.urlAfterRedirects.split('/')[2];
                 th.showNavTitle = event.urlAfterRedirects.split('/')[2];
+
+               
               }
 
               });

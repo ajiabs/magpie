@@ -122,7 +122,7 @@
       </div>
       <ul class="app-breadcrumb breadcrumb">
         <li class="breadcrumb-item"><i [routerLink]="['admin/dashboard']" class="fa fa-home fa-lg"></i></li>
-        <li class="breadcrumb-item"><a [routerLink]="['admin/'+(showNavTitle | lowercase)]" >{{showNavDisplayTitle.replace("-"," ") | titlecase}}</a></li>
+        <li class="breadcrumb-item" *ngIf="showNavTitle != undefined"><a [routerLink]="['admin/'+(showNavTitle | lowercase)]">{{showNavDisplayTitle.replace("-"," ") | titlecase}}</a></li>
          <li class="breadcrumb-item"  *ngIf="showNavMethod != undefined"><a >{{showNavMethod  | titlecase}}</a></li>
       </ul>
 
