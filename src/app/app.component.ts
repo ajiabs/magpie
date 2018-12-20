@@ -30,8 +30,9 @@ export class AppComponent extends  MagpieComponent {
     //   ]);
 
     var th = this;
+    if(localStorage.getItem("current_segment") == 'admin'){
 
-    if (localStorage.getItem('jwtToken')) {
+      if (localStorage.getItem('jwtToken')) {
 
         th.showNav = true;
         th.login_name = localStorage.getItem("userDetails['name']");
@@ -55,8 +56,6 @@ export class AppComponent extends  MagpieComponent {
       }
 
 
-    if(localStorage.getItem("current_segment") == 'admin'){
-
         
       //Admin script
       this.admin_script_init();
@@ -71,57 +70,63 @@ export class AppComponent extends  MagpieComponent {
           th.titleService.setTitle(this.website_name );
         
         });
+
+
+
+
+        this.router.events.subscribe(event => {
+          if (event instanceof NavigationEnd ) {
+     
+          
+             if(event.urlAfterRedirects == '/admin/login'){
+               this.showNav = false;
+             }else{
+     
+               var newUrl = event.url.split("?");
+               if (newUrl[0] == '/admin/reset-password') {
+                 this.showNav = false;
+               } else {
+     
+     
+     
+                   var url = event.urlAfterRedirects.split("/");
+                   var custom_url = url[1]+"/"+url[2];
+                 
+                   th.showNavMethod = event.urlAfterRedirects.split('/')[3] != undefined && event.urlAfterRedirects.split('/')[3].split('?')[0]?event.urlAfterRedirects.split('/')[3].split('?')[0]:event.urlAfterRedirects.split('/')[3];
+                   th.showBeadcrumb = true;
+     
+                   th.getMenuNameFromUrl(custom_url).subscribe(res=>{
+     
+                   if(res != null){
+                       th.menuRow = res;
+                       th.showNavDisplayTitle = this.menuRow.display_name;
+                       th.titleService.setTitle(th.website_name + ' | ' + th.showNavDisplayTitle);
+                       if(th.showNavDisplayTitle != 'Dashboard')
+                         th.showNavTitle = this.menuRow.name;
+                       else
+                         th.showNavTitle = undefined;
+                   }else{
+                     
+     
+                     th.showNavDisplayTitle =  event.urlAfterRedirects.split('/')[2];
+                     th.titleService.setTitle(th.website_name + ' | ' + th.showNavDisplayTitle.replace("-"," "));
+                     th.showNavTitle = event.urlAfterRedirects.split('/')[2];
+     
+                    
+                   }
+     
+                   });
+                 }
+     
+             }
+           }
+         });
+
       
     }
 
 
-    this.router.events.subscribe(event => {
-     if (event instanceof NavigationEnd ) {
-
-     
-        if(event.urlAfterRedirects == '/admin/login'){
-          this.showNav = false;
-        }else{
-
-          var newUrl = event.url.split("?");
-          if (newUrl[0] == '/admin/reset-password') {
-            this.showNav = false;
-          } else {
-
-
-
-              var url = event.urlAfterRedirects.split("/");
-              var custom_url = url[1]+"/"+url[2];
-            
-              th.showNavMethod = event.urlAfterRedirects.split('/')[3] != undefined && event.urlAfterRedirects.split('/')[3].split('?')[0]?event.urlAfterRedirects.split('/')[3].split('?')[0]:event.urlAfterRedirects.split('/')[3];
-              th.showBeadcrumb = true;
-
-              th.getMenuNameFromUrl(custom_url).subscribe(res=>{
-
-              if(res != null){
-                  th.menuRow = res;
-                  th.showNavDisplayTitle = this.menuRow.display_name;
-                  th.titleService.setTitle(th.website_name + ' | ' + th.showNavDisplayTitle);
-                  if(th.showNavDisplayTitle != 'Dashboard')
-                    th.showNavTitle = this.menuRow.name;
-                  else
-                    th.showNavTitle = undefined;
-              }else{
-                
-
-                th.showNavDisplayTitle =  event.urlAfterRedirects.split('/')[2];
-                th.titleService.setTitle(th.website_name + ' | ' + th.showNavDisplayTitle.replace("-"," "));
-                th.showNavTitle = event.urlAfterRedirects.split('/')[2];
-
-               
-              }
-
-              });
-            }
-
-        }
-      }
-    });
+  
   
 
 
