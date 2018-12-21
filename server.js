@@ -51,10 +51,6 @@ app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: true
 app.use(flash());
 
 app.enable('trust proxy');
-
-// Add a handler to inspect the req.secure flag (see 
-// http://expressjs.com/api#req.secure). This allows us 
-// to know whether the request was via http or https.
 app.use (function (req, res, next) {
         if (req.secure) {
                 // request was via https, so do no special handling
@@ -64,6 +60,7 @@ app.use (function (req, res, next) {
           var secureUrl = "https://www." + req.headers['host'] + req.url; 
           res.writeHead(301, { "Location":  secureUrl });
           res.end();
+          return;
         }
 });
 
@@ -71,12 +68,12 @@ app.use (function (req, res, next) {
 
 
 
-// app.use(function(req, res, next){
-//   res.locals.success_message = req.flash('success_message');
-//   res.locals.error_message = req.flash('error_message');
-//   res.locals.error = req.flash('error');
-//   next();
-// });
+app.use(function(req, res, next){
+  res.locals.success_message = req.flash('success_message');
+  res.locals.error_message = req.flash('error_message');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 app.use('/uploads', express.static('uploads'))
 
