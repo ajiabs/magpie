@@ -60,8 +60,10 @@ app.use (function (req, res, next) {
                 // request was via https, so do no special handling
                 next();
         } else {
-                // request was via http, so redirect to https
-                res.redirect('https://www' + req.headers.host + req.url);
+
+          var secureUrl = "https://www." + req.headers['host'] + req.url; 
+          res.writeHead(301, { "Location":  secureUrl });
+          res.end();
         }
 });
 
