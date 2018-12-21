@@ -34,6 +34,7 @@ app.use(cors());
 const port = process.env.PORT || 4000;
 
 app.use(forceSsl);
+app.use(compression());
 // app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/', expressStaticGzip(__dirname+'/dist', {
   enableBrotli: true, 
@@ -44,17 +45,34 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: true, }));
-app.use(compression());
+
 
 
 app.use(flash());
 
-app.use(function(req, res, next){
-  res.locals.success_message = req.flash('success_message');
-  res.locals.error_message = req.flash('error_message');
-  res.locals.error = req.flash('error');
-  next();
+app.enable('trust proxy');
+
+// Add a handler to inspect the req.secure flag (see 
+// http://expressjs.com/api#req.secure). This allows us 
+// to know whether the request was via http or https.
+app.use (function (req, res, next) {
+        if (req.secure) {
+                // request was via https, so do no special handling
+                next();
+        } else {
+                // request was via http, so redirect to https
+                res.redirect('https://' + req.headers.host + req.url);
+        }
 });
+
+
+
+// app.use(function(req, res, next){
+//   res.locals.success_message = req.flash('success_message');
+//   res.locals.error_message = req.flash('error_message');
+//   res.locals.error = req.flash('error');
+//   next();
+// });
 
 app.use('/uploads', express.static('uploads'))
 
