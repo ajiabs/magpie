@@ -50,24 +50,6 @@ app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: true
 
 app.use(flash());
 
-app.enable('trust proxy');
-app.use (function (req, res, next) {
-        if (req.secure) {
-                // request was via https, so do no special handling
-                next();
-        } else {
-
-          var secureUrl = "https://www." + req.headers['host'] + req.url; 
-          res.writeHead(301, { "Location":  secureUrl });
-          res.end();
-          return;
-        }
-});
-
-
-
-
-
 app.use(function(req, res, next){
   res.locals.success_message = req.flash('success_message');
   res.locals.error_message = req.flash('error_message');
