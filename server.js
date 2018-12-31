@@ -10,9 +10,11 @@ config = require('./config/DB'),
 LocalStrategy = require('passport-local').Strategy,
 RedisStore = require('connect-redis')(session);
 const http = require('http');
-const forceSsl = require('force-ssl-heroku');
+var https = require('https');
+//const forceSsl = require('force-ssl-heroku');
 var compression = require('compression');
 var expressStaticGzip = require('express-static-gzip');
+naked_redirect = require('express-naked-redirect');
 
 
 magpieAdminRoutes  = require('./system/nodex/admin/sectionRoutes');
@@ -33,7 +35,7 @@ app.use(bodyParser.json());
 app.use(cors());
 const port = process.env.PORT || 4000;
 
-app.use(forceSsl);
+//app.use(forceSsl);
 app.use(compression());
 // app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/', expressStaticGzip(__dirname+'/dist', {
@@ -44,18 +46,24 @@ app.use('/', expressStaticGzip(__dirname+'/dist', {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: true, }));
 
+app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: true, }));
 
 
 app.use(flash());
 
-app.use(function(req, res, next){
-  res.locals.success_message = req.flash('success_message');
-  res.locals.error_message = req.flash('error_message');
-  res.locals.error = req.flash('error');
-  next();
-});
+// app.use(function(req, res, next){
+//   res.locals.success_message = req.flash('success_message');
+//   res.locals.error_message = req.flash('error_message');
+//   res.locals.error = req.flash('error');
+//   next();
+// });
+
+app.use(naked_redirect({
+  subDomain: 'www',
+  https: true
+}))
+
 
 app.use('/uploads', express.static('uploads'))
 
