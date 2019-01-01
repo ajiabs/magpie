@@ -81,13 +81,17 @@ module.exports = {
 
 			function sendMessage(templateResult, settingResult, done) {
 
-				var subject = templateResult[0].template_subject;
 				var body = templateResult[0].template_body;
 				var adminEmail = settingResult[3].value;
 				var host = settingResult[4].value;
 				var port = settingResult[5].value;
 				var smtpUser = settingResult[6].value;
 				var smtpPassword = settingResult[7].value;
+
+				if (replaceparams['mail-subject'] != null)
+					var subject = replaceparams['mail-subject'];
+				else
+					var subject = templateResult[0].template_subject;
 
 				var email = mailIds;
 
@@ -99,31 +103,31 @@ module.exports = {
 
 
 				nodemailer.createTestAccount((err, account) => {
-				
+
 					let transporter = nodemailer.createTransport({
 						host: host,
 						port: port,
-						secure: true, 
+						secure: true,
 						auth: {
-							user: smtpUser, 
-							pass: smtpPassword 
+							user: smtpUser,
+							pass: smtpPassword
 						},
 						tls: {
-						
+
 							rejectUnauthorized: false
 						}
 					});
 
-					
+
 					let mailOptions = {
-						from: adminEmail,  
-						to: email, 
-						subject: subject, 
+						from: adminEmail,
+						to: email,
+						subject: subject,
 						//text: 'Hello world?', // plain text body
-						html: body 
+						html: body
 					};
 
-					
+
 					transporter.sendMail(mailOptions, (error, info) => {
 						if (error) {
 							return console.log(error);

@@ -1,73 +1,105 @@
 <div class="row">
-   
+
 
     <div class="col-md-12">
         <div class="tab-content">
-          <div class="tab-pane active" id="user-account">
-              <div class="tile user-settings">
-                  <div class="tile-title-w-btn">
-                      <h3 class="title">Settings</h3>
-                      <p><a class="btn btn-secondary icon-btn btn-sm" [routerLink]="['/admin/dashboard']" ><i class="fa fa-arrow-left"></i></a></p>
+            <div class="tab-pane active" id="user-account">
+                <div class="tile user-settings">
+                    <div class="tile-title-w-btn">
+                        <h3 class="title">Settings</h3>
+                        <p><a class="btn btn-secondary icon-btn btn-sm" [routerLink]="['/admin/dashboard']"><i class="fa fa-arrow-left"></i></a></p>
                     </div>
 
                     <form class="settings-form" [formGroup]="settingsForm" novalidate>
                         <div class="row">
                             <div class="col-md-6" *ngFor="let column of columns;let rowIndex=index">
-                                  <label class="control-label">{{column.label}}<span class="required_field">*</span></label>
-                                  <div *ngIf="column.type == 'textbox'" >        
-                                    <input class="form-control {{(settingsForm.controls[column.slug].invalid && (settingsForm.controls[column.slug].dirty || settingsForm.controls[column.slug].touched))?'is-invalid':settingsForm.controls[column.slug].valid?'is-valid':''}}" type="text" formControlName="{{column.slug}}" #{{column.slug}}  [(ngModel)] = "settings_form_data[column.slug]" placeholder="Enter your {{column.label}}">
-                                    <div  *ngIf="settingsForm.controls[column.slug].invalid && (settingsForm.controls[column.slug].dirty || settingsForm.controls[column.slug].touched) && settingsForm.controls[column.slug].errors.required" class="form-control-feedback">  
-                                        {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required</div>
-                                  </div>
-                                  <div *ngIf="column.type == 'email'" >        
-                                      <input class="form-control {{(settingsForm.controls[column.slug].invalid && (settingsForm.controls[column.slug].dirty || settingsForm.controls[column.slug].touched))?'is-invalid':settingsForm.controls[column.slug].valid?'is-valid':''}}" type="email" formControlName="{{column.slug}}" #{{column.slug}}  [(ngModel)] = "settings_form_data[column.slug]" placeholder="Enter your {{column.label}}">
-                                      <div  *ngIf="settingsForm.controls[column.slug].invalid && (settingsForm.controls[column.slug].dirty || settingsForm.controls[column.slug].touched) && settingsForm.controls[column.slug].errors.required" class="form-control-feedback">  
-                                          {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is required</div>
-                                      <div  *ngIf="settingsForm.controls[column.slug].invalid && (settingsForm.controls[column.slug].dirty || settingsForm.controls[column.slug].touched) && settingsForm.controls[column.slug].errors.pattern" class="form-control-feedback">  
-                                          {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is not valid email</div>
-                                    </div>
-                                  <div *ngIf="column.type == 'colour-picker'" >        
-                                      <input class="form-control" formControlName="{{column.slug}}" #{{column.slug}}  [(ngModel)] = "settings_form_data[column.slug]" placeholder="Enter your {{column.label}}">
-                                  </div>
-                                  <div *ngIf="column.type == 'textarea'" >        
-                                      <textarea class="form-control" formControlName="{{column.slug}}" #{{column.slug}}  [(ngModel)] = "settings_form_data[column.slug]" placeholder="Enter your {{column.label}}"></textarea>
-                                  </div>
-                                  <div *ngIf="column.type == 'image'" >        
-                                      <div *ngIf="column.type == 'image'" >
-                                          <input class="form-control" type="file" (change)="onFileChangeEvent($event,column.slug)" >
-                                          <input type="hidden"  formControlName="{{column.slug}}" #{{column.slug}} [(ngModel)] = "settings_form_data[column.slug]">
-                                          <div *ngIf="settingsForm.controls[column.slug].invalid &&  settingsForm.controls[column.slug].errors.extension"  class="form-control-feedback">
-                                              {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is only accept jpg,jpeg,png formats.
-                                          </div> 
-                                          <div *ngIf="settingsForm.controls[column.slug].invalid &&  settingsForm.controls[column.slug].errors.maxSize"  class="form-control-feedback">
-                                              {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}} is  accept less than 1 MB.
-                                          </div> 
-                                       
-                                          <div class="row">
-                                  
-                                            <div class="col-md-4" *ngFor="let i of settings_form_data[column.slug] | toArray as images" style="padding-top:15px;text-align: center;">
-                                              <img  [src]="i | getFile:'id' | async" width="132px" height="90px">
-                                              <a *ngIf="(column.multiple =='true' && column.validations[0].required == 'true' && images.length >1) || (column.multiple =='true' && column.validations[0].required == 'false') " (click)="deleteFile(i,column.slug)" style="margin-top:2px;cursor:pointer" >&nbsp;<i class="fa fa-trash"></i></a>
-                                            </div>
-                                          </div>
+                                <label class="control-label" *ngIf="(column.type == 'hidden' && isDeveloper) || column.type != 'hidden' ">{{column.label}}<span
+                                        class="required_field">*</span></label>
+                                <div *ngIf="column.type == 'textbox'">
+                                    <input class="form-control {{(settingsForm.controls[column.slug].invalid && (settingsForm.controls[column.slug].dirty || settingsForm.controls[column.slug].touched))?'is-invalid':settingsForm.controls[column.slug].valid?'is-valid':''}}"
+                                        type="text" formControlName="{{column.slug}}" #{{column.slug}} [(ngModel)]="settings_form_data[column.slug]"
+                                        placeholder="Enter your {{column.label}}">
+                                    <div *ngIf="settingsForm.controls[column.slug].invalid && (settingsForm.controls[column.slug].dirty || settingsForm.controls[column.slug].touched) && settingsForm.controls[column.slug].errors.required"
+                                        class="form-control-feedback">
+                                        {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}}
+                                        is required</div>
+                                </div>
+                                <div *ngIf="column.type == 'email'">
+                                    <input class="form-control {{(settingsForm.controls[column.slug].invalid && (settingsForm.controls[column.slug].dirty || settingsForm.controls[column.slug].touched))?'is-invalid':settingsForm.controls[column.slug].valid?'is-valid':''}}"
+                                        type="email" formControlName="{{column.slug}}" #{{column.slug}} [(ngModel)]="settings_form_data[column.slug]"
+                                        placeholder="Enter your {{column.label}}">
+                                    <div *ngIf="settingsForm.controls[column.slug].invalid && (settingsForm.controls[column.slug].dirty || settingsForm.controls[column.slug].touched) && settingsForm.controls[column.slug].errors.required"
+                                        class="form-control-feedback">
+                                        {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}}
+                                        is required</div>
+                                    <div *ngIf="settingsForm.controls[column.slug].invalid && (settingsForm.controls[column.slug].dirty || settingsForm.controls[column.slug].touched) && settingsForm.controls[column.slug].errors.pattern"
+                                        class="form-control-feedback">
+                                        {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}}
+                                        is not valid email</div>
+                                </div>
+                                <div *ngIf="column.type == 'colour-picker'">
+                                    <input class="form-control" formControlName="{{column.slug}}" #{{column.slug}}
+                                        [(ngModel)]="settings_form_data[column.slug]" placeholder="Enter your {{column.label}}">
+                                </div>
+                                <div *ngIf="column.type == 'textarea'">
+                                    <textarea class="form-control" formControlName="{{column.slug}}" #{{column.slug}}
+                                        [(ngModel)]="settings_form_data[column.slug]" placeholder="Enter your {{column.label}}"></textarea>
+                                </div>
+                                <div *ngIf="column.type == 'image'">
+                                    <div *ngIf="column.type == 'image'">
+                                        <input class="form-control" type="file" (change)="onFileChangeEvent($event,column.slug)">
+                                        <input type="hidden" formControlName="{{column.slug}}" #{{column.slug}}
+                                            [(ngModel)]="settings_form_data[column.slug]">
+                                        <div *ngIf="settingsForm.controls[column.slug].invalid &&  settingsForm.controls[column.slug].errors.extension"
+                                            class="form-control-feedback">
+                                            {{column.label.charAt(0).toUpperCase() +
+                                            column.label.substr(1).toLowerCase()}} is only accept jpg,jpeg,png formats.
                                         </div>
-                                  </div>
-                                  <div *ngIf="column.type == 'color-picker'" > 
-                                        <input class="form-control" formControlName="{{column.slug}}" #{{column.slug}} [(ngModel)] = "settings_form_data[column.slug]" placeholder="Enter your {{column.label}}" [cpOutputFormat]="'hex'" [cpCancelButton]="true" [(colorPicker)]="settings_form_data[column.slug]" [style.background]="settings_form_data[column.slug]" [value]="settings_form_data[column.slug]" (colorPickerChange)="cmyk=onChangeColor($event,column.slug)"/>
-                                  </div>
-                                        
-                                        
+                                        <div *ngIf="settingsForm.controls[column.slug].invalid &&  settingsForm.controls[column.slug].errors.maxSize"
+                                            class="form-control-feedback">
+                                            {{column.label.charAt(0).toUpperCase() +
+                                            column.label.substr(1).toLowerCase()}} is accept less than 1 MB.
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col-md-4" *ngFor="let i of settings_form_data[column.slug] | toArray as images"
+                                                style="padding-top:15px;text-align: center;">
+                                                <img [src]="i | getFile:'id' | async" width="132px" height="90px">
+                                                <a *ngIf="(column.multiple =='true' && column.validations[0].required == 'true' && images.length >1) || (column.multiple =='true' && column.validations[0].required == 'false') "
+                                                    (click)="deleteFile(i,column.slug)" style="margin-top:2px;cursor:pointer">&nbsp;<i
+                                                        class="fa fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="column.type == 'color-picker'">
+                                    <input class="form-control" formControlName="{{column.slug}}" #{{column.slug}}
+                                        [(ngModel)]="settings_form_data[column.slug]" placeholder="Enter your {{column.label}}"
+                                        [cpOutputFormat]="'hex'" [cpCancelButton]="true" [(colorPicker)]="settings_form_data[column.slug]"
+                                        [style.background]="settings_form_data[column.slug]" [value]="settings_form_data[column.slug]"
+                                        (colorPickerChange)="cmyk=onChangeColor($event,column.slug)" />
+                                </div>
+
+                                <div *ngIf="column.type == 'hidden' && isDeveloper ">
+                                    <tag-input class="tag {{(settingsForm.controls[column.slug].invalid)?'is-invalid':settingsForm.controls[column.slug].valid?'is-valid':''}}"  [ngModel]="devs[column.slug]"  [ngModelOptions]="{standalone: true}" [clearOnBlur]="true" (onAdd)="onTagAdded(column.slug,$event)" (onRemove)="onTagRemove(column.slug,$event)" [placeholder]="'Add developer'" [secondaryPlaceholder]="'Add developer'">
+                                        <tag-input-dropdown [focusFirstElement]="true" >
+                                        </tag-input-dropdown>
+                                    </tag-input>
+
+                                    <input type="hidden" formControlName="{{column.slug}}" #{{column.slug}}  [(ngModel)]="settings_form_data[column.slug]">                                    
+                                </div>
+
                             </div>
                         </div>
                         <div class="tile-footer">
-                            <button (click)="settingsUpdate()" [disabled]="settingsForm.invalid" class="btn btn-primary" ><i class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>
-                          </div>
-                      </form>
+                            <button (click)="settingsUpdate()" [disabled]="settingsForm.invalid" class="btn btn-primary"><i
+                                    class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>
+                        </div>
+                    </form>
                 </div>
-          </div>
-          
+            </div>
+
         </div>
-      </div>
     </div>
-
-
+</div>

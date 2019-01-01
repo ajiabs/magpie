@@ -1,5 +1,5 @@
 import { TestBed, async } from '@angular/core/testing';
-import { MagpieViewComponent } from './../login/login.component';
+import { MagpieViewComponent } from './../view/view.component';
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
