@@ -94,10 +94,10 @@ app.get('/*', (req, res) => {
 });
 
 
-const options = {
-  key: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/privkey.pem"),
-  cert: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/fullchain.pem")
-};
+// const options = {
+//   key: fs.readFileSync("/opt/lampp/htdocs/Magpie/node_modules/public-encrypt/test/test_rsa_privkey.pem"),
+//   cert: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/fullchain.pem")
+// };
 
 
 const httpServer = http.createServer(app);
@@ -105,7 +105,7 @@ httpServer.listen(port, function(){
     console.log('Listening on port ' + port);
   });
 
-const httpsServer = https.createServer(options, app);
-httpsServer.listen(443, () => {
-	console.log('HTTPS Server running on port 443');
-});
+// const httpsServer = https.createServer(options, app);
+// httpsServer.listen(port, () => {
+// 	console.log('HTTPS Server running on port 443'+ port);
+// });
