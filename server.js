@@ -61,7 +61,7 @@ app.use(flash());
 // });
 
 app.use(naked_redirect({
-  subDomain: 'www',
+  //subDomain: 'www',
   https: true
 }))
 
