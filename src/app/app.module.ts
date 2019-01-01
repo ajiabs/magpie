@@ -12,6 +12,8 @@ import { DashboardService } from './../../src/app/admin/services/dashboard.servi
 import { AuthGuard } from './../../system/src/services/admin/auth-guard.service';
 import { SectionService } from './../../system/src/services/admin/section.service';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { TagInputModule } from 'ngx-chips';
+
 const appRoutes: Routes = [];
 
 @NgModule({
@@ -25,7 +27,7 @@ const appRoutes: Routes = [];
       onSameUrlNavigation: 'reload',
       enableTracing: true ,
       preloadingStrategy: PreloadAllModules
-      }), MagpieModule,HttpClientModule, ReactiveFormsModule,Ng4LoadingSpinnerModule.forRoot()
+      }), MagpieModule,HttpClientModule, ReactiveFormsModule,Ng4LoadingSpinnerModule.forRoot(),TagInputModule
   ],
   providers: [DashboardService,AuthGuard,SectionService],
   exports: [RouterModule],

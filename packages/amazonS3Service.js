@@ -56,7 +56,6 @@ exports.uploadFile = (req, res, file) => {
 
 exports.downloadFile = (req, res, key) => {
     var async = require('async');
-
     async.waterfall([
         function getCredentials(done) {
             Package.find({ package_name: 'amazon_S3' }, function (err, result) {
@@ -103,5 +102,5 @@ exports.downloadFile = (req, res, key) => {
             // });
         }
     ]);
-
+    
 }

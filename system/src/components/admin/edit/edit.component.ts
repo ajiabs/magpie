@@ -174,9 +174,9 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
        if(data.value != undefined && data.value.length>0)
         this.section_data[field] =  JSON.stringify({"selected_values":data.value});
        else
-        this.section_data[field] = "";
- 
+        this.section_data[field] = ""; 
    }
+   
    deletePoly(field) {
     let pathArray = JSON.parse(this.section_data[field]);
     pathArray['geofence'] = [];

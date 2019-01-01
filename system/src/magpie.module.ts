@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule,Input } from '@angular/core';
 import { RouterModule,Routes,PreloadAllModules } from '@angular/router';
-import {HttpClientModule} from '@angular/common/http';
+import { HttpClientModule} from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MagpieComponent } from './magpie.component';
 import { MagpieLoginComponent } from './components/admin/login/login.component';
@@ -38,6 +38,11 @@ import { AgmCoreModule } from '@agm/core';
 import { NgxEditorModule } from 'ngx-editor';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { TagInputModule } from 'ngx-chips';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // this is needed!
+import { FormsModule } from '@angular/forms';
+
+
 
 
 @NgModule({
@@ -73,11 +78,12 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
   ],
   imports: [
     BrowserModule,HttpClientModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(magpieRoutes,{
       onSameUrlNavigation: 'reload',
       preloadingStrategy: PreloadAllModules
     }), 
-    ReactiveFormsModule,
+    ReactiveFormsModule,FormsModule,
     Select2Module,
     Ng4GeoautocompleteModule.forRoot(),
     AgmCoreModule.forRoot({
@@ -86,7 +92,9 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     }),
     NgxEditorModule,
     ColorPickerModule,
-    Ng4LoadingSpinnerModule.forRoot()
+    Ng4LoadingSpinnerModule.forRoot(),
+    TagInputModule
+
   ],
   exports: [
     MagpieComponent,

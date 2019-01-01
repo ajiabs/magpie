@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpHeaders } from '@angular/common/http';
-import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import  { environment } from './../../../../src/environments/environment';
+import { environment } from './../../../../src/environments/environment';
 import 'rxjs/add/observable/of';
 
 
@@ -19,141 +19,141 @@ export class SectionService {
 
 
   checkLogin(data) {
-    const uri = server_url+'users/checkLogin';
+    const uri = server_url + 'users/checkLogin';
     const obj = {
-     email: data.email,
-     password:data.password
-   };
-   return this
-           .http
-           .post(uri,obj)
-           .map(res => {
-             return res;
-           });
- }
+      email: data.email,
+      password: data.password
+    };
+    return this
+      .http
+      .post(uri, obj)
+      .map(res => {
+        return res;
+      });
+  }
 
 
-  sectionConfig = (current_route) =>{
+  sectionConfig = (current_route) => {
 
-   let httpOptions = {
+    let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
     var section = current_route.split('/')[2];
 
-    const uri = server_url+section+'/getConfig';
-    return this.http.get(uri,httpOptions)
-       .map(res => {
-              return res;
-            });
+    const uri = server_url + section + '/getConfig';
+    return this.http.get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
   }
 
-  customRoute = (current_route,from) =>{
+  customRoute = (current_route, from) => {
 
 
-   let httpOptions = {
+    let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
     var section = current_route.split('/')[2];
-    const uri = server_url+'magpie_custom/'+from;
-    const obj = {"role_id":localStorage.getItem("userDetails['roles_id']")};
-    return this.http.post(uri,obj,httpOptions)
-       .map(res => {
-              return res;
-            });
+    const uri = server_url + 'magpie_custom/' + from;
+    const obj = { "role_id": localStorage.getItem("userDetails['roles_id']") };
+    return this.http.post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
   }
 
-  adminCustomRoute = (current_route,from) =>{
+  adminCustomRoute = (current_route, from) => {
 
     let httpOptions = {
-       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-     };
-     var section = current_route.split('/')[2];
-     const uri = server_url+'admin_custom/'+from;
-     const obj = {"role_id":localStorage.getItem("userDetails['roles_id']")};
-     return this.http.post(uri,obj,httpOptions)
-        .map(res => {
-               return res;
-             });
-   }
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    var section = current_route.split('/')[2];
+    const uri = server_url + 'admin_custom/' + from;
+    const obj = { "role_id": localStorage.getItem("userDetails['roles_id']") };
+    return this.http.post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
+  }
 
 
-   add = (data,current_route) => {
+  add = (data, current_route) => {
     let httpOptions = {
-     
-      headers: new HttpHeaders({ 'Accept':'application/json','enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
+
+      headers: new HttpHeaders({ 'Accept': 'application/json', 'enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
     };
 
 
 
     let formData = new FormData();
-      Object.keys(data).forEach(k => {
-          if( data.file_fields.indexOf(k) != -1){
-            if((typeof data[k] == "object" )){
-             for(let i =0; i < data[k].length; i++){
-                  formData.append(k, data[k][i], data[k][i]['name']);
-              }
-           }
-          }else
-             formData.append(k, data[k]);
+    Object.keys(data).forEach(k => {
+      if (data.file_fields.indexOf(k) != -1) {
+        if ((typeof data[k] == "object")) {
+          for (let i = 0; i < data[k].length; i++) {
+            formData.append(k, data[k][i], data[k][i]['name']);
+          }
+        }
+      } else
+        formData.append(k, data[k]);
     });
 
 
 
     var section = current_route.split('/')[2];
-    const uri = server_url+section+'/add';
+    const uri = server_url + section + '/add';
     const obj = formData;
-    this.http.post(uri, obj,httpOptions)
-        .subscribe(res => console.log('Done'));
+    this.http.post(uri, obj, httpOptions)
+      .subscribe(res => console.log('Done'));
   }
 
-  search = (value,searchable_fields,order_by,sortable_field,relation,current_page,per_page,current_route) => {
+  search = (value, searchable_fields, order_by, sortable_field, relation, current_page, per_page, current_route) => {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
     var section = current_route.split('/')[2];
-    const uri = server_url+section+'/search';
-    const obj = {'search':value,'searchable':searchable_fields,'sort_order':order_by,'sort_orderBy':sortable_field,'relation':relation,'current_page':current_page,'per_page':per_page,'role_id':localStorage.getItem("userDetails['roles_id']")};
+    const uri = server_url + section + '/search';
+    const obj = { 'search': value, 'searchable': searchable_fields, 'sort_order': order_by, 'sort_orderBy': sortable_field, 'relation': relation, 'current_page': current_page, 'per_page': per_page, 'role_id': localStorage.getItem("userDetails['roles_id']") };
     return this
-            .http
-            .post(uri,obj,httpOptions)
-            .map(res => {
-              return res;
-            });
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
   }
 
 
-  export  = (value,searchable_fields,order_by,sortable_field,relation,current_route,columns)=>{
+  export = (value, searchable_fields, order_by, sortable_field, relation, current_route, columns) => {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
     var section = current_route.split('/')[2];
-    const uri = server_url+section+'/export';
-    const obj = {'search':value,'searchable':searchable_fields,'sort_order':order_by,'sort_orderBy':sortable_field,'relation':relation,'role_id':localStorage.getItem("userDetails['roles_id']"),'columns':columns};
+    const uri = server_url + section + '/export';
+    const obj = { 'search': value, 'searchable': searchable_fields, 'sort_order': order_by, 'sort_orderBy': sortable_field, 'relation': relation, 'role_id': localStorage.getItem("userDetails['roles_id']"), 'columns': columns };
     return this
-            .http
-            .post(uri,obj,httpOptions)
-            .map(res => {
-              return res;
-            });
-      
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
+
   }
 
-  import  = (data,columns_array,import_unique_field,current_route)=>{
+  import = (data, columns_array, import_unique_field, current_route) => {
     let httpOptions = {
-     
-      headers: new HttpHeaders({ 'Accept':'application/json','enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
+
+      headers: new HttpHeaders({ 'Accept': 'application/json', 'enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
     };
     let formData = new FormData();
     formData.append('csv_import', data, data['name']);
-    formData.append('columns',columns_array);
-    formData.append('import_unique_field',import_unique_field);
+    formData.append('columns', columns_array);
+    formData.append('import_unique_field', import_unique_field);
 
     var section = current_route.split('/')[2];
-    const uri = server_url+section+'/import';
+    const uri = server_url + section + '/import';
     const obj = formData;
-    return  this.http.post(uri, obj,httpOptions)
-        .map(res => console.log('Done'));
-      
+    return this.http.post(uri, obj, httpOptions)
+      .map(res => console.log('Done'));
+
   }
 
   forgotPassword(data) {
@@ -169,7 +169,7 @@ export class SectionService {
         return res;
       });
   }
-  
+
   resetPassword(passwordInfo) {
     const uri = server_url + 'users/resetPassword';
     const obj = {
@@ -187,507 +187,518 @@ export class SectionService {
 
 
 
-   get = (current_page,per_page,sortable_field,order_by,current_route) =>{
+  get = (current_page, per_page, sortable_field, order_by, current_route) => {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
 
     var section = current_route.split('/')[2];
-    const uri = server_url+section;
-    const obj = {'current_page':current_page,'per_page':per_page,'sort_orderBy':sortable_field,sort_order:order_by,'role_id':localStorage.getItem("userDetails['roles_id']")};
+    const uri = server_url + section;
+    const obj = { 'current_page': current_page, 'per_page': per_page, 'sort_orderBy': sortable_field, sort_order: order_by, 'role_id': localStorage.getItem("userDetails['roles_id']") };
     return this
-            .http
-            .post(uri,obj,httpOptions)
-            .map(res => {
-              return res;
-            });
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
   }
 
-  edit = (id,current_route) => {
+  edit = (id, current_route) => {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
-      var section = current_route.split('/')[2];
-    const uri = server_url+section+'/edit_details/' + id;
+    var section = current_route.split('/')[2];
+    const uri = server_url + section + '/edit_details/' + id;
     return this
-            .http
-            .get(uri,httpOptions)
-            .map(res => {
-              return res;
-            });
+      .http
+      .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
   }
 
-  getProfile = (users_id)=>{
+  getProfile = (users_id) => {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
-    const uri = server_url+'users/profile-edit/' + users_id;
+    const uri = server_url + 'users/profile-edit/' + users_id;
     return this
-        .http
-        .get(uri,httpOptions)
-        .map(res => {
-          return res;
-        });
+      .http
+      .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
   }
 
-  view = (id,current_route) =>{
+  view = (id, current_route) => {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
-      var section = current_route.split('/')[2];
-    const uri = server_url+section+'/view_details/' + id;
+    var section = current_route.split('/')[2];
+    const uri = server_url + section + '/view_details/' + id;
     return this
-            .http
-            .get(uri,httpOptions)
-            .map(res => {
-              return res;
-            });
+      .http
+      .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
 
   }
 
 
-  getUserRole = (role_id) =>{
+  getUserRole = (role_id) => {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
-  
-    const uri = server_url+'roles/getUserRole/' +parseInt(role_id);
+
+    const uri = server_url + 'roles/getUserRole/' + parseInt(role_id);
     return this
-            .http
-            .get(uri,httpOptions)
-            .map(res => {
-              return res;
-            });
+      .http
+      .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
 
   }
 
 
 
-   update = (data,current_route) => {
+  update = (data, current_route) => {
 
 
-   
+
     let httpOptions = {
-     
-      headers: new HttpHeaders({ 'Accept':'application/json','enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
+
+      headers: new HttpHeaders({ 'Accept': 'application/json', 'enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
     };
 
 
-     let formData = new FormData();
-      Object.keys(data).forEach(k => {
-          if( data.file_fields.indexOf(k) != -1){
-           
-           if((typeof data[k] == "object" )){
-            
-             for(let i =0; i < data[k].length; i++){
-                  formData.append(k, data[k][i], data[k][i]['name']);
-              }
-           }else
-            formData.append(k, data[k]);
-          }else
-             formData.append(k, data[k]);
+    let formData = new FormData();
+    Object.keys(data).forEach(k => {
+      if (data.file_fields.indexOf(k) != -1) {
+
+        if ((typeof data[k] == "object")) {
+
+          for (let i = 0; i < data[k].length; i++) {
+            formData.append(k, data[k][i], data[k][i]['name']);
+          }
+        } else
+          formData.append(k, data[k]);
+      } else
+        formData.append(k, data[k]);
     });
 
 
     var section = current_route.split('/')[2];
-    const uri = server_url+section+'/update/' + data._id;
+    const uri = server_url + section + '/update/' + data._id;
 
     const obj = formData;
     this
       .http
-      .post(uri, obj,httpOptions)
+      .post(uri, obj, httpOptions)
       .subscribe(res => console.log('Done'));
-      
+
   }
 
-  changePassword = (data,current_route) => {
+  changePassword = (data, current_route) => {
 
 
-   
+
     let httpOptions = {
-     
-      headers: new HttpHeaders({ 'Accept':'application/json','enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
+
+      headers: new HttpHeaders({ 'Accept': 'application/json', 'enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
     };
 
-    const uri = server_url+'users/changePassword';
+    const uri = server_url + 'users/changePassword';
     const obj = data;
     this
       .http
-      .post(uri, obj,httpOptions)
+      .post(uri, obj, httpOptions)
       .subscribe(res => console.log('Done'));
-      
+
   }
-   delete = (id,current_route) => {
+  delete = (id, current_route) => {
 
-    let httpOptions = {
-      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-    };
-      var section = current_route.split('/')[2];
-    const uri = server_url+section+'/delete/' + id;
-
-        return this
-            .http
-            .get(uri,httpOptions)
-            .map(res => {
-              return res;
-            });
-  }
-
-
-  bulkDelete=(ids,current_route) => {
-
-    let httpOptions = {
-      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-    };
-      var section = current_route.split('/')[2];
-      const uri = server_url+section+'/bulk-delete';
-      var obj = {'ids':ids};
-        return this
-            .http
-            .post(uri,obj,httpOptions)
-            .map(res => {
-              return res;
-            });
-  }
-
-
-
-
-  getImage = (id,current_route) =>{
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
     var section = current_route.split('/')[2];
-    const uri = server_url+section+'/getImage/' + id;
+    const uri = server_url + section + '/delete/' + id;
+
     return this
-            .http
-            .get(uri,httpOptions)
-            .map(res => {
-              return res;
-            });
-      
-  }
-
-    deleteFile = (id,column,rowId,current_route) => {
-      let httpOptions = {
-        headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-      };
-      var section = current_route.split('/')[2];
-      const uri = server_url+section+'/deleteFile/' + rowId;;
-      const obj = {'file_id':id,'column':column};
-      return this
-              .http
-              .post(uri,obj,httpOptions)
-              .map(res => {
-              return res;
-            });
-
-  }
-
-
-  getRolePermissionMenus = (section) =>{
-      let httpOptions = {
-        headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-      };
-      const uri = server_url+section+'/getRolePermissionMenus';
-      const obj  ={'role_id':localStorage.getItem("userDetails['roles_id']")};
-      return this
-              .http
-              .post(uri,obj,httpOptions)
-              .map(res => {
-              return res;
-            });
-
-  }
-
-  getAllMenus = (section) =>{
-    let httpOptions = {
-      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-    };
-    const uri = server_url+section+'/getAllMenus';
-    return this
-            .http
-            .get(uri,httpOptions)
-            .map(res => {
-            return res;
-          });
-
-}
-
-getCurrentRolePermissionMenus = (roles,role_id)=>{
-
-  let httpOptions = {
-    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-  };
-  const uri = server_url+roles+'/getCurrentRolePermissionMenus/'+role_id;
-  return this
-          .http
-          .get(uri,httpOptions)
-          .map(res => {
-          return res;
-        });
-
-}
-
-checkEmailExist = (email,users_id)=>{
-
-  let httpOptions = {
-    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-  };
-  if(users_id == undefined)
-   users_id = 0;
-  const uri = server_url+'users/checkEmailExist/'+email+'/'+users_id;
-  return this
-          .http
-          .get(uri,httpOptions)
-          .map(res => {
-          return res;
-        });
-
-}
-getSettings=(current_route)=>{
-  let httpOptions = {
-    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-  };
-  var section = current_route.split('/')[2];
-  const uri = server_url+section+'/getSettings';
-  return this
       .http
-      .get(uri,httpOptions)
+      .get(uri, httpOptions)
       .map(res => {
         return res;
       });
-}
+  }
 
-updateSettings=(data,current_route)=>{
-  let httpOptions = {
-   
-    headers: new HttpHeaders({ 'Accept':'application/json','enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
-  };
- console.log( localStorage.getItem('jwtToken'));
-  let formData = new FormData();
-   Object.keys(data).forEach(k => {
-     if( data.file_fields.indexOf(k) != -1){
-      if((typeof data[k] == "object" )){
-        for(let i =0; i < data[k].length; i++){
-            
+
+  bulkDelete = (ids, current_route) => {
+
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    var section = current_route.split('/')[2];
+    const uri = server_url + section + '/bulk-delete';
+    var obj = { 'ids': ids };
+    return this
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
+  }
+
+
+
+
+  getImage = (id, current_route) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    var section = current_route.split('/')[2];
+    const uri = server_url + section + '/getImage/' + id;
+    return this
+      .http
+      .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
+
+  }
+
+  deleteFile = (id, column, rowId, current_route) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    var section = current_route.split('/')[2];
+    const uri = server_url + section + '/deleteFile/' + rowId;;
+    const obj = { 'file_id': id, 'column': column };
+    return this
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
+
+  }
+
+
+  getRolePermissionMenus = (section) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + section + '/getRolePermissionMenus';
+    const obj = { 'role_id': localStorage.getItem("userDetails['roles_id']") };
+    return this
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
+
+  }
+
+  getAllMenus = (section) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + section + '/getAllMenus';
+    return this
+      .http
+      .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
+
+  }
+
+  getCurrentRolePermissionMenus = (roles, role_id) => {
+
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + roles + '/getCurrentRolePermissionMenus/' + role_id;
+    return this
+      .http
+      .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
+
+  }
+
+  checkEmailExist = (email, users_id) => {
+
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    if (users_id == undefined)
+      users_id = 0;
+    const uri = server_url + 'users/checkEmailExist/' + email + '/' + users_id;
+    return this
+      .http
+      .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
+
+  }
+  getSettings = (current_route) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    var section = current_route.split('/')[2];
+    const uri = server_url + section + '/getSettings';
+    return this
+      .http
+      .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
+  }
+
+  updateSettings = (data, current_route) => {
+    let httpOptions = {
+
+      headers: new HttpHeaders({ 'Accept': 'application/json', 'enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    let formData = new FormData();
+    Object.keys(data).forEach(k => {
+      if (data.file_fields.indexOf(k) != -1) {
+        if ((typeof data[k] == "object")) {
+          for (let i = 0; i < data[k].length; i++) {
+
             formData.append(k, data[k][i], data[k][i]['name']);
-         }
-      }else
-       formData.append(k, data[k]);
-      }else{
-     
-      formData.append(k, data[k]);
-     }
-  });
-  var section = current_route.split('/')[2];
-  const obj = formData;
-  const uri = server_url+section+'/updateSettings';
-  
-  return this
-          .http
-          .post(uri,obj,httpOptions)
-          .map(res => {
-            return res;
-          });
-}
+          }
+        } else
+          formData.append(k, data[k]);
+      } else {
 
-getPackagesInstaller = ()=>{
-  let httpOptions = {
-    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-  };
-  const uri = server_url+'packages-installer/getPackagesInstaller';
-  const obj = {};
-  return this
-          .http
-          .post(uri,obj,httpOptions)
-          .map(res => {
-          return res;
-        });
-
-}
-getOnePackagesInstaller = (package_name)=>{
-  let httpOptions = {
-    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-  };
-  const uri = server_url+'packages-installer/getOnePackagesInstaller';
-  const obj = {'package_name':package_name};
-  return this
-          .http
-          .post(uri,obj,httpOptions)
-          .map(res => {
-          return res;
-        });
-
-}
-
-installPackage = (pkg)=>{
-  let httpOptions = {
-    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-  };
-  const uri = server_url+'packages-installer/installPackage';
-  //.command_line_code
-  const obj = pkg;
-  return this
-          .http
-          .post(uri,obj,httpOptions)
-          .map(res => {
-          return res;
-        });
-}
-
-
-installedPackages = ()=>{
-  let httpOptions = {
-    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-  };
-  const uri = server_url+'packages-installer/installedPackages';
-  //.command_line_code
-  const obj = {};
-  return this
-          .http
-          .post(uri,obj,httpOptions)
-          .map(res => {
-          return res;
-        });
-}
-
-
-searchPackagesInstaller = (searchkey)=>{
-  let httpOptions = {
-    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-  };
-  const uri = server_url+'packages-installer/searchPackagesInstaller';
-  const obj = {'search_key':searchkey};
-  return this
-          .http
-          .post(uri,obj,httpOptions)
-          .map(res => {
-          return res;
-        });
-
-}
-
-getMenuNameFromUrl = (section,url)=>{
-  let httpOptions = {
-    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-  };
-  const uri = server_url+section+'/getMenuNameFromUrl';
-  let obj={ "url":url}
-  return this
-          .http
-          .post(uri,obj,httpOptions)
-          .map(res => {
-          return res;
-        });
- }
-
-
- updatePackageConfiguration = (packagedata)=>{
-  let httpOptions = {
-  headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-  };
-  const uri = server_url+'packages-installer/updatePackageConfiguration';
-  const obj = packagedata;
-  
-  return this
-    .http
-    .post(uri,obj,httpOptions)
-    .map(res => {
-      return res;
+        formData.append(k, data[k]);
+      }
     });
-  }
-  getPackageData = (package_name)=>{
-  let httpOptions = {
-  headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-  };
-  const uri = server_url+'packages-installer/getPackageData';
-  
-  const obj = {'package_name':package_name};
-  
-  return this
-    .http
-    .post(uri,obj,httpOptions)
-    .map(res => {
-      return res;
-    });
+    var section = current_route.split('/')[2];
+    const obj = formData;
+    const uri = server_url + section + '/updateSettings';
+
+    return this
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
   }
 
-  getThemeColorSettings = ()=>{
+  getPackagesInstaller = () => {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
-    const uri = server_url+'general-settings/getThemeColorSettings';
-    
+    const uri = server_url + 'packages-installer/getPackagesInstaller';
     const obj = {};
-    
     return this
       .http
-      .post(uri,obj)
+      .post(uri, obj, httpOptions)
       .map(res => {
         return res;
       });
 
-}
-
-getWebsiteNameSettings = ()=>{
-  let httpOptions = {
-    headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-  };
-  const uri = server_url+'general-settings/getWebsiteNameSettings';
-  
-  const obj = {};
-  
-  return this
-    .http
-    .post(uri,obj)
-    .map(res => {
-      return res;
-    });
-
-}
-
-  getRowSettings = (settings_key)=>{
-      let httpOptions = {
-        headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-      };
-      const uri = server_url+'general-settings/getRowSettings';
-      
-      const obj = {'slug':settings_key};
-      
-      return this
-        .http
-        .post(uri,obj)
-        .map(res => {
-          return res;
-        });
+  }
+  getOnePackagesInstaller = (package_name) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'packages-installer/getOnePackagesInstaller';
+    const obj = { 'package_name': package_name };
+    return this
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
 
   }
 
-  changeStatus =(current_route,id,value,field,source)=>{
-    var obj = "";
-    Object.keys(source).forEach((v)=>{
+  installPackage = (pkg) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'packages-installer/installPackage';
+    //.command_line_code
+    const obj = pkg;
+    return this
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
+  }
 
-      if(source[v].value  != value)
-       obj = source[v].value;
+
+  installedPackages = () => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'packages-installer/installedPackages';
+    //.command_line_code
+    const obj = {};
+    return this
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
+  }
+
+
+  searchPackagesInstaller = (searchkey) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'packages-installer/searchPackagesInstaller';
+    const obj = { 'search_key': searchkey };
+    return this
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
+
+  }
+
+  getMenuNameFromUrl = (section, url) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + section + '/getMenuNameFromUrl';
+    let obj = { "url": url }
+    return this
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
+  }
+
+
+  updatePackageConfiguration = (packagedata) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'packages-installer/updatePackageConfiguration';
+    const obj = packagedata;
+
+    return this
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
+  }
+  getPackageData = (package_name) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'packages-installer/getPackageData';
+
+    const obj = { 'package_name': package_name };
+
+    return this
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
+  }
+
+  getThemeColorSettings = () => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'general-settings/getThemeColorSettings';
+
+    const obj = {};
+
+    return this
+      .http
+      .post(uri, obj)
+      .map(res => {
+        return res;
+      });
+
+  }
+
+  getWebsiteNameSettings = () => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'general-settings/getWebsiteNameSettings';
+
+    const obj = {};
+
+    return this
+      .http
+      .post(uri, obj)
+      .map(res => {
+        return res;
+      });
+
+  }
+
+  getRowSettings = (settings_key) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'general-settings/getRowSettings';
+
+    const obj = { 'slug': settings_key };
+
+    return this
+      .http
+      .post(uri, obj)
+      .map(res => {
+        return res;
+      });
+
+  }
+
+  changeStatus = (current_route, id, value, field, source) => {
+    var obj = "";
+    Object.keys(source).forEach((v) => {
+
+      if (source[v].value != value)
+        obj = source[v].value;
     });
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
     var section = current_route.split('/')[2];
-    const uri = server_url+section+'/changeStatus/'+id;
+    const uri = server_url + section + '/changeStatus/' + id;
     return this
-        .http
-        .post(uri,{'status':obj,'field':field},httpOptions)
-        .map(res => {
-          return res;
-        });
-    
+      .http
+      .post(uri, { 'status': obj, 'field': field }, httpOptions)
+      .map(res => {
+        return res;
+      });
+
 
   }
 
 
-
+  getUsers = (current_route) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    var section = current_route.split('/')[2];
+    const uri = server_url + section + '/getUsers';
+    return this
+      .http
+      .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
+  }
 
 
 }
