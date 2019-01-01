@@ -103,8 +103,8 @@ app.get('/*', (req, res) => {
 
 
 var options = {
-  key: fs.readFileSync('./ssl/privatekey.pem'),
-  cert: fs.readFileSync('./ssl/certificate.pem'),
+  key: fs.readFileSync('/etc/letsencrypt/live/magpie.iscriptsdemo.com/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/magpie.iscriptsdemo.com/fullchain.pem'),
 };
 
 
