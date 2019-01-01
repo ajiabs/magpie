@@ -25,7 +25,7 @@
 
                     <div class="col-md-4" *ngFor="let packages of  packagesData">
                       <div class="timeline-post">
-                        <div class="post-media"><a  [routerLink]="['/admin/package-installer/'+packages.package_name]"><img src="http://52.91.195.127/packages/{{packages.package_name}}/{{packages.image}}"  width="48px" height="48px"></a>
+                        <div class="post-media"><a  [routerLink]="['/admin/package-installer/'+packages.package_name]"><img src="http://34.239.133.96/packages_plugins/{{packages.package_name}}/{{packages.image}}"  width="48px" height="48px"></a>
                           <div class="content">
                             <h5><a  [routerLink]="['/admin/package-installer/'+packages.package_name]">{{packages.package_name | titlecase}}</a></h5>
                             <p class="text-muted"><small>{{packages.publish_date}}</small></p>
@@ -53,7 +53,7 @@
 
                         <div class="col-md-12"  *ngFor="let packages of  installedPackages">
                           <div class="timeline-post">
-                            <div class="post-media"><a  [routerLink]="['/admin/package-installer/'+packages.package_name]"><img src="http://52.91.195.127/packages/{{packages.package_name}}/{{packages.image}}"  width="48px" height="48px"></a>
+                            <div class="post-media"><a  [routerLink]="['/admin/package-installer/'+packages.package_name]"><img src="http://34.239.133.96/packages_plugins/{{packages.package_name}}/{{packages.image}}"  width="48px" height="48px"></a>
                               <div class="content">
                                 <h5><a  [routerLink]="['/admin/package-installer/'+packages.package_name]">{{packages.package_name | titlecase}}</a></h5>
                                 <p class="text-muted"><small>{{packages.publish_date}}</small></p>

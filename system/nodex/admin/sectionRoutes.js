@@ -619,8 +619,8 @@ sectionAdminRoutes.route('/getPackagesInstaller').post(passport.authenticate('jw
     if (token) {
 
 
-      http.get('http://52.91.195.127/packages/package.php?action=get_all', (response) => {
-
+      http.get('http://34.239.133.96/packages_plugins/package.php?action=get_all', (response) => {
+        
         let result = '';
 
         response.on('data', (chunk) => {
@@ -631,6 +631,8 @@ sectionAdminRoutes.route('/getPackagesInstaller').post(passport.authenticate('jw
 
 
           return res.json(JSON.parse(result).data);
+    
+      
 
         });
 
@@ -650,12 +652,12 @@ sectionAdminRoutes.route('/getPackagesInstaller').post(passport.authenticate('jw
 
 
 
-sectionAdminRoutes.route('/searchPackagesInstaller').post(passport.authenticate('jwt', { session: false }), function (req, res) {
-  try {
-    var token = sectionGetToken(req.headers);
-    if (token) {
-      http.get('http://52.91.195.127/packages/package.php?action=search&package_name=' + req.body.search_key, (response) => {
-
+sectionAdminRoutes.route('/searchPackagesInstaller').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+  try{
+  var token = sectionGetToken(req.headers);
+  if (token) {
+      http.get('http://34.239.133.96/packages_plugins/package.php?action=search&package_name='+req.body.search_key, (response) => {
+            
         let result = '';
 
         response.on('data', (chunk) => {
@@ -681,24 +683,23 @@ sectionAdminRoutes.route('/searchPackagesInstaller').post(passport.authenticate(
   }
 });
 
-sectionAdminRoutes.route('/getOnePackagesInstaller').post(passport.authenticate('jwt', { session: false }), function (req, res) {
-  try {
-    var token = sectionGetToken(req.headers);
-    if (token) {
-      http.get('http://52.91.195.127/packages/package.php?action=get_one&package_name=' + req.body.package_name, (response) => {
-
-        let result = '';
-
-        response.on('data', (chunk) => {
-          result += chunk;
-        });
-
-        response.on('end', () => {
-          return res.json(JSON.parse(result).data);
-
-        });
-
-
+sectionAdminRoutes.route('/getOnePackagesInstaller').post(passport.authenticate('jwt', { session: false}),function (req, res) {
+  try{
+  var token = sectionGetToken(req.headers);
+  if (token) 
+      {
+        http.get('http://34.239.133.96/packages_plugins/package.php?action=get_one&package_name='+req.body.package_name, (response) => {
+            
+          let result = '';
+  
+          response.on('data', (chunk) => {
+            result += chunk;
+          });
+        
+          response.on('end', () => {
+            return  res.json(JSON.parse(result).data);
+  
+          });    
       });
     }
     else
