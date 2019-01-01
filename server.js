@@ -15,7 +15,7 @@ fs = require("fs");
 //const forceSsl = require('force-ssl-heroku');
 var compression = require('compression');
 var expressStaticGzip = require('express-static-gzip');
-naked_redirect = require('express-naked-redirect');
+// naked_redirect = require('express-naked-redirect');
 
 
 magpieAdminRoutes  = require('./system/nodex/admin/sectionRoutes');
@@ -60,10 +60,10 @@ app.use(flash());
 //   next();
 // });
 
-app.use(naked_redirect({
-  //subDomain: 'www',
-  https: true
-}))
+// app.use(naked_redirect({
+//   //subDomain: 'www',
+//   https: true
+// }))
 
 
 app.use('/uploads', express.static('uploads'))
@@ -93,14 +93,8 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
-const options = {
-  key: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/privkey.pem"),
-  cert: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/fullchain.pem")
-};
 
-
-
-const server = https.createServer(options,app);
+const server = http.createServer(app);
 server.listen(port, function(){
     console.log('Listening on port ' + port);
   });
