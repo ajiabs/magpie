@@ -9,12 +9,13 @@ flash    = require('connect-flash'),
 config = require('./config/DB'),
 LocalStrategy = require('passport-local').Strategy,
 RedisStore = require('connect-redis')(session);
-const https = require('https');
-var http = require('http');
+const http = require('http');
+var https = require('https');
+fs = require("fs");
 //const forceSsl = require('force-ssl-heroku');
 var compression = require('compression');
 var expressStaticGzip = require('express-static-gzip');
-//naked_redirect = require('express-naked-redirect');
+naked_redirect = require('express-naked-redirect');
 
 
 magpieAdminRoutes  = require('./system/nodex/admin/sectionRoutes');
@@ -52,15 +53,6 @@ app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: true
 
 app.use(flash());
 
-app.get('*', function(req, res, next) {
-  if (req.headers.host.slice(0, 3) != 'www') {
-    res.redirect('https://www.' + req.headers.host + req.url, 301);
-  } else {
-    next();
-  }
-});
-
-
 // app.use(function(req, res, next){
 //   res.locals.success_message = req.flash('success_message');
 //   res.locals.error_message = req.flash('error_message');
@@ -68,10 +60,10 @@ app.get('*', function(req, res, next) {
 //   next();
 // });
 
-// app.use(naked_redirect({
-//   subDomain: 'www',
-//   https: true
-// }))
+app.use(naked_redirect({
+  subDomain: 'www',
+  https: true
+}))
 
 
 app.use('/uploads', express.static('uploads'))
@@ -101,11 +93,11 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
-
-var options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/magpie.iscriptsdemo.com/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/magpie.iscriptsdemo.com/fullchain.pem'),
+const options = {
+  key: fs.readFileSync("/srv/www/keys/my-site-key.pem"),
+  cert: fs.readFileSync("/srv/www/keys/chain.pem")
 };
+
 
 
 const server = https.createServer(options,app);
