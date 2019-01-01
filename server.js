@@ -94,8 +94,8 @@ app.get('/*', (req, res) => {
 });
 
 const options = {
-  key: fs.readFileSync("/srv/www/keys/my-site-key.pem"),
-  cert: fs.readFileSync("/srv/www/keys/chain.pem")
+  key: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/privkey.pem"),
+  cert: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/fullchain.pem")
 };
 
 
