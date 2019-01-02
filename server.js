@@ -34,9 +34,17 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 app.use(cors());
 const port = process.env.PORT || 4000;
-
-//app.use(forceSsl);
 app.use(compression());
+app.all('*',function(req,res,next){
+  if(req.headers['x-forwarded-proto']!='https') {
+    res.redirect(`https://www.${req.get('host')}`+req.url);
+  } else {
+    next(); /* Continue to other routes if we're not redirecting */
+  }
+});
+
+
+
 // app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/', expressStaticGzip(__dirname+'/dist', {
   enableBrotli: true, 
@@ -51,22 +59,6 @@ app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: true
 
 
 app.use(flash());
-
-// app.use(function(req, res, next){
-//   res.locals.success_message = req.flash('success_message');
-//   res.locals.error_message = req.flash('error_message');
-//   res.locals.error = req.flash('error');
-//   next();
-// });
-
-
-
-app.use(require('express-naked-redirect')({
-  subDomain: 'www',
-  https: true
-}))
-
-
 
 
 app.use('/uploads', express.static('uploads'))
@@ -96,24 +88,18 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
-
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/magpie.iscriptsdemo.com/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/magpie.iscriptsdemo.com/cert.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/magpie.iscriptsdemo.com/fullchain.pem', 'utf8');
-
-const options = {
-	key: privateKey,
-	cert: certificate,
-	ca: ca
-};
-
-
 // const httpServer = http.createServer(app);
 // httpServer.listen(port, function(){
 //     console.log('Listening on port ' + port);
 //   });
 
-const httpsServer = https.createServer(options, app);
-httpsServer.listen(port, () => {
-	console.log('HTTPS Server running on port 443'+ port);
-});
+  const options = {
+   key: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/privkey.pem"),
+   cert: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/cert.pem")
+  };
+
+const httpServer = https.createServer(options,app);
+httpServer.listen(port, function(){
+    console.log('Listening on port ' + port);
+  });
+
