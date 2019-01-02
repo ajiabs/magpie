@@ -93,10 +93,13 @@ app.get('/*', (req, res) => {
 //     console.log('Listening on port ' + port);
 //   });
 
-  const options = {
-   key: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/privkey.pem"),
-   cert: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/cert.pem")
-  };
+
+const options = {
+  key: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/privkey.pem"),
+  cert: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/cert.pem")
+ };
+
+
 
 const httpServer = https.createServer(options,app);
 httpServer.listen(port, function(){
