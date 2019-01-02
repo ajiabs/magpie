@@ -59,13 +59,12 @@ app.use(flash());
 //   next();
 // });
 
-app.get('*', function(req, res, next) {
-  if (req.headers.host.slice(0, 3) != 'www') {
-    res.redirect('https://www.' + req.headers.host + req.url, 301);
-  } else {
-    next();
-  }
-});
+
+
+app.use(require('express-naked-redirect')({
+  subDomain: 'www',
+  https: true
+}))
 
 
 
@@ -98,23 +97,23 @@ app.get('/*', (req, res) => {
 });
 
 
-// const privateKey = fs.readFileSync('/etc/letsencrypt/live/magpie.iscriptsdemo.com/privkey.pem', 'utf8');
-// const certificate = fs.readFileSync('/etc/letsencrypt/live/magpie.iscriptsdemo.com/cert.pem', 'utf8');
-// const ca = fs.readFileSync('/etc/letsencrypt/live/magpie.iscriptsdemo.com/fullchain.pem', 'utf8');
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/magpie.iscriptsdemo.com/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/magpie.iscriptsdemo.com/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/magpie.iscriptsdemo.com/fullchain.pem', 'utf8');
 
-// const options = {
-// 	key: privateKey,
-// 	cert: certificate,
-// 	ca: ca
-// };
+const options = {
+	key: privateKey,
+	cert: certificate,
+	ca: ca
+};
 
 
-const httpServer = http.createServer(app);
-httpServer.listen(port, function(){
-    console.log('Listening on port ' + port);
-  });
+// const httpServer = http.createServer(app);
+// httpServer.listen(port, function(){
+//     console.log('Listening on port ' + port);
+//   });
 
-// const httpsServer = https.createServer(options, app);
-// httpsServer.listen(port, () => {
-// 	console.log('HTTPS Server running on port 443'+ port);
-// });
+const httpsServer = https.createServer(options, app);
+httpsServer.listen(port, () => {
+	console.log('HTTPS Server running on port 443'+ port);
+});
