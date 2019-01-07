@@ -35,14 +35,6 @@ app.use(bodyParser.json());
 app.use(cors());
 const port = process.env.PORT || 4000;
 app.use(compression());
-// app.all('*',function(req,res,next){
-//   if(req.headers['x-forwarded-proto']!='https') {
-//     res.redirect(`https://www.${req.get('host')}`+req.url);
-//   } else {
-//     next(); /* Continue to other routes if we're not redirecting */
-//   }
-// });
-
 
 
 // app.use(express.static(path.join(__dirname, 'dist')));
@@ -94,15 +86,4 @@ httpServer.listen(port, function(){
   });
 
 
-// const options = {
-//   key: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/privkey.pem"),
-//   cert: fs.readFileSync("/etc/letsencrypt/live/magpie.iscriptsdemo.com/cert.pem")
-//  };
-
-
-
-// const httpServer = https.createServer(options,app);
-// httpServer.listen(port, function(){
-//     console.log('Listening on port ' + port);
-//   });
 
