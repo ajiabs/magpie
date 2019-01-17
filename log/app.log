@@ -1,0 +1,34 @@
+[2019-01-17T11:54:46.403] [ERROR] error - { Error: Cannot find module '../../../nodex/models/404'
+    at Function.Module._resolveFilename (module.js:547:15)
+    at Function.Module._load (module.js:474:25)
+    at Module.require (module.js:596:17)
+    at require (internal/module.js:11:18)
+    at sectionGetList (/opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:1032:19)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:183:14
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41) code: 'MODULE_NOT_FOUND' }
+[2019-01-17T12:33:06.981] [ERROR] error - { Error: Cannot find module '../../../nodex/models/404'
+    at Function.Module._resolveFilename (module.js:547:15)
+    at Function.Module._load (module.js:474:25)
+    at Module.require (module.js:596:17)
+    at require (internal/module.js:11:18)
+    at sectionGetList (/opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:1056:19)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:194:14
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41) code: 'MODULE_NOT_FOUND' }

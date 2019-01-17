@@ -33,6 +33,22 @@ export class SectionService {
   }
 
 
+  getAllModules() {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'menus/getAllModules';
+    const obj = {};
+    return this
+      .http
+      .post(uri,obj, httpOptions)
+      .map(res => {
+        return res;
+      });
+  }
+
+
+
   sectionConfig = (current_route) => {
 
     let httpOptions = {
@@ -77,7 +93,7 @@ export class SectionService {
   }
 
 
-  add = (data, current_route) => {
+  add = (data, current_route,callback) => {
     let httpOptions = {
 
       headers: new HttpHeaders({ 'Accept': 'application/json', 'enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
@@ -103,7 +119,11 @@ export class SectionService {
     const uri = server_url + section + '/add';
     const obj = formData;
     this.http.post(uri, obj, httpOptions)
-      .subscribe(res => console.log('Done'));
+    .subscribe(
+      response => {
+        callback(response);
+      },
+      );
   }
 
   search = (value, searchable_fields, order_by, sortable_field, relation, current_page, per_page, current_route) => {
@@ -263,7 +283,7 @@ export class SectionService {
 
 
 
-  update = (data, current_route) => {
+  update = (data, current_route,callback) => {
 
 
 
@@ -293,11 +313,14 @@ export class SectionService {
     const uri = server_url + section + '/update/' + data._id;
 
     const obj = formData;
-    this
+    return this
       .http
       .post(uri, obj, httpOptions)
-      .subscribe(res => console.log('Done'));
-
+      .subscribe(
+        response => {
+          callback(response);
+        },
+        );
   }
 
   changePassword = (data, current_route) => {

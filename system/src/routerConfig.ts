@@ -9,6 +9,7 @@ import { MagpieSettingsComponent } from './components/admin/settings/settings.co
 import { MagpiePackageInstallerComponent } from './components/admin/package-installer/package-installer.component';
 import { MagpiePackageInstallerDetailsComponent } from './components/admin/package-installer/package-installer-details.component';
 import { MagpieResetPasswordComponent } from './components/admin/reset-password/reset-password.component';
+import { MagpiePageNotFoundComponent } from './components/admin/page-notfound/page-notfound.component';
 import { Routes,RouterModule } from '@angular/router';
 import { customRoutes } from './../../src/app/routerConfig';
 import { AuthGuard } from './services/admin/auth-guard.service';
@@ -25,7 +26,8 @@ const routes:Routes = [
             { path: '',
               component: MagpieLoginComponent,
               canActivate: [AuthGuard]
-            }]},
+            }
+          ]},
         ...customRoutes,
         {
         path: 'admin',
@@ -61,6 +63,11 @@ const routes:Routes = [
             canActivate: [AuthGuard],
             runGuardsAndResolvers: 'always',
           },
+          { path: '404',
+            component: MagpiePageNotFoundComponent,
+            // canActivate: [AuthGuard],
+             runGuardsAndResolvers: 'always' 
+          },
           { path: ':section/create', 
             component: MagpieCreateComponent,
             canActivate: [AuthGuard],
@@ -82,9 +89,20 @@ const routes:Routes = [
             component: MagpieIndexComponent,
             canActivate: [AuthGuard],
             runGuardsAndResolvers: 'always',
-           }
+           },
+           
+         
+          
          ]
-       }
+       },
+       { path: '**',
+         redirectTo: '/404',
+         pathMatch:"full"
+       },
+       {  path: '404',
+          component: MagpiePageNotFoundComponent,
+          runGuardsAndResolvers: 'always' 
+       },
 ];
 //customRoutes[0].children =customRoutes[0].children.concat(routes[0].children).filter((li, idx, self) => self.map(itm => itm.path).indexOf(li.path) === idx);
 export const magpieRoutes:Routes  = routes;

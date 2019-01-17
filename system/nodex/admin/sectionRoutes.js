@@ -88,6 +88,17 @@ sectionAdminRoutes.route('/getConfig').get(passport.authenticate('jwt', { sessio
   }
 });
 
+sectionAdminRoutes.route('/getAllModules').post(passport.authenticate('jwt', { session: false }),function (req, res) {
+  try {
+  
+      return getAllModules(req, res);
+  }
+  catch (err) {
+    log.logerror(res, err);
+  }
+});
+
+
 sectionAdminRoutes.route('/getAllMenus').get(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
@@ -950,6 +961,19 @@ getRowSettings = (req, res) => {
   });
 };
 
+
+getAllModules = (req, res) => {
+  var Menus = require('../models/'+req.originalUrl.split('/')[2]);
+  Menus.find({ 'status': 'active','parent_id':{ $ne: '0' } }, ['url'], { sort: { menu_order: 1 } }, function (err, result) {
+    if (err) {
+      return res.json({ success: false, msg: err });
+    }
+    else {
+      return res.json(result);
+    }
+  });
+
+};
 
 
 sectionGetAllMenus = (req, res) => {

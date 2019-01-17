@@ -120,11 +120,13 @@ export class MagpieProfileEditComponent implements OnInit {
 
   
      this.section_data['file_fields'] =  this.file_inputs;
-     this.section_service.update(this.section_data,'/admin/users/');
-     this.router.navigated = false;
-     this.init();
-     localStorage.setItem("userDetails['email']", this.section_data.email);
-     localStorage.setItem("userDetails['name']", this.section_data.name);
+     this.section_service.update(this.section_data,'/admin/users/',(result) => {
+      this.router.navigated = false;
+      this.init();
+      localStorage.setItem("userDetails['email']", this.section_data.email);
+      localStorage.setItem("userDetails['name']", this.section_data.name);
+    });
+    
     
     
    

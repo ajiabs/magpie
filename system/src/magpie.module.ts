@@ -15,6 +15,7 @@ import { MagpieSettingsComponent } from './components/admin/settings/settings.co
 import { MagpiePackageInstallerComponent } from './components/admin/package-installer/package-installer.component';
 import { MagpiePackageInstallerDetailsComponent } from './components/admin/package-installer/package-installer-details.component';
 import { MagpieResetPasswordComponent } from './components/admin/reset-password/reset-password.component';
+import { MagpiePageNotFoundComponent } from './components/admin/page-notfound/page-notfound.component';
 import { magpieRoutes } from './../../system/src/routerConfig';
 import { SectionService } from './../../system/src/services/admin/section.service';
 import { AuthGuard } from './../../system/src/services/admin/auth-guard.service';
@@ -58,6 +59,7 @@ import { FormsModule } from '@angular/forms';
     MagpieSettingsComponent,
     MagpiePackageInstallerComponent,
     MagpiePackageInstallerDetailsComponent,
+    MagpiePageNotFoundComponent,
     MagpieResetPasswordComponent,
     RolePermissionsDirective,
     ChartDirective,
@@ -81,7 +83,8 @@ import { FormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     RouterModule.forRoot(magpieRoutes,{
       onSameUrlNavigation: 'reload',
-      preloadingStrategy: PreloadAllModules
+      preloadingStrategy: PreloadAllModules,
+      enableTracing: false 
     }), 
     ReactiveFormsModule,FormsModule,
     Select2Module,
@@ -109,6 +112,7 @@ import { FormsModule } from '@angular/forms';
     MagpiePackageInstallerComponent,
     MagpiePackageInstallerDetailsComponent,
     MagpieResetPasswordComponent,
+    MagpiePageNotFoundComponent,
     RolePermissionsDirective,
     ChartDirective,
     MenuToggleDirective,

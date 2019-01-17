@@ -97,7 +97,7 @@ module.exports = {
 
 				if (Object.keys(replaceparams).length > 0) {
 					Object.keys(replaceparams).forEach(function (key) {
-						body = body.replace('{' + key + '}', replaceparams[key]);
+						body = body.replace(new RegExp('{'+key+'}', 'g'), replaceparams[key]);
 					});
 				}
 

@@ -9,6 +9,7 @@ import { LatLngLiteral } from '@agm/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 import { Select2OptionData } from 'ng2-select2';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 declare var swal: any;
 declare var $: any;
 
@@ -47,10 +48,10 @@ export class MagpieCreateComponent implements OnInit,OnDestroy {
     geofence=[];
   
      
-  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public ref:ChangeDetectorRef) {
+  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public ref:ChangeDetectorRef,public spinnerService: Ng4LoadingSpinnerService) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
-
+        this.spinnerService.show();
         this.sectionForm = this.fb.group({});
         this.section_service.sectionConfig(this.router.url).subscribe(res => {
             var column_config  = JSON.parse(res[0].section_config).column;
@@ -109,18 +110,22 @@ ngOnInit(){
     });
  }
 create = () => {
-
+    this.spinnerService.show();
     this.section_data['file_fields'] =  this.file_inputs;
-    this.section_service.add(this.section_data,this.router.url);
-        this.router.navigated = false;
-        this.router.navigate(['admin/'+this.section_alias]);
-        $.notify({
-          title: "Added! ",
-          message: "New Record has been added.",
-          icon: 'fa fa-check' 
-        },{
-          type: "success"
-        });
+    this.section_service.add(this.section_data,this.router.url,(result) => {
+      this.router.navigated = false;
+      this.router.navigate(['admin/'+this.section_alias]);
+      this.spinnerService.hide();
+      $.notify({
+        title: "Added! ",
+        message: "New Record has been added.",
+        icon: 'fa fa-check' 
+      },{
+        type: "success"
+      });
+    });
+       
+     
      
   
 

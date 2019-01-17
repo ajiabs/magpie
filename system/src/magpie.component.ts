@@ -35,7 +35,10 @@ export class MagpieComponent {
    @Input()
     logout = () => {
       localStorage.removeItem('jwtToken');
-      window.location.href = "/admin/login";
+     // window.location.href = "/admin/login";
+      this.router.navigate(['/admin/login']);
+      location.reload();
+     
     }
 
     @Input()

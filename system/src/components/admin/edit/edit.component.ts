@@ -6,6 +6,7 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
 import {ImageValidator} from './../../../../../system/src/validators/image.validators'
 import { LatLngLiteral } from '@agm/core';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 declare var swal: any;
@@ -46,9 +47,10 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
     geofence=[];
     
   
-  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public ref:ChangeDetectorRef) {
+  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public ref:ChangeDetectorRef,public spinnerService: Ng4LoadingSpinnerService) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
+        this.spinnerService.show();
         this.sectionForm = this.fb.group({});
         this.section_service.sectionConfig(this.router.url).subscribe(res => {
              var column_config  = JSON.parse(res[0].section_config).column;
@@ -219,22 +221,26 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
 
   update = () =>{
   
-   
+    this.spinnerService.show();
     this.route.params.subscribe(params => {
   
      this.section_data['file_fields'] =  this.file_inputs;
-     this.section_service.update(this.section_data,this.router.url);
-     this.router.navigated = false;
-     this.router.navigate(['admin/'+this.section_alias]);
+     this.section_service.update(this.section_data,this.router.url,(result) => {
+        this.router.navigated = false;
+        this.router.navigate(['admin/'+this.section_alias]);
+        this.spinnerService.hide();
+        $.notify({
+          title: "Update! ",
+          message: "Record has been updated.",
+          icon: 'fa fa-check' 
+        },{
+          type: "success"
+        });
+   
+     });
+     
   
-  
-      $.notify({
-        title: "Update! ",
-        message: "Record has been updated.",
-        icon: 'fa fa-check' 
-      },{
-        type: "success"
-      });
+
   
     });
   }

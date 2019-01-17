@@ -12,7 +12,7 @@ import { Meta,Title } from '@angular/platform-browser';
 
 
 export class AppComponent extends  MagpieComponent {
-  angular_part:any=false;
+  admin_part:any=false;
   package_installer:any = false;
   menuRow:any;
 
@@ -29,10 +29,14 @@ export class AppComponent extends  MagpieComponent {
     //   {name: 'keywords', content: ''}
     //   ]);
 
+
     var th = this;
     if(localStorage.getItem("current_segment") == 'admin'){
 
+
       if (localStorage.getItem('jwtToken')) {
+
+
 
         th.showNav = true;
         th.login_name = localStorage.getItem("userDetails['name']");
@@ -60,7 +64,7 @@ export class AppComponent extends  MagpieComponent {
       //Admin script
       this.admin_script_init();
 
-      th.angular_part = true;
+      th.admin_part = true;
       th.section_service.getThemeColorSettings().subscribe(res=>{
           $("body").css({"--some-color-dark":this.colorLuminance(res[0].value, -0.3),"--some-color":this.colorLuminance(res[0].value, 0),"--some-hovercolor":this.colorLuminance(res[0].value, -0.2)});
   
@@ -76,8 +80,27 @@ export class AppComponent extends  MagpieComponent {
 
         this.router.events.subscribe(event => {
           if (event instanceof NavigationEnd ) {
-     
-          
+
+         
+
+           if(event.url.split('/')[1] == 'admin'){
+              th.section_service.getAllModules().subscribe(res1=>{
+                var current_modules = ['login','dashboard','reset-password','account','settings','package-installer','404'];
+                Object.keys(res1).forEach(key => {
+                 
+                  current_modules.push(res1[key]['url'].split('/')[1]);
+                });
+                if (current_modules.indexOf( event.url.split('/')[2]) < 0) {
+                  this.router.navigate(['/admin/404']);
+                }
+
+              
+              });
+              
+            }
+  
+
+           
              if(event.urlAfterRedirects == '/admin/login'){
                this.showNav = false;
              }else{
@@ -119,6 +142,9 @@ export class AppComponent extends  MagpieComponent {
                  }
      
              }
+
+
+             
            }
          });
 
