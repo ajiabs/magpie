@@ -10,12 +10,14 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 import { Select2OptionData } from 'ng2-select2';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { environment } from './../../../../../src/environments/environment';
+declare var notifier: any;
 declare var swal: any;
 declare var $: any;
 
 
 
-
+var loading_img_url = environment.loading_image;
 @Component({
   selector: 'app-create',
   templateUrl: './create.component.html',
@@ -46,8 +48,8 @@ export class MagpieCreateComponent implements OnInit,OnDestroy {
     paths: Array<LatLngLiteral> = [];
     cordArray=[];
     geofence=[];
-  
-     
+    template: string ='<img class="custom-spinner-template" src="'+loading_img_url+'">';
+
   constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public ref:ChangeDetectorRef,public spinnerService: Ng4LoadingSpinnerService) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
@@ -93,8 +95,9 @@ ngOnDestroy() {
 
 
 ngOnInit(){
+  
     this.init();
-
+   
 
   }
 
@@ -116,13 +119,7 @@ create = () => {
       this.router.navigated = false;
       this.router.navigate(['admin/'+this.section_alias]);
       this.spinnerService.hide();
-      $.notify({
-        title: "Added! ",
-        message: "New Record has been added.",
-        icon: 'fa fa-check' 
-      },{
-        type: "success"
-      });
+      new notifier({title: "Added! ", message: "New Record has been added.", icon: 'fa fa-check',type: "success"});
     });
        
      
@@ -239,13 +236,7 @@ onTagsChange = (field,data)=>{
   
   
     } else {
-      $.notify({
-        title: "Warning! ",
-        message: "Please select a location from map.",
-        icon: 'fa fa-exclamation-triangle'
-      }, {
-        type: "danger"
-      });
+      new notifier({title: "Warning! ", message: "Please select a location from map.", icon: 'fa fa-exclamation-triangle',type: "danger"});
     }
   }
 
@@ -310,6 +301,7 @@ onTagsChange = (field,data)=>{
                           this.section_alias = res[0].section_alias;
                        
                           this.section_data = {};
+                          this.spinnerService.hide();
 
                   });
 

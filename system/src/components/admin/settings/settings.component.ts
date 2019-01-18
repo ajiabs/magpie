@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
 import { ImageValidator } from './../../../../../system/src/validators/image.validators';
-
+declare var notifier: any;
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 declare var swal: any;
@@ -78,14 +78,7 @@ export class MagpieSettingsComponent implements OnInit {
 
       this.ngOnInit();
     });
-    $.notify({
-      title: "Update! ",
-      message: "Settings has been updated.",
-      icon: 'fa fa-check'
-    }, {
-        type: "success"
-      });
-
+    new notifier({title: "Update! ", message:  "Settings has been updated.", icon: 'fa fa-check',type: "success"});
 
   }
 

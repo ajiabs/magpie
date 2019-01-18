@@ -6,6 +6,7 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
+declare var notifier: any;
 declare var swal: any;
 declare var $: any;
 
@@ -72,14 +73,7 @@ export class MagpiePackageInstallerComponent implements OnInit {
      this.installing[pkg.package_name]  = true;
     if(localStorage.getItem("userDetails['roles_id']") == '1'){
       this.section_service.installPackage(pkg).subscribe(res => {
-        $.notify({
-          title: "Success! ",
-          message: pkg.package_name+" plugin has been installed.",
-          icon: 'fa fa-check' 
-        },{
-          type: "success"
-        });
-    
+        new notifier({title: "Success! ", message:  pkg.package_name+" plugin has been installed.", icon: 'fa fa-check',type: "success"});
         this.getInstallerPackage();
         
       });

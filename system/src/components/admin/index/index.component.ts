@@ -8,12 +8,14 @@ import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { environment } from './../../../../../src/environments/environment';
+declare var notifier: any;
 declare var swal: any;
 declare var $: any;
 
 
 
-
+var loading_img_url = environment.loading_image;
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
@@ -63,7 +65,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
     checkboxSelectAll:boolean=false;
     checkBoxArr:any=[];
     selectedRows:number=0;
-    template: string ='<img class="custom-spinner-template" src="https://www.sony.net/SonyInfo/csr/ForTheNextGeneration/eyesee/img/parts/loading.gif">';
+    template: string ='<img class="custom-spinner-template" src="'+loading_img_url+'">';
   constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public spinnerService: Ng4LoadingSpinnerService) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
@@ -234,16 +236,8 @@ bulkDelete =()=>{
            th.index();
          });
          swal.close();
-         $.notify({
-          title: "Update! ",
-          message: "Record has been deleted.",
-          icon: 'fa fa-check' 
-        },{
-          type: "success"
-        });
-    
-   
-         
+         new notifier({title: "Update! ", message: "Record has been deleted.", icon: 'fa fa-check',type: "success"});
+            
        }
       
      } else {
@@ -282,14 +276,9 @@ bulkDelete =()=>{
               this.route.params.subscribe(params => {
                this.section_service.import(this.file_import,columns_array,import_unique_field,this.router.url).subscribe(result => {
                 if(import_csv_data){
-                  this.index();
-                  $.notify({
-                      title: "Imported! ",
-                      message: "Csv has been successfully imported.",
-                      icon: 'fa fa-check' 
-                    },{
-                      type: "success"
-                    });
+                    this.index();
+                    new notifier({title: "Imported! ", message: "Csv has been successfully imported.", icon: 'fa fa-check',type: "success"});
+
                     import_csv_data = false;
                   }
                 
@@ -429,13 +418,7 @@ bulkDelete =()=>{
       this.route.params.subscribe(params => {
         this.section_service.changeStatus(this.router.url,id,value,field,source).subscribe(result => {
           if(change_status){
-            $.notify({
-              title: "Update! ",
-              message: "Status has been changed  successfully.",
-              icon: 'fa fa-check' 
-            },{
-              type: "success"
-            });
+            new notifier({title: "Update! ", message: "Status has been changed  successfully.", icon: 'fa fa-check',type: "success"});
             this.index();
             change_status=false;
           }
@@ -590,16 +573,8 @@ bulkDelete =()=>{
                th.index();
              });
              swal.close();
-             $.notify({
-              title: "Update! ",
-              message: "Record has been deleted.",
-              icon: 'fa fa-check' 
-            },{
-              type: "success"
-            });
-        
-       
-             
+             new notifier({title: "Success! ", message: "Record has been deleted.", icon: 'fa fa-check',type: "success"});
+
            }
           
          } else {

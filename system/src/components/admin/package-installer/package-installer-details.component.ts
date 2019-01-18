@@ -6,6 +6,7 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
+declare var notifier: any;
 declare var swal: any;
 declare var $: any;
 
@@ -80,13 +81,9 @@ export class MagpiePackageInstallerDetailsComponent implements OnInit {
       this.packageConfigData.package_config = JSON.stringify(this.package_form_data);
         this.section_service.updatePackageConfiguration( this.packageConfigData).subscribe(res => {
           this.packagesData = res;
-          $.notify({
-          title: "Update! ",
-          message: "Configuration has been updated.",
-          icon: 'fa fa-check' 
-          },{
-          type: "success"
-          });
+          new notifier({title: "Update! ", message: "Configuration has been updated.", icon: 'fa fa-check',type: "success"});
+
+
       });
 
      }else

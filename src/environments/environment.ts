@@ -8,7 +8,9 @@ export const environment = {
   server_url : "http://localhost:4000/admin/",
   upload_url : "http://localhost:4000/",
   site_server_url : "http://localhost:4000/site/",
-  site_url: "http://localhost:4200/"
+  site_url: "http://localhost:4200/",
+  loading_image:"https://www.sony.net/SonyInfo/csr/ForTheNextGeneration/eyesee/img/parts/loading.gif"
+
 };
 
 

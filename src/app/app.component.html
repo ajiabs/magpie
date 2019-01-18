@@ -18,7 +18,7 @@
    
     <ul class="app-nav">
     
-      <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
+      <li class="dropdown"><a class="app-nav__item" data-toggle="dropdown" aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
         <ul class="dropdown-menu settings-menu dropdown-menu-right">
           <li *ngIf="package_installer"><a class="dropdown-item" [routerLink]="['admin/package-installer']" routerLinkActive="active"><i class="fa fa-briefcase fa-lg"></i> Package Installer</a></li>
           <li><a class="dropdown-item" [routerLink]="['admin/settings']" routerLinkActive="active"><i class="fa fa-cog fa-lg"></i> Settings</a></li>
@@ -35,13 +35,13 @@
    
     <div class="app-sidebar__user">
       <span  *ngIf="login_image != ''">
-       <img *ngFor="let i of login_image | toArray" class="app-sidebar__user-avatar" [src]="i | getFile:'id' | async" width="50px" height="50px" alt="">
+        <a  [routerLink]="['admin/account']"><img *ngFor="let i of login_image | toArray" class="app-sidebar__user-avatar" [src]="i | getFile:'id' | async" width="50px" height="50px" alt=""></a>
       </span>
       <span  *ngIf="login_image == ''">
-        <img  class="app-sidebar__user-avatar" src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg" alt="">
+        <a  [routerLink]="['admin/account']"><img  class="app-sidebar__user-avatar" src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg" alt=""></a>
       </span>
       <div>
-        <p class="app-sidebar__user-name">{{login_name}}</p>
+        <p class="app-sidebar__user-name"><a  [routerLink]="['admin/account']">{{login_name}}</a></p>
         <p class="app-sidebar__user-designation">{{login_role}}</p>
       </div>
     </div>

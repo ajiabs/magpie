@@ -9,10 +9,13 @@ import { LatLngLiteral } from '@agm/core';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
+import { environment } from './../../../../../src/environments/environment';
+declare var notifier: any;
 declare var swal: any;
 declare var $: any;
 
 
+var loading_img_url = environment.loading_image;
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
@@ -46,7 +49,7 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
     cordArray=[];
     geofence=[];
     
-  
+    template: string ='<img class="custom-spinner-template" src="'+loading_img_url+'">';
   constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public ref:ChangeDetectorRef,public spinnerService: Ng4LoadingSpinnerService) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
@@ -229,14 +232,8 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
         this.router.navigated = false;
         this.router.navigate(['admin/'+this.section_alias]);
         this.spinnerService.hide();
-        $.notify({
-          title: "Update! ",
-          message: "Record has been updated.",
-          icon: 'fa fa-check' 
-        },{
-          type: "success"
-        });
-   
+        new notifier({title: "Update! ", message: "Record has been updated.", icon: 'fa fa-check',type: "success"});
+
      });
      
   
@@ -261,13 +258,8 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
   
      });
      this.init();
-      $.notify({
-        title: "Deleted! ",
-        message: "File has been unlinked.",
-        icon: 'fa fa-check' 
-      },{
-        type: "success"
-      });
+     new notifier({title: "Deleted! ", message: "File has been unlinked.", icon: 'fa fa-check',type: "success"});
+
   
     });
   
@@ -402,6 +394,7 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
                           });
 
                           th.setEditColumnsData(params['id'],th_router.url,config_columns,res1,th_files,th_tags,res);
+                          th.spinnerService.hide();
                 });
             });
           });

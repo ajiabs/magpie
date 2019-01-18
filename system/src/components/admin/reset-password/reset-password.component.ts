@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
 import { environment } from './../../../../../src/environments/environment';
+declare var notifier: any;
 declare var $: any;
 
 @Component({
@@ -54,26 +55,14 @@ export class MagpieResetPasswordComponent implements OnInit {
     this.section_service.resetPassword(passwordInfo).subscribe(res => {
       if (res['success']) {
         this.resetPasswordForm.reset() ;
-        $.notify({
-          title: "Success! ",
-          message: res['msg'],
-          icon: 'fa fa-check' 
-        },{
-          type: "success"
-        });
+        new notifier({title: "Success! ", message: res['msg'], icon: 'fa fa-check',type: "success"});
         setTimeout(() => {
               window.location.href = environment.site_url + 'admin/login'
             }, 2000);
       }
       else {
         this.resetPasswordForm.reset() ;
-        $.notify({
-          title: "Sorry! ",
-          message: res['msg'],
-          icon: 'fa fa-times' 
-        },{
-          type: "danger"
-        });
+        new notifier({title: "Sorry! ", message: res['msg'], icon: 'fa fa-times',type: "danger"});
         setTimeout(() => {
           window.location.href = environment.site_url + 'admin/login'
         }, 2000);
