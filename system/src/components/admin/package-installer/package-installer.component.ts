@@ -4,11 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
+import { environment } from './../../../../../src/environments/environment';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
-declare var notifier: any;
 declare var swal: any;
 declare var $: any;
+declare var notifier: any;
+
 
 
 @Component({
@@ -28,6 +30,7 @@ export class MagpiePackageInstallerComponent implements OnInit {
     result_data:any;
     localPackages:any;
     installedPackages:any;
+    package_url:any=environment.package_url;
 
     packageInstallerForm: FormGroup;
     constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService) {
@@ -48,10 +51,11 @@ export class MagpiePackageInstallerComponent implements OnInit {
             var packages = [];
             if(pkgs  != null){
               Object.keys(pkgs).forEach(key => {
-                  if(key=='package_name')
-                  packages.push(pkgs[key]);
+             
+                  packages.push(pkgs[key]['package_name']);
                   
               });
+            
             }
           
            
@@ -59,6 +63,8 @@ export class MagpiePackageInstallerComponent implements OnInit {
               th.installing[element.package_name]  = false;
             });
 
+            
+          
           
             th.installedPackages = Object.values(res).filter(({package_name}) => packages.includes(package_name));
             th.localPackages = packages;
@@ -73,7 +79,9 @@ export class MagpiePackageInstallerComponent implements OnInit {
      this.installing[pkg.package_name]  = true;
     if(localStorage.getItem("userDetails['roles_id']") == '1'){
       this.section_service.installPackage(pkg).subscribe(res => {
-        new notifier({title: "Success! ", message:  pkg.package_name+" plugin has been installed.", icon: 'fa fa-check',type: "success"});
+
+        new notifier({title:"Success! ", message:  pkg.package_name+" plugin has been installed.", icon: 'fa fa-check',type: "success"});
+
         this.getInstallerPackage();
         
       });

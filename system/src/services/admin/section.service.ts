@@ -10,6 +10,7 @@ import 'rxjs/add/observable/of';
 
 var server_url = environment.server_url;
 var site_url = environment.site_url;
+var package_url = environment.package_url;
 
 
 @Injectable()
@@ -31,22 +32,6 @@ export class SectionService {
         return res;
       });
   }
-
-
-  getAllModules() {
-    let httpOptions = {
-      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-    };
-    const uri = server_url + 'menus/getAllModules';
-    const obj = {};
-    return this
-      .http
-      .post(uri,obj, httpOptions)
-      .map(res => {
-        return res;
-      });
-  }
-
 
 
   sectionConfig = (current_route) => {
@@ -93,7 +78,7 @@ export class SectionService {
   }
 
 
-  add = (data, current_route,callback) => {
+  add = (data, current_route) => {
     let httpOptions = {
 
       headers: new HttpHeaders({ 'Accept': 'application/json', 'enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
@@ -119,11 +104,7 @@ export class SectionService {
     const uri = server_url + section + '/add';
     const obj = formData;
     this.http.post(uri, obj, httpOptions)
-    .subscribe(
-      response => {
-        callback(response);
-      },
-      );
+      .subscribe(res => console.log('Done'));
   }
 
   search = (value, searchable_fields, order_by, sortable_field, relation, current_page, per_page, current_route) => {
@@ -283,7 +264,7 @@ export class SectionService {
 
 
 
-  update = (data, current_route,callback) => {
+  update = (data, current_route) => {
 
 
 
@@ -313,14 +294,11 @@ export class SectionService {
     const uri = server_url + section + '/update/' + data._id;
 
     const obj = formData;
-    return this
+    this
       .http
       .post(uri, obj, httpOptions)
-      .subscribe(
-        response => {
-          callback(response);
-        },
-        );
+      .subscribe(res => console.log('Done'));
+
   }
 
   changePassword = (data, current_route) => {
@@ -519,7 +497,7 @@ export class SectionService {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
     const uri = server_url + 'packages-installer/getPackagesInstaller';
-    const obj = {};
+    const obj = {'package_url':package_url};
     return this
       .http
       .post(uri, obj, httpOptions)
@@ -533,7 +511,7 @@ export class SectionService {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
     const uri = server_url + 'packages-installer/getOnePackagesInstaller';
-    const obj = { 'package_name': package_name };
+    const obj = { 'package_name': package_name,'package_url':package_url };
     return this
       .http
       .post(uri, obj, httpOptions)
@@ -580,7 +558,7 @@ export class SectionService {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
     const uri = server_url + 'packages-installer/searchPackagesInstaller';
-    const obj = { 'search_key': searchkey };
+    const obj = { 'search_key': searchkey,'package_url':package_url };
     return this
       .http
       .post(uri, obj, httpOptions)
@@ -589,21 +567,6 @@ export class SectionService {
       });
 
   }
-
-  getMenuNameFromUrl = (section, url) => {
-    let httpOptions = {
-      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-    };
-    const uri = server_url + section + '/getMenuNameFromUrl';
-    let obj = { "url": url }
-    return this
-      .http
-      .post(uri, obj, httpOptions)
-      .map(res => {
-        return res;
-      });
-  }
-
 
   updatePackageConfiguration = (packagedata) => {
     let httpOptions = {
@@ -634,6 +597,23 @@ export class SectionService {
         return res;
       });
   }
+
+  getMenuNameFromUrl = (section, url) => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + section + '/getMenuNameFromUrl';
+    let obj = { "url": url }
+    return this
+      .http
+      .post(uri, obj, httpOptions)
+      .map(res => {
+        return res;
+      });
+  }
+
+
+ 
 
   getThemeColorSettings = () => {
     let httpOptions = {
@@ -718,6 +698,21 @@ export class SectionService {
     return this
       .http
       .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
+  }
+
+  
+  getAllModules() {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'menus/getAllModules';
+    const obj = {};
+    return this
+      .http
+      .post(uri, obj, httpOptions)
       .map(res => {
         return res;
       });

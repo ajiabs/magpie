@@ -46,7 +46,6 @@ sectionAdminRoutes.route('/checkLogin').post(function (req, res) {
       email: req.body.email
     }, function (err, user) {
       if (err) throw err;
-
       if (!user) {
         return res.json({ success: false, msg: 'Authentication failed. Wrong password.' });
       } else {
@@ -87,17 +86,6 @@ sectionAdminRoutes.route('/getConfig').get(passport.authenticate('jwt', { sessio
     log.logerror(res, err);
   }
 });
-
-sectionAdminRoutes.route('/getAllModules').post(passport.authenticate('jwt', { session: false }),function (req, res) {
-  try {
-  
-      return getAllModules(req, res);
-  }
-  catch (err) {
-    log.logerror(res, err);
-  }
-});
-
 
 sectionAdminRoutes.route('/getAllMenus').get(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
@@ -630,7 +618,7 @@ sectionAdminRoutes.route('/getPackagesInstaller').post(passport.authenticate('jw
     if (token) {
 
 
-      http.get('http://magpie-packages.iscripts.com/packages/package.php?action=get_all', (response) => {
+      http.get(req.body.package_url+'package.php?action=get_all', (response) => {
         
         let result = '';
 
@@ -667,7 +655,7 @@ sectionAdminRoutes.route('/searchPackagesInstaller').post(passport.authenticate(
   try{
   var token = sectionGetToken(req.headers);
   if (token) {
-      http.get('http://magpie-packages.iscripts.com/packages/package.php?action=search&package_name='+req.body.search_key, (response) => {
+      http.get(req.body.package_url+'package.php?action=search&package_name='+req.body.search_key, (response) => {
             
         let result = '';
 
@@ -699,7 +687,7 @@ sectionAdminRoutes.route('/getOnePackagesInstaller').post(passport.authenticate(
   var token = sectionGetToken(req.headers);
   if (token) 
       {
-        http.get('http://magpie-packages.iscripts.com/packages/package.php?action=get_one&package_name='+req.body.package_name, (response) => {
+        http.get(req.body.package_url+'package.php?action=get_one&package_name='+req.body.package_name, (response) => {
             
           let result = '';
   
@@ -726,7 +714,7 @@ sectionAdminRoutes.route('/installedPackages').post(passport.authenticate('jwt',
     if (token) {
 
       var PackageInstaller = require('../models/package-installer');
-      PackageInstaller.findOne({}, function (err, result) {
+      PackageInstaller.find({}, function (err, result) {
         if (err) {
           return res.json({ success: false, msg: err });
         }
@@ -897,7 +885,28 @@ sectionAdminRoutes.route('/getMenuNameFromUrl').post(passport.authenticate('jwt'
   }
 });
 
+sectionAdminRoutes.route('/getAllModules').post(passport.authenticate('jwt', { session: false }),function (req, res) {
+  try {
+  
+      return getAllModules(req, res);
+}
+  catch (err) {
+    log.logerror(res, err);
+}
+});
 
+getAllModules = (req, res) => {
+  var Menus = require('../models/'+req.originalUrl.split('/')[2]);
+  Menus.find({ 'status': 'active','parent_id':{ $ne: '0' } }, ['url'], { sort: { menu_order: 1 } }, function (err, result) {
+    if (err) {
+      return res.json({ success: false, msg: err });
+}
+    else {
+      return res.json(result);
+}
+});
+
+};
 
 
 sectiongetMenuNameFromUrl = (req, res) => {
@@ -961,19 +970,6 @@ getRowSettings = (req, res) => {
   });
 };
 
-
-getAllModules = (req, res) => {
-  var Menus = require('../models/'+req.originalUrl.split('/')[2]);
-  Menus.find({ 'status': 'active','parent_id':{ $ne: '0' } }, ['url'], { sort: { menu_order: 1 } }, function (err, result) {
-    if (err) {
-      return res.json({ success: false, msg: err });
-    }
-    else {
-      return res.json(result);
-    }
-  });
-
-};
 
 
 sectionGetAllMenus = (req, res) => {
