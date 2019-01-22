@@ -57,6 +57,7 @@ export class MagpieProfileEditComponent implements OnInit {
                   column_validation[column_config[key]['field']] = ['', validation_array ];
                   
                 }
+                
                });    
 
             

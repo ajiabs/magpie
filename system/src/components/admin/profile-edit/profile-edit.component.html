@@ -36,6 +36,14 @@
                               <div *ngIf="column.type == 'hidden'" >
                                   <input type="hidden" class="form-control"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]" />
                               </div>
+                              <div *ngIf="column.type == 'selectbox'  && column.field != 'roles_id'" >
+                                <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+                                <select class="form-control {{column.class}} {{(profileEditForm.controls[column.field].invalid && (profileEditForm.controls[column.field].dirty || profileEditForm.controls[column.field].touched))?'is-invalid':profileEditForm.controls[column.field].valid?'is-valid':''}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]" tabindex="{{j+1}}">
+                                  <option *ngFor="let col of column.source" value="{{col.value}}">  {{col.label}}</option>
+                                </select>
+                                <div  *ngIf="profileEditForm.controls[column.field].invalid && (profileEditForm.controls[column.field].dirty || profileEditForm.controls[column.field].touched) && profileEditForm.controls[column.field].errors.required" class="form-control-feedback">    {{column.validations_msg[0].required}}</div>
+            
+                              </div>
                               <div *ngIf="column.type == 'image'" >
                                   <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
                                   <input class="form-control {{(profileEditForm.controls[column.field].invalid && (profileEditForm.controls[column.field].dirty || profileEditForm.controls[column.field].touched))?'is-invalid':profileEditForm.controls[column.field].valid?'is-valid':''}}" type="file" tabindex="{{j+1}}" (change)="onFileChangeEvent($event,column.field)"  multiple="{{column.multiple == 'true'?'multiple':''}}"   placeholder="Enter your {{column.label | lowercase}}">

@@ -4,7 +4,7 @@
 # compiled output
 /dist
 /dist-server
-/tmp
+/temp
 /out-tsc
 /config/*
 /src/environments/*
