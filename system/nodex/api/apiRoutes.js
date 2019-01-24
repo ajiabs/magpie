@@ -28,6 +28,10 @@ const storage = multer.diskStorage({
 
 // Defined Login route
 ApiAdminRoutes.route('/checkLogin').post(function (req, res) {
+
+  // var io = req.app.get('socketio');
+  // io.to(1).emit('new message', {});
+
   try {
     const User = require('../models/users');
     User.findOne({

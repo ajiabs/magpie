@@ -1578,6 +1578,11 @@ profileFetchDataById = (req, res) => {
 
 
 sectionUpdate = (req, res) => {
+  // var io = req.app.get('socketio');
+  // io.to(1).emit('new message', {});
+  
+
+
 
   var total_files = Object.keys(req.files).length;
   var i = 1;

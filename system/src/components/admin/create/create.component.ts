@@ -4,7 +4,8 @@ import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
-import {ImageValidator} from './../../../../../system/src/validators/image.validators'
+import {ImageValidator} from './../../../../../system/src/validators/image.validators';
+import { WebsocketService } from './../../../../../system/src/services/admin/websocket.service';
 import { LatLngLiteral } from '@agm/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
@@ -50,7 +51,8 @@ export class MagpieCreateComponent implements OnInit,OnDestroy {
     geofence=[];
     template: string ='<img class="custom-spinner-template" src="'+loading_img_url+'">';
 
-  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public ref:ChangeDetectorRef,public spinnerService: Ng4LoadingSpinnerService) {
+  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public ref:ChangeDetectorRef,public spinnerService: Ng4LoadingSpinnerService,public webSocketService: WebsocketService) {
+
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
         this.spinnerService.show();
@@ -120,6 +122,7 @@ create = () => {
       this.router.navigate(['admin/'+this.section_alias]);
       this.spinnerService.hide();
       new notifier({title: "Added! ", message: "New Record has been added.", icon: 'fa fa-check',type: "success"});
+      this.webSocketService.createItem({module:this.section_alias,room:1});
     });
        
      

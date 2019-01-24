@@ -79,11 +79,43 @@ app.use('/api/:section', magpieApiRoutes);
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
-
 const httpServer = http.createServer(app);
-httpServer.listen(port, function(){
-    console.log('Listening on port ' + port);
+var io = require('socket.io')(httpServer);
+app.set('socketio', io);
+
+io.sockets.on('connection', function (client) {
+
+  client.on('join', (data) => {          
+    client.join(data.room);
+    console.log(client.id + " is connected.");  
+  });
+
+  client.on('createItem', (data) => {
+      client.broadcast.in(data.room).emit('new item', {message:'New '+data.module+' created.'});
+  });
+  client.on('updateItem', (data) => {
+      client.broadcast.in(data.room).emit('update item',  {message:'A'+data.module+' updated.'});
+  });
+  client.on('deleteItem', (data) => {
+    client.broadcast.in(data.room).emit('delete item',  {message:'A '+data.module+' deleted.'});
+  });
+  client.on('changeItemStatus', (data) => {
+    client.broadcast.in(data.room).emit('change status item',  {message:'A '+data.module+' deleted.'});
   });
 
 
+ 
+});
 
+
+
+
+
+
+httpServer.listen(port, function(){
+    console.log('Listening on port ' + port);
+});
+
+
+
+  

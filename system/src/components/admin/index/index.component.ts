@@ -4,6 +4,7 @@ import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
+import { WebsocketService } from './../../../../../system/src/services/admin/websocket.service';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
@@ -65,8 +66,24 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
     checkboxSelectAll:boolean=false;
     checkBoxArr:any=[];
     selectedRows:number=0;
+    ij=1;
     template: string ='<img class="custom-spinner-template" src="'+loading_img_url+'">';
-  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public spinnerService: Ng4LoadingSpinnerService) {
+  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public spinnerService: Ng4LoadingSpinnerService,public webSocketService: WebsocketService) {
+
+    this.webSocketService.createItemMessageReceived().subscribe(data => {
+     // new notifier({title: "Success! ", message: data.message, icon: 'fa fa-check',type: "success"});
+      this.index();
+    });
+    this.webSocketService.updateItemMessageReceived().subscribe(data => {
+     // new notifier({title: "Success! ", message: data.message, icon: 'fa fa-check',type: "success"});
+      this.index();
+    });
+    this.webSocketService.deleteItemMessageReceived().subscribe(data => {
+     // new notifier({title: "Success! ", message: data.message, icon: 'fa fa-check',type: "success"});
+      this.index();
+    });
+ 
+
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
         this.spinnerService.show();
@@ -89,13 +106,13 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
 
 
   ngOnInit(){
-
+    this.webSocketService.joinRoom({room:1});
 
    
   }
 
   export_csv = ()=>{
-
+   
     var export_csv_data = true;
     this.section_service.getCurrentRolePermissionMenus('roles',localStorage.getItem("userDetails['roles_id']")).subscribe(res1 => {
          
@@ -236,8 +253,9 @@ bulkDelete =()=>{
            th.index();
          });
          swal.close();
+        
          new notifier({title: "Update! ", message: "Record has been deleted.", icon: 'fa fa-check',type: "success"});
-            
+         this.webSocketService.deleteItem({module:this.section_alias,room:1});   
        }
       
      } else {
@@ -278,7 +296,7 @@ bulkDelete =()=>{
                 if(import_csv_data){
                     this.index();
                     new notifier({title: "Imported! ", message: "Csv has been successfully imported.", icon: 'fa fa-check',type: "success"});
-
+                    this.webSocketService.createItem({module:this.section_alias,room:1});
                     import_csv_data = false;
                   }
                 
@@ -419,6 +437,7 @@ bulkDelete =()=>{
         this.section_service.changeStatus(this.router.url,id,value,field,source).subscribe(result => {
           if(change_status){
             new notifier({title: "Update! ", message: "Status has been changed  successfully.", icon: 'fa fa-check',type: "success"});
+            this.webSocketService.changeItemStatus({module:this.section_alias,room:1});
             this.index();
             change_status=false;
           }
@@ -574,7 +593,7 @@ bulkDelete =()=>{
              });
              swal.close();
              new notifier({title: "Success! ", message: "Record has been deleted.", icon: 'fa fa-check',type: "success"});
-
+             this.webSocketService.deleteItem({module:this.section_alias,room:1});
            }
           
          } else {

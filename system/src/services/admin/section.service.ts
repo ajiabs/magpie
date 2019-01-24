@@ -7,7 +7,6 @@ import { environment } from './../../../../src/environments/environment';
 import 'rxjs/add/observable/of';
 
 
-
 var server_url = environment.server_url;
 var site_url = environment.site_url;
 var package_url = environment.package_url;
@@ -16,10 +15,11 @@ var package_url = environment.package_url;
 @Injectable()
 export class SectionService {
   result: any;
+ 
   constructor(private http: HttpClient) { }
 
 
-  checkLogin(data) {
+  checkLogin = (data) => {
     const uri = server_url + 'users/checkLogin';
     const obj = {
       email: data.email,
@@ -78,7 +78,7 @@ export class SectionService {
   }
 
 
-  add = (data, current_route) => {
+  add = (data, current_route,callback) => {
     let httpOptions = {
 
       headers: new HttpHeaders({ 'Accept': 'application/json', 'enctype': 'multipart/form-data', 'Authorization': localStorage.getItem('jwtToken') })
@@ -104,7 +104,11 @@ export class SectionService {
     const uri = server_url + section + '/add';
     const obj = formData;
     this.http.post(uri, obj, httpOptions)
-      .subscribe(res => console.log('Done'));
+    .subscribe(
+      response => {
+       callback(response);
+      },
+      );
   }
 
   search = (value, searchable_fields, order_by, sortable_field, relation, current_page, per_page, current_route) => {
@@ -264,7 +268,7 @@ export class SectionService {
 
 
 
-  update = (data, current_route) => {
+  update = (data, current_route,callback) => {
 
 
 
@@ -297,7 +301,11 @@ export class SectionService {
     this
       .http
       .post(uri, obj, httpOptions)
-      .subscribe(res => console.log('Done'));
+      .subscribe(
+        response => {
+         callback(response);
+        },
+        );
 
   }
 

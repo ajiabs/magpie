@@ -4,6 +4,7 @@ import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
+import { WebsocketService } from './../../../../../system/src/services/admin/websocket.service';
 import {ImageValidator} from './../../../../../system/src/validators/image.validators'
 import { LatLngLiteral } from '@agm/core';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
@@ -50,7 +51,11 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
     geofence=[];
     
     template: string ='<img class="custom-spinner-template" src="'+loading_img_url+'">';
-  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public ref:ChangeDetectorRef,public spinnerService: Ng4LoadingSpinnerService) {
+  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public ref:ChangeDetectorRef,public spinnerService: Ng4LoadingSpinnerService,public webSocketService: WebsocketService) {
+    this.webSocketService.updateItemMessageReceived().subscribe(data => {
+      this.init();
+      //new notifier({title: "Success! ", message: data.message, icon: 'fa fa-check',type: "success"});
+    });
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
         this.spinnerService.show();
@@ -233,7 +238,7 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
         this.router.navigate(['admin/'+this.section_alias]);
         this.spinnerService.hide();
         new notifier({title: "Update! ", message: "Record has been updated.", icon: 'fa fa-check',type: "success"});
-
+        this.webSocketService.updateItem({module:this.section_alias,room:1});
      });
      
   

@@ -2,6 +2,7 @@ import { Component, OnInit,Input,Output } from '@angular/core';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
 import { environment } from './../../../../../src/environments/environment';
@@ -12,7 +13,7 @@ declare var $: any;
 declare var notifier: any;
 
 
-
+var loading_img_url = environment.loading_image;
 @Component({
   selector: 'app-package-installer',
   templateUrl: './package-installer.component.html',
@@ -31,9 +32,9 @@ export class MagpiePackageInstallerComponent implements OnInit {
     localPackages:any;
     installedPackages:any;
     package_url:any=environment.package_url;
-
     packageInstallerForm: FormGroup;
-    constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService) {
+    template: string ='<img class="custom-spinner-template" src="'+loading_img_url+'">';
+    constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public spinnerService: Ng4LoadingSpinnerService) {
      
     }
 
@@ -44,6 +45,7 @@ export class MagpiePackageInstallerComponent implements OnInit {
   }
 
   getInstallerPackage =()=>{
+    this.spinnerService.show();
     if(localStorage.getItem("userDetails['roles_id']") == '1'){
       this.section_service.getPackagesInstaller().subscribe(res => {
         var th = this;
@@ -69,6 +71,7 @@ export class MagpiePackageInstallerComponent implements OnInit {
             th.installedPackages = Object.values(res).filter(({package_name}) => packages.includes(package_name));
             th.localPackages = packages;
             th.packagesData = res;
+            this.spinnerService.hide();
         });
       });
     }else
@@ -92,10 +95,11 @@ export class MagpiePackageInstallerComponent implements OnInit {
 
 
   onSearchChange = (value)=>{
-
+    this.spinnerService.show();
     if(localStorage.getItem("userDetails['roles_id']") == '1'){
       this.section_service.searchPackagesInstaller(value).subscribe(res => {
         this.packagesData = res;
+        this.spinnerService.hide();
       });
     }else
       this.router.navigate(['/admin/dashboard']);

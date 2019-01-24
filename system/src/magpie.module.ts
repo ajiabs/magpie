@@ -18,6 +18,7 @@ import { MagpieResetPasswordComponent } from './components/admin/reset-password/
 import { MagpiePageNotFoundComponent } from './components/admin/page-notfound/page-notfound.component';
 import { magpieRoutes } from './../../system/src/routerConfig';
 import { SectionService } from './../../system/src/services/admin/section.service';
+import { WebsocketService } from './../../system/src/services/admin/websocket.service';
 import { AuthGuard } from './../../system/src/services/admin/auth-guard.service';
 import { FilterPipe} from './../../system/src/pipes/admin/objectFilterByKeyValue.pipe';
 import { KeyReturnPipe} from './../../system/src/pipes/admin/objectReturnKey.pipe';
@@ -129,7 +130,7 @@ import { FormsModule } from '@angular/forms';
     ToObjectPipe,
     RouterModule
   ],
-  providers: [SectionService,AuthGuard],
+  providers: [SectionService,WebsocketService,AuthGuard],
   bootstrap: [MagpieComponent]
 })
 export class MagpieModule { }

@@ -126,9 +126,10 @@ export class MagpieProfileEditComponent implements OnInit {
       this.init();
       localStorage.setItem("userDetails['email']", this.section_data.email);
       localStorage.setItem("userDetails['name']", this.section_data.name);
+      new notifier({title: "Update! ", message: "Account has been updated.", icon: 'fa fa-check',type: "success"});
+
     });
     
-    new notifier({title: "Update! ", message: "Account has been updated.", icon: 'fa fa-check',type: "success"});
 
   
   }
