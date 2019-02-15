@@ -33,6 +33,80 @@ export class SectionService {
       });
   }
 
+  userDetailsFromToken = (callback) =>{
+
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'users/userDetailsFromToken';
+    const obj = {};
+    this.http.post(uri, obj, httpOptions)
+    .subscribe(
+      response => {
+       callback(response);
+      },
+      );
+
+
+  }
+
+
+  decodeToken = (current_route,callback)=>{
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'users/decodeToken';
+    var data = current_route.split('/');
+    const obj = {'token':decodeURIComponent(data[3]),'date':decodeURIComponent(data[4])};
+    this.http.post(uri, obj, httpOptions)
+    .subscribe(
+      response => {
+       callback(response);
+      },
+      );
+  }
+
+
+
+  logout = () => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'users/logout';
+    const obj = {
+      token: localStorage.getItem('jwtToken'),
+      autologin_users: localStorage.getItem("autologin"),
+      users_id: localStorage.getItem("userDetails['users_id']")
+    };
+    return this
+      .http
+      .post(uri, obj,httpOptions)
+      .map(res => {
+        return res;
+      });
+  }
+
+
+
+  
+  autoLoginAs = (current_route,id,callback)=>{
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    var section = current_route.split('/')[2];
+    var obj = {
+      id:id,
+      roles_id:localStorage.getItem("userDetails['roles_id']")
+    }
+    const uri = server_url + section + '/autologin';
+    return this.http.post(uri,obj, httpOptions)
+      .subscribe(
+        response => {
+        callback(response);
+        },
+      );
+  }
+
 
   sectionConfig = (current_route) => {
 

@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
 import { environment } from './../../../../../src/environments/environment';
+import { AuthGuard } from './../../../../../system/src/services/admin/auth-guard.service';
+import { WebsocketService } from './../../../../../system/src/services/admin/websocket.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 declare var swal: any;
@@ -28,7 +30,7 @@ export class MagpieLoginComponent implements OnInit {
     resetMail:any;
     userLoginForm: FormGroup;
     forgotPasswordForm :FormGroup;
-    constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService) {
+    constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public webSocketService: WebsocketService,private authguard:AuthGuard) {
       this.userLoginForm = this.fb.group({
         email: ['', [Validators.required,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')] ],
         password: ['', Validators.required ]
@@ -49,14 +51,19 @@ export class MagpieLoginComponent implements OnInit {
           this.data = res;
   
           if(this.data.success){
-             localStorage.setItem('jwtToken', this.data.token);
-             localStorage.setItem('todays_date', this.data.todays_date);
-             localStorage.setItem("userDetails['email']", this.data.result.email);
-             localStorage.setItem("userDetails['name']", this.data.result.name);
-             localStorage.setItem("userDetails['users_id']", this.data.result.users_id);
-             localStorage.setItem("userDetails['roles_id']", this.data.result.roles_id);
-             localStorage.setItem("userDetails['image']", this.data.result.image);
-             window.location.href = "/admin/dashboard";
+
+            var session_data =[];
+            session_data['jwtToken'] = this.data.token;
+            session_data['todays_date'] = this.data.todays_date;
+            session_data['email'] =  this.data.result.email;
+            session_data['name'] =  this.data.result.name;
+            session_data['users_id'] =  this.data.result.users_id;
+            session_data['roles_id'] =  this.data.result.roles_id;
+            session_data['role_name'] =  this.data.result.role_name;
+            session_data['image'] =  this.data.result.image;
+            this.authguard.setSessions(session_data);
+            this.webSocketService.joinRoom({room:1});
+            window.location.href = "/admin/dashboard";
           }else
             this.login_error = this.data.msg;
          

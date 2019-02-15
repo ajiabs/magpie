@@ -19,7 +19,11 @@ var UserSchema = new Schema({
     },
   image: {
         type: String
-    }
+    },
+   is_logged_in:{
+       type: Number,
+       default:0
+   }
 });
 
 UserSchema.pre('save', function (next) {

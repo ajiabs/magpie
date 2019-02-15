@@ -4,6 +4,8 @@ import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { SectionService } from './../../system/src/services/admin/section.service';
 import { Meta,Title } from '@angular/platform-browser';
+import { AuthGuard } from './../../system/src/services/admin/auth-guard.service';
+declare var getStarted:any;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,13 +13,15 @@ import { Meta,Title } from '@angular/platform-browser';
 })
 
 
+
 export class AppComponent extends  MagpieComponent {
   admin_part:any=false;
   package_installer:any = false;
   menuRow:any;
+  
 
-  constructor(router: Router,route: ActivatedRoute, http: HttpClient,section_service: SectionService,private meta: Meta,private titleService: Title) {
-    super(route,router,http,section_service)
+  constructor(router: Router,route: ActivatedRoute, http: HttpClient,section_service: SectionService,authguard:AuthGuard,private meta: Meta,private titleService: Title) {
+    super(route,router,http,section_service,authguard)
 
 
   }
@@ -31,10 +35,39 @@ export class AppComponent extends  MagpieComponent {
 
 
     var th = this;
+    var local_sessions_details=[];
     if(localStorage.getItem("current_segment") == 'admin'){
 
+   
+      if (typeof localStorage.getItem('jwtToken') != undefined ) {
 
-      if (localStorage.getItem('jwtToken')) {
+      
+       
+        var session_data =[];
+        session_data['jwtToken'] = sessionStorage.getItem("session_storage_user['jwtToken']")!=null?sessionStorage.getItem("session_storage_user['jwtToken']"):localStorage.getItem("jwtToken");
+        session_data['todays_date'] =  sessionStorage.getItem("session_storage_user['todays_date']")!=null?sessionStorage.getItem("session_storage_user['todays_date']"):localStorage.getItem("todays_date");
+        session_data['email'] =  sessionStorage.getItem("session_storage_user['email']")!=null?sessionStorage.getItem("session_storage_user['email']"):localStorage.getItem("userDetails['email']");
+        session_data['name'] =  sessionStorage.getItem("session_storage_user['name']")!=null?sessionStorage.getItem("session_storage_user['name']"):localStorage.getItem("userDetails['name']");
+        session_data['users_id'] =  sessionStorage.getItem("session_storage_user['users_id']")!=null?sessionStorage.getItem("session_storage_user['users_id']"):localStorage.getItem("userDetails['users_id']");
+        session_data['roles_id'] =  sessionStorage.getItem("session_storage_user['roles_id']")!=null?sessionStorage.getItem("session_storage_user['roles_id']"):localStorage.getItem("userDetails['roles_id']");
+        session_data['role_name'] =  sessionStorage.getItem("session_storage_user['role_name']")!=null?sessionStorage.getItem("session_storage_user['role_name']"):localStorage.getItem("userDetails['role_name']");
+        session_data['image'] =  sessionStorage.getItem("session_storage_user['image']")!=null?sessionStorage.getItem("session_storage_user['image']"):localStorage.getItem("userDetails['image']");
+        this.authguard.setSessions(session_data);
+
+        if(localStorage.getItem('jwtToken') == 'null')
+        {
+          this.authguard.setSessions(session_data);
+          this.router.navigate(['/admin/login']);
+        }
+        
+        this.section_service.userDetailsFromToken((data) => {
+          if(data['success']){
+            if(data['result'].roles_id != localStorage.getItem("userDetails['roles_id']") || data['result'].users_id != localStorage.getItem("userDetails['users_id']") ){
+              this.authguard.setSessions(session_data);
+              this.router.navigate(['/admin/login']);
+            }
+          }
+        });
 
 
 
@@ -46,11 +79,10 @@ export class AppComponent extends  MagpieComponent {
         th.isLoggedIn().subscribe(res=>{
             th.roles_menu = res;
         });
-    
-
         th.package_installer = localStorage.getItem("userDetails['roles_id']") == '1'?true:false;
         th.section_service.getUserRole(localStorage.getItem("userDetails['roles_id']")).subscribe(res => {
-            th.login_role = res['name'];
+            
+          th.login_role = res['name'];
 
         });
 
@@ -80,21 +112,38 @@ export class AppComponent extends  MagpieComponent {
 
         this.router.events.subscribe(event => {
           if (event instanceof NavigationEnd ) {
+            if (typeof sessionStorage.getItem('jwtToken') != undefined) 
+               this.authguard.setSessions(session_data);
+               if(event.urlAfterRedirects == '/admin/dashboard'){
+                  setTimeout(()=>{
+                    new getStarted([
+                      {
+                        'element': "#profile-logo", 
+                        'title': "Profile Info",
+                        "description": "Profile Name,Role",
+                        "position": "right"  
+                      },
+                      { 'element': "#Dashboard", 
+                        'title': "Dashboard page",
+                        "description": "Welcome to magpie",
+                        "position": "right" }]);
+                  },1000);
 
-         
-
+                }
+          
            if(event.url.split('/')[1] == 'admin'){
               th.section_service.getAllModules().subscribe(res1=>{
-                var current_modules = ['login','dashboard','reset-password','account','settings','package-installer','404'];
-                Object.keys(res1).forEach(key => {
-                 
-                  current_modules.push(res1[key]['url'].split('/')[1]);
-                });
+                var current_modules = ['login','dashboard','reset-password','account','settings','package-installer','404','autologin'];
+                if(typeof res1 == 'object'){
+                    Object.keys(res1).forEach(key => {
+                
+                      current_modules.push(res1[key]['url'].split('/')[1]);
+                    });
+                  }
                 if (current_modules.indexOf( event.url.split('/')[2]) < 0) {
                   this.router.navigate(['/admin/404']);
                 }
 
-              
               });
               
             }
@@ -102,6 +151,9 @@ export class AppComponent extends  MagpieComponent {
 
            
              if(event.urlAfterRedirects == '/admin/login'){
+              if (typeof localStorage.getItem('jwtToken') != undefined) 
+                this.authguard.removeLocalStorageSessions();
+                this.authguard.removeSessionStorageSessions();
                this.showNav = false;
              }else{
      

@@ -1,4 +1,5 @@
 import { MagpieLoginComponent } from './components/admin/login/login.component';
+import { MagpieAutoLoginComponent } from './components/admin/login/auto-login.component';
 import { MagpieDashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { MagpieIndexComponent } from './components/admin/index/index.component';
 import { MagpieCreateComponent } from './components/admin/create/create.component';
@@ -63,6 +64,12 @@ const routes:Routes = [
             canActivate: [AuthGuard],
             runGuardsAndResolvers: 'always',
           },
+          { path: 'autologin/:token/:date',
+            component: MagpieAutoLoginComponent,
+            canActivate: [AuthGuard],
+            runGuardsAndResolvers: 'always' 
+          },
+
           { path: '404',
             component: MagpiePageNotFoundComponent,
             // canActivate: [AuthGuard],

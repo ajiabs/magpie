@@ -85,35 +85,58 @@ export class MagpieSettingsComponent implements OnInit {
 
   init = () => {
 
+    var th_service = this.section_service; 
+    var th_router = this.router; 
     var settings_data = {};
     var developer_data = {};
     var th_files = [];
 
-    this.section_service.getSettings('/admin/general-settings').subscribe(res => {
-      Object(res).forEach(rowItem => {
-
-        var developers = [];
-
-        // column_validation[rowItem.slug] = ['', Validators.required ];
-        var row_slug = rowItem.slug;
-        if (rowItem.type == 'image')
-          th_files.push(rowItem.slug);
-
-        if ((rowItem.type == 'hidden') && (rowItem.value != undefined)) {
-          var devArray = JSON.parse(rowItem.value);
-          devArray.selected_mails.forEach(dev => {
-            developers.push(dev);
-          });
-          developer_data[row_slug]=developers;
-        }
-        settings_data[row_slug] = rowItem.value;
+    this.section_service.getCurrentRolePermissionMenus('roles',localStorage.getItem("userDetails['roles_id']")).subscribe(res1 => {
+      
+      var current_route = this.router.url.split('/')[2].split("-").join(" ");
+      current_route = current_route.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                return letter.toUpperCase();
+            });
+    
+      var current_module = JSON.parse(res1[0].permissions).sections.filter(itm => itm.name == current_route);	
+      var menus_actions = [];
+      current_module[0].actions.forEach(function (menuItem) {
+        menus_actions.push(menuItem.label);
+        menus_actions[menuItem['label']] = menuItem.perm == 'true'?true:false;
       });
-      this.devs = developer_data;
-      this.settings_form_data = settings_data;
-      this.settings_form_data['file_fields'] = th_files;
-      this.columns = res;
 
-    });
+         if(menus_actions['Index']){ 
+
+              this.section_service.getSettings('/admin/general-settings').subscribe(res => {
+                Object(res).forEach(rowItem => {
+
+                  var developers = [];
+
+                  // column_validation[rowItem.slug] = ['', Validators.required ];
+                  var row_slug = rowItem.slug;
+                  if (rowItem.type == 'image')
+                    th_files.push(rowItem.slug);
+
+                  if ((rowItem.type == 'hidden') && (rowItem.value != undefined)) {
+                    var devArray = JSON.parse(rowItem.value);
+                    devArray.selected_mails.forEach(dev => {
+                      developers.push(dev);
+                    });
+                    developer_data[row_slug]=developers;
+                  }
+                  settings_data[row_slug] = rowItem.value;
+                });
+                this.devs = developer_data;
+                this.settings_form_data = settings_data;
+                this.settings_form_data['file_fields'] = th_files;
+                this.columns = res;
+
+              });
+         }
+         else
+          this.router.navigate(['/admin/dashboard']);
+
+        });
 
   }
 
@@ -133,8 +156,6 @@ export class MagpieSettingsComponent implements OnInit {
 
     var index = this.devs[field].indexOf(item);
     if (index > -1) this.devs[field].splice(index, 1);
-
-    console.log(this.devs[field])
 
     if (this.devs[field].length > 0)
       this.settings_form_data[field] = JSON.stringify({ "selected_mails": this.devs[field] });

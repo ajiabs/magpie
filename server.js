@@ -33,8 +33,16 @@ const app = express();
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 app.use(cors());
+// app.use(cors({  
+//   origin: ["http://localhost:4000"],
+//   methods: ["GET", "POST"],
+//   allowedHeaders: ["Content-Type", "Authorization"]
+// }));
 const port = process.env.PORT || 4000;
 app.use(compression());
+
+
+
 
 
 // app.use(express.static(path.join(__dirname, 'dist')));
@@ -85,7 +93,7 @@ app.set('socketio', io);
 
 io.sockets.on('connection', function (client) {
 
-  client.on('join', (data) => {          
+  client.on('join', (data) => {        
     client.join(data.room);
     console.log(client.id + " is connected.");  
   });
@@ -94,6 +102,8 @@ io.sockets.on('connection', function (client) {
       client.broadcast.in(data.room).emit('new item', {message:'New '+data.module+' created.'});
   });
   client.on('updateItem', (data) => {
+
+  
       client.broadcast.in(data.room).emit('update item',  {message:'A'+data.module+' updated.'});
   });
   client.on('deleteItem', (data) => {

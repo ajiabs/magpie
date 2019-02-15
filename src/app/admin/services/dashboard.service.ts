@@ -15,15 +15,17 @@ export class DashboardService {
 
 
   getDashboardConfig = (role_id)=>{
-    
-    let httpOptions = {
-      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-    };
-    const uri = server_url+'dashboard-config/getDashboardConfig/'+role_id;
-    return this.http.get(uri,httpOptions)
-       .map(res => {
-              return res;
-            });
+
+      let httpOptions = {
+        headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+      };
+      const uri = server_url+'dashboard-config/getDashboardConfig/'+role_id;
+      return this.http.get(uri,httpOptions)
+        .map(res => {
+                return res;
+              });
+
+   
   }
 
   dashboardCustomRoute = (current_route,fn)=>{

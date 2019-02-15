@@ -313,18 +313,19 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
     var th_service = this.section_service; 
     var th_router = this.router; 
     var th = this;
-    this.section_service.getCurrentRolePermissionMenus('roles',localStorage.getItem("userDetails['roles_id']")).subscribe(res4 => {
    
+    this.section_service.getCurrentRolePermissionMenus('roles',localStorage.getItem("userDetails['roles_id']")).subscribe(res4 => {
+  
       var current_route = this.router.url.split('/')[2].split("-").join(" ");
       current_route = current_route.toLowerCase().replace(/\b[a-z]/g, function(letter) {
                 return letter.toUpperCase();
             });
-     
+    
       var current_module = JSON.parse(res4[0].permissions).sections.filter(itm => itm.name == current_route);	
       var menus_actions = [];
       current_module[0].actions.forEach(function (menuItem) {
-         menus_actions.push(menuItem.label);
-         menus_actions[menuItem['label']] = menuItem.perm == 'true'?true:false;
+        menus_actions.push(menuItem.label);
+        menus_actions[menuItem['label']] = menuItem.perm == 'true'?true:false;
       });
 
 
@@ -337,7 +338,7 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
                     var th_files = [];
                     
                   
-                     
+                    
                           config_columns.forEach(function (rowItem,key) { 
                             if((rowItem.type == 'tags' || rowItem.type == 'selectbox' || rowItem.type == 'checkbox' || rowItem.type == 'radio') && rowItem.source_type == 'dynamic'){
                               if(th_router.url.split('/')[2] == 'users' || th_router.url.split('/')[2] == 'roles' || th_router.url.split('/')[2] == 'menus' || th_router.url.split('/')[2] == 'sections')
@@ -363,7 +364,7 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
                                     });
                                   
 
-                                 
+                                
                                   
                               }else{
 
@@ -388,14 +389,14 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
                                   
                                   });
                                 
-                               
+                              
                                   
                               }
                             }
                             if(rowItem.type == 'file' || rowItem.type == 'image')
                               th_files.push(rowItem.field);
 
-                         
+                        
                           });
 
                           th.setEditColumnsData(params['id'],th_router.url,config_columns,res1,th_files,th_tags,res);
@@ -404,8 +405,9 @@ export class MagpieEditComponent implements OnInit,OnDestroy {
             });
           });
       }else
-         this.router.navigate(['/admin/dashboard']);
+        this.router.navigate(['/admin/dashboard']);
     });
+      
 
     this.options = {
       multiple: true

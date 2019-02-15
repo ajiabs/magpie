@@ -45,41 +45,43 @@ export class MagpiePackageInstallerComponent implements OnInit {
   }
 
   getInstallerPackage =()=>{
-    this.spinnerService.show();
-    if(localStorage.getItem("userDetails['roles_id']") == '1'){
-      this.section_service.getPackagesInstaller().subscribe(res => {
-        var th = this;
-        th.section_service.installedPackages().subscribe(pkgs => {
-            var packages = [];
-            if(pkgs  != null){
-              Object.keys(pkgs).forEach(key => {
-             
-                  packages.push(pkgs[key]['package_name']);
-                  
+      this.spinnerService.show();
+      if(localStorage.getItem("userDetails['roles_id']") == '1'){
+        this.section_service.getPackagesInstaller().subscribe(res => {
+          var th = this;
+          th.section_service.installedPackages().subscribe(pkgs => {
+              var packages = [];
+              if(pkgs  != null){
+                Object.keys(pkgs).forEach(key => {
+              
+                    packages.push(pkgs[key]['package_name']);
+                    
+                });
+              
+              }
+            
+            
+              Object.values(res).forEach(element => {
+                th.installing[element.package_name]  = false;
               });
-            
-            }
-          
-           
-            Object.values(res).forEach(element => {
-              th.installing[element.package_name]  = false;
-            });
 
+              
             
-          
-          
-            th.installedPackages = Object.values(res).filter(({package_name}) => packages.includes(package_name));
-            th.localPackages = packages;
-            th.packagesData = res;
-            this.spinnerService.hide();
+            
+              th.installedPackages = Object.values(res).filter(({package_name}) => packages.includes(package_name));
+              th.localPackages = packages;
+              th.packagesData = res;
+              this.spinnerService.hide();
+          });
         });
-      });
-    }else
-      this.router.navigate(['/admin/dashboard']);
+      }else
+        this.router.navigate(['/admin/dashboard']);
+      
   }
 
   installPackage = (pkg)=>{
-     this.installing[pkg.package_name]  = true;
+
+    this.installing[pkg.package_name]  = true;
     if(localStorage.getItem("userDetails['roles_id']") == '1'){
       this.section_service.installPackage(pkg).subscribe(res => {
 
@@ -90,20 +92,20 @@ export class MagpiePackageInstallerComponent implements OnInit {
       });
     }else
       this.router.navigate(['/admin/dashboard']);
-
+     
   }
 
 
   onSearchChange = (value)=>{
-    this.spinnerService.show();
-    if(localStorage.getItem("userDetails['roles_id']") == '1'){
-      this.section_service.searchPackagesInstaller(value).subscribe(res => {
-        this.packagesData = res;
-        this.spinnerService.hide();
-      });
-    }else
-      this.router.navigate(['/admin/dashboard']);
 
+      this.spinnerService.show();
+      if(localStorage.getItem("userDetails['roles_id']") == '1'){
+        this.section_service.searchPackagesInstaller(value).subscribe(res => {
+          this.packagesData = res;
+          this.spinnerService.hide();
+        });
+      }else
+        this.router.navigate(['/admin/dashboard']);
 
   }
 

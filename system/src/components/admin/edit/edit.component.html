@@ -12,7 +12,7 @@
           <div class="tile-body">
           <form [formGroup]="sectionForm"  novalidate>
             <div class="row">
-             <div *ngFor="let column of columns;let j = index" class="form-group col-md-6"> 
+             <div *ngFor="let column of columns;let j = index" [ngClass]="column.type != 'hidden' && column.type != 'password'?'form-group col-md-6':''"> 
                   <div *ngIf="column.type == 'textbox'" >
                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
                     <input class="form-control {{column.class}} {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" type="text" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]" tabindex="{{j+1}}" placeholder="{{column.placeholder}}">
@@ -48,7 +48,7 @@
                         {{column.validations_msg[0].pattern}}
                     </div> 
                   </div>
-                  <div *ngIf="column.type == 'hidden'" >
+                  <div *ngIf="column.type == 'hidden' || column.type == 'password'" >
                   
                       <input type="hidden" class="form-control {{column.class}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]" />
                   </div>

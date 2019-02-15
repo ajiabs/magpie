@@ -23,51 +23,51 @@ export class DashboardComponent extends  MagpieDashboardComponent {
    }
   ngOnInit(){
 
-   
 
-    this.dashboard_service.getDashboardConfig(localStorage.getItem("userDetails['roles_id']")).subscribe(res => {
-   
-      
-     Object.keys(res).forEach((v)=>{
-        res[v]['entity_config']  = JSON.parse(res[v]['entity_config']);
-        if(res[v]['entity_config']['source_type'] == 'dynamic'){
-          this.dashboard_service.dashboardCustomRoute(res[v]['entity_config']['routes'],res[v]['entity_config']['value']).subscribe(res1 => {
-               res[v]['entity_config']['value'] =  res1 ;
+          this.dashboard_service.getDashboardConfig(localStorage.getItem("userDetails['roles_id']")).subscribe(res => {
+        
+            
+          Object.keys(res).forEach((v)=>{
+              res[v]['entity_config']  = JSON.parse(res[v]['entity_config']);
+              if(res[v]['entity_config']['source_type'] == 'dynamic'){
+                this.dashboard_service.dashboardCustomRoute(res[v]['entity_config']['routes'],res[v]['entity_config']['value']).subscribe(res1 => {
+                    res[v]['entity_config']['value'] =  res1 ;
 
-          });
-        }
-        res[v]['menus_actions'] = {};   
-        if(res[v]['entity_type'] == 'list'){
+                });
+              }
+              res[v]['menus_actions'] = {};   
+              if(res[v]['entity_type'] == 'list'){
 
-          this.section_service.getCurrentRolePermissionMenus('roles',localStorage.getItem("userDetails['roles_id']")).subscribe(res1 => {
-              
-            var current_route = res[v]['entity_config']['routes'];
-            current_route = current_route.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-                      return letter.toUpperCase();
+                this.section_service.getCurrentRolePermissionMenus('roles',localStorage.getItem("userDetails['roles_id']")).subscribe(res1 => {
+                    
+                  var current_route = res[v]['entity_config']['routes'];
+                  current_route = current_route.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                            return letter.toUpperCase();
+                        });
+                
+                  var current_module = JSON.parse(res1[0].permissions).sections.filter(itm => itm.name == current_route);	
+                  var menus_actions = [];
+                  var i= 1;
+                  current_module[0].actions.forEach(function (menuItem) {
+                    menus_actions[menuItem['label']] = menuItem.perm == 'true'?true:false;
                   });
+                res[v]['menus_actions'] = menus_actions;   
+                });
+
+
+              }
+
+              if((parseInt(v) + 1) == Object.keys(res).length)
+              {
+                this.dashboard_config = res;
+              }
+          })
+
           
-            var current_module = JSON.parse(res1[0].permissions).sections.filter(itm => itm.name == current_route);	
-            var menus_actions = [];
-            var i= 1;
-            current_module[0].actions.forEach(function (menuItem) {
-              menus_actions[menuItem['label']] = menuItem.perm == 'true'?true:false;
-            });
-          res[v]['menus_actions'] = menus_actions;   
+              
+          
           });
-
-
-        }
-
-        if((parseInt(v) + 1) == Object.keys(res).length)
-        {
-           this.dashboard_config = res;
-        }
-     })
-
-    
-         
-    
-    });
+  
 
 
     // this.dashboard_service.getUsersCount(this.router.url).subscribe(res => {
@@ -77,6 +77,9 @@ export class DashboardComponent extends  MagpieDashboardComponent {
    
 
   //  this.line_data = {"labels":["January", "February", "March", "April", "May"],"data":["28", "48", "40", "19", "86"]};
+
+
+
 
 
   }

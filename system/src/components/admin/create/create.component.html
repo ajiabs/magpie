@@ -13,7 +13,7 @@
           <div class="tile-body">
           <form [formGroup]="sectionForm"  novalidate>
             <div class="row">
-            <div *ngFor="let column of columns" class="form-group {{column.type == 'custom'?'col-md-12':'col-md-6'}}"> 
+            <div *ngFor="let column of columns" [ngClass]="column.type != 'hidden'?('form-group'+column.type == 'custom'?'col-md-12':'col-md-6'):''"> 
                   <div *ngIf="column.type == 'textbox'" class="" >
                         <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
                         <input class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}" type="text" formControlName="{{column.field}}" #{{column.field}} [(ngModel)] = "section_data[column.field]" placeholder="{{column.placeholder}}">
@@ -47,11 +47,15 @@
                    </div> 
                   </div>
                   <div *ngIf="column.type == 'hidden'" >
-                    <label ng-show="column.field == 'password'" class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
-                      <input type="{{column.field == 'password'?'password':'hidden'}}" class="form-control"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="{{column.placeholder}}"/>
+                      <input type="hidden" class="form-control"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="{{column.placeholder}}"/>
+
+                  </div>
+                  <div *ngIf="column.type == 'password'" >
+                     <label class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
+                      <input type="password" class="form-control {{(sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched))?'is-invalid':sectionForm.controls[column.field].valid?'is-valid':''}}"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]"  placeholder="{{column.placeholder}}"/>
                       <div  *ngIf="column.field == 'password' && sectionForm.controls[column.field].invalid && (sectionForm.controls[column.field].dirty || sectionForm.controls[column.field].touched) && sectionForm.controls[column.field].errors.required" class="form-control-feedback" >   {{column.validations_msg[0].required}}</div>
 
-                    </div>
+                  </div>
                   <div *ngIf="column.type == 'readonly'" >
                     <label  class="control-label">{{column.label}}<span *ngIf="column.validations[0].required == 'true'" class="required_field">*</span></label>
                       <input type="textbox" class="form-control"  formControlName="{{column.field}}" #{{column.field}}  [(ngModel)] = "section_data[column.field]" />

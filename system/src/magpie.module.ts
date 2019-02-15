@@ -5,6 +5,7 @@ import { HttpClientModule} from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MagpieComponent } from './magpie.component';
 import { MagpieLoginComponent } from './components/admin/login/login.component';
+import { MagpieAutoLoginComponent } from './components/admin/login/auto-login.component';
 import { MagpieDashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { MagpieIndexComponent } from './components/admin/index/index.component';
 import { MagpieCreateComponent } from './components/admin/create/create.component';
@@ -52,6 +53,7 @@ import { FormsModule } from '@angular/forms';
     MagpieComponent,
     MagpieIndexComponent,
     MagpieLoginComponent,
+    MagpieAutoLoginComponent,
     MagpieDashboardComponent,
     MagpieCreateComponent,
     MagpieEditComponent,
@@ -104,6 +106,7 @@ import { FormsModule } from '@angular/forms';
     MagpieComponent,
     MagpieIndexComponent,
     MagpieLoginComponent,
+    MagpieAutoLoginComponent,
     MagpieDashboardComponent,
     MagpieCreateComponent,
     MagpieEditComponent,

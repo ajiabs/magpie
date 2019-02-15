@@ -52,13 +52,45 @@ sectionAdminRoutes.route('/checkLogin').post(function (req, res) {
         // check if password matches
         user.comparePassword(req.body.password, function (err, isMatch) {
           if (isMatch && !err) {
-            // if user is found and password is right create a token
-            var token = jwt.sign(user.toJSON(), config.secret);
-            // return the information including token as JSON
-            var now_date = new Date(Date.now()).toLocaleString();
-            return res.json({ success: true, token: 'JWT ' + token, result: user, todays_date: now_date });
+
+            User.findOneAndUpdate({ '_id': user._id }, {is_logged_in:1}).exec(function (err, updated) {
+              if (err)
+                return res.json({ success: false, msg: err });
+              else
+                {
+                    
+                    var Roles = require('../models/roles');
+                  
+                    Roles.find({roles_id:user.roles_id},{name:1}).exec(function(err,data){
+                        var data_result = {
+                        _id: user._id,
+                        users_id: user.users_id,
+                        roles_id: user.roles_id,
+                        email: user.email,
+                        name: user.name,
+                        image: user.image,
+                        role_name: data[0].name,
+                        password: user.password,
+                        __v: 0 
+                        }
+
+                        var token = jwt.sign(data_result, config.secret, {
+                          expiresIn: '1d' // expires in 1d
+                  
+                        });
+                        // return the information including token as JSON
+                        var now_date = new Date(Date.now()).toLocaleString();
+
+
+                        return res.json({ success: true, token: 'JWT ' + token, result: data_result, todays_date: now_date });
+                    });
+
+                }
+            });
+
+
           } else {
-            return res.json({ success: false, msg: 'Authentication failed. Wrong password.' });
+            return res.json({ success: false, msg: 'Authentication failed. Incorrect username or password.' });
           }
         });
       }
@@ -71,13 +103,216 @@ sectionAdminRoutes.route('/checkLogin').post(function (req, res) {
 
 });
 
+
+
+
+sectionAdminRoutes.route('/autologin').post(passport.authenticate('jwt', { session: false }), function (req, res) {
+  try {
+    var token = sectionGetToken(req.headers);
+    if (token) {
+
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm)
+         {
+
+              var id = req.body.id;
+               User.findById(id, function (err, user) {
+                 if (err)
+                 return res.status(403).send({ success: false, msg: 'Unauthorized.' });
+                 else
+                   {
+
+
+                    User.findOneAndUpdate({ '_id': user._id }, {is_logged_in:1}).exec(function (err, updated) {
+                      if (err)
+                        return res.json({ success: false, msg: err });
+                      else
+                        {     
+                           
+                            var Roles = require('../models/roles');
+                            
+                            Roles.find({roles_id:user.roles_id},{name:1}).exec(function(err,data){
+                                var data_result = {
+                                  _id: user._id,
+                                  users_id: user.users_id,
+                                  roles_id: user.roles_id,
+                                  email: user.email,
+                                  name: user.name,
+                                  image: user.image,
+                                  role_name: data[0].name,
+                                  password: user.password,
+                                  __v: 0 
+                                  }
+
+                                   // if user is found and password is right create a token
+                                var token = jwt.sign(data_result, config.secret,{
+                                      expiresIn: '1d' // expires in 1d
+                          
+                                });
+                                  // return the information including token as JSON
+                                  var now_date = new Date(Date.now()).toLocaleString();
+
+                
+                                return res.json({ success: true, token: 'JWT ' + token, result: data_result, todays_date: now_date });
+                            });
+                        }
+                      });
+                   }
+               });
+
+         }
+        else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+
+    }
+    else
+      return res.status(403).send({ success: false, msg: 'Unauthorized.' });
+  }
+  catch (err) {
+    log.logerror(res, err);
+  }
+});
+
+
+sectionAdminRoutes.route('/logout').post(passport.authenticate('jwt', { session: false }), function (req, res) {
+  try {
+    var token = sectionGetToken(req.headers);
+    if (token)
+    {
+
+      var autologin_users = JSON.parse(req.body.autologin_users);
+      var l =0;
+      autologin_users.forEach(function(id){
+       
+        User.findOneAndUpdate({ users_id:id }, {is_logged_in:0}).exec(function (err, updated) {
+          l++;
+          if(autologin_users.length == l){
+            if (err)
+              return res.json({ success: false, msg: err });
+            else
+              {
+                return res.json({ success: true,msg: 'Successfully logout' });
+
+              }
+            }
+           
+        });
+       
+
+
+     });
+   
+    }
+    else
+      return res.json({ success: false, msg: 'Unauthorized' });
+
+  }
+  catch (err) {
+    log.logerror(res, err);
+  }
+});
+
+
+
+
+sectionAdminRoutes.route('/userDetailsFromToken').post(passport.authenticate('jwt', { session: false }), function (req, res) {
+  try {
+    var token = sectionGetToken(req.headers);
+    if (token)
+    {
+
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+
+        if(is_perm){
+          var decode = jwt.verify(token, config.secret);
+          return res.json({ success: true, result:decode});
+        } 
+        else
+        return res.json({ success: false, msg: 'Unauthorized' });
+
+
+      });
+
+    }
+    else
+      return res.json({ success: false, msg: 'Unauthorized' });
+
+  }
+  catch (err) {
+    log.logerror(res, err);
+  }
+});
+
+
+
+
+
+
+sectionAdminRoutes.route('/decodeToken').post(passport.authenticate('jwt', { session: false }), function (req, res) {
+  try {
+    var token = sectionGetToken(req.headers);
+    if (token)
+    {
+
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+          if(is_perm){
+            var user_token = req.body.token;
+            var decode = jwt.verify(user_token.split(' ')[1], config.secret);
+
+            var Roles = require('../models/roles');
+                            
+            Roles.find({roles_id:decode.roles_id},{name:1}).exec(function(err,data){
+                var data_result = {
+                  _id: decode._id,
+                  users_id: decode.users_id,
+                  roles_id: decode.roles_id,
+                  email: decode.email,
+                  name: decode.name,
+                  image: decode.image,
+                  role_name: data[0].name,
+                  __v: 0 
+                  }
+                  return res.json({ success: true, data:data_result,todays_date: req.body.date,jwt_token:req.body.token,todays_date:req.body.date,msg: 'success' })
+
+            });
+
+
+
+        
+          }
+          else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+
+    }
+    else
+      return res.json({ success: false, msg: 'Unauthorized' });
+
+  }
+  catch (err) {
+    log.logerror(res, err);
+  }
+});
+
+
+
+
+
+
+
+
 sectionAdminRoutes.route('/getConfig').get(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    var decode = jwt.verify(token, config.secret);
-    // console.log(decode.users_id);
-    if (token)
-      return sectionGetConfig(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+          if(is_perm)
+            return sectionGetConfig(req, res);
+          else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
 
@@ -90,8 +325,15 @@ sectionAdminRoutes.route('/getConfig').get(passport.authenticate('jwt', { sessio
 sectionAdminRoutes.route('/getAllMenus').get(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return sectionGetAllMenus(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+          if(is_perm)
+            return sectionGetAllMenus(req, res);
+          else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+     
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -103,8 +345,15 @@ sectionAdminRoutes.route('/getAllMenus').get(passport.authenticate('jwt', { sess
 sectionAdminRoutes.route('/getRolePermissionMenus').post(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return sectionGetRolePermissionMenus(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+          if(is_perm)
+            return sectionGetRolePermissionMenus(req, res);
+          else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+      
+    }
     else
       return res.status(403).send({ success: false, msg: 'Unauthorized.' });
   }
@@ -119,34 +368,42 @@ sectionAdminRoutes.route('/getDashboardConfig/:role_id').get(passport.authentica
     var token = sectionGetToken(req.headers);
     if (token) {
 
-      var Dashboard_config = require('../../../nodex/models/dashboard-config');
-      var a = 1;
-      var role = new RegExp("\\b" + req.params.role_id + "\\b");
-      var where = { $in: [role] };
-      Dashboard_config.find({ 'assigned_roles': where }).sort({ 'entity_order': 1, 'entity_type': 1 }).exec(function (err, result) {
-        if (err)
-          return res.status(403).send({ success: false, msg: err });
-        else {
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
 
-          if (result.length > 0)
-            return res.json(result);
+          var Dashboard_config = require('../../../nodex/models/dashboard-config');
+          var a = 1;
+          var role = new RegExp("\\b" + req.params.role_id + "\\b");
+          var where = { $in: [role] };
+          Dashboard_config.find({ 'assigned_roles': where }).sort({ 'entity_order': 1, 'entity_type': 1 }).exec(function (err, result) {
+            if (err)
+              return res.status(403).send({ success: false, msg: err });
+            else {
 
-          else {
+              if (result.length > 0)
+                return res.json(result);
 
-            Dashboard_config.find({}).sort({ 'entity_order': 1, 'entity_type': 1 }).exec(function (err2, result2) {
-              if (err2)
-                return res.status(403).send({ success: false, msg: err });
-              else
-                return res.json(result2);
-            });
-          }
+              else {
 
+                Dashboard_config.find({}).sort({ 'entity_order': 1, 'entity_type': 1 }).exec(function (err2, result2) {
+                  if (err2)
+                    return res.status(403).send({ success: false, msg: err });
+                  else
+                    return res.json(result2);
+                });
+              }
 
+            }
 
+          });
+          
         }
-
-
+        else
+          return res.json({ success: false, msg: 'Unauthorized' });
       });
+
+
+
     }
     else
       return res.status(403).send({ success: false, msg: 'Unauthorized.' });
@@ -163,8 +420,14 @@ sectionAdminRoutes.route('/getDashboardConfig/:role_id').get(passport.authentica
 sectionAdminRoutes.route('/getCurrentRolePermissionMenus/:id').get(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return getCurrentRolePermissionMenus(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+          if(is_perm)
+            return getCurrentRolePermissionMenus(req, res);
+          else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -178,8 +441,14 @@ sectionAdminRoutes.route('/').post(passport.authenticate('jwt', { session: false
 
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return sectionGetList(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+          if(is_perm)
+            return sectionGetList(req, res);
+          else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -192,8 +461,15 @@ sectionAdminRoutes.route('/').post(passport.authenticate('jwt', { session: false
 sectionAdminRoutes.route('/search').post(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return sectionSearch(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+          if(is_perm)
+            return sectionSearch(req, res);
+          else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -205,8 +481,14 @@ sectionAdminRoutes.route('/search').post(passport.authenticate('jwt', { session:
 sectionAdminRoutes.route('/export').post(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return sectionExport(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+          if(is_perm)
+            return sectionExport(req, res);
+          else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -221,12 +503,20 @@ sectionAdminRoutes.route('/import').post(passport.authenticate('jwt', { session:
 
 
     if (token) {
-      var upload = multer({ storage: temp_storage }).any();
-      upload(req, res, function (err) {
-        if (err)
-          return res.json({ success: false, msg: 'Error uploading file..' });
-        else
-          return sectionImport(req, res);
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+          if(is_perm){
+            var upload = multer({ storage: temp_storage }).any();
+            upload(req, res, function (err) {
+  
+              
+              if (err)
+                return res.json({ success: false, msg: 'Error uploading file..' });
+              else
+                return sectionImport(req, res);
+            });
+          }
+          else
+            return res.json({ success: false, msg: 'Unauthorized' });
       });
 
     }
@@ -250,14 +540,18 @@ sectionAdminRoutes.route('/add').post(passport.authenticate('jwt', { session: fa
   try {
     var token = sectionGetToken(req.headers);
     if (token) {
-      var upload = multer({ storage: storage }).any();
-      upload(req, res, function (err) {
-        if (err)
-          return res.json({ success: false, msg: 'Error uploading file..' });
-        else
-          return sectionAdd(req, res);
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          var upload = multer({ storage: storage }).any();
+          upload(req, res, function (err) {
+            if (err)
+              return res.json({ success: false, msg: 'Error uploading file..' });
+            else
+              return sectionAdd(req, res);
+          });
+        }else
+         return res.json({ success: false, msg: 'Unauthorized' });
       });
-
     }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
@@ -273,7 +567,15 @@ sectionAdminRoutes.route('/changePassword').post(passport.authenticate('jwt', {
   try {
     var token = sectionGetToken(req.headers);
     if (token) {
-      return changePassword(req, res, token)
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          return changePassword(req, res, token)
+        }else
+        return res.json({
+          success: false,
+          msg: 'Unauthorized'
+        });
+      });
     } else
       return res.json({
         success: false,
@@ -325,18 +627,23 @@ sectionAdminRoutes.route('/checkEmailExist/:email/:users_id').get(passport.authe
   try {
     var token = sectionGetToken(req.headers);
     if (token) {
-      var Users = require('../models/users');
-      if (req.params.users_id != 0)
-        var where = { email: req.params.email, users_id: { $ne: req.params.users_id } };
-      else
-        var where = { email: req.params.email };
-      Users.find(where, function (err, result) {
-        if (err)
-          return res.status(403).send({ success: false, msg: err });
-        else
-          return res.json(result);
-      });
 
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          var Users = require('../models/users');
+          if (req.params.users_id != 0)
+            var where = { email: req.params.email, users_id: { $ne: req.params.users_id } };
+          else
+            var where = { email: req.params.email };
+          Users.find(where, function (err, result) {
+            if (err)
+              return res.status(403).send({ success: false, msg: err });
+            else
+              return res.json(result);
+          });
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
 
     }
     else
@@ -357,8 +664,15 @@ sectionAdminRoutes.route('/checkEmailExist/:email/:users_id').get(passport.authe
 sectionAdminRoutes.route('/edit_details/:id').get(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return sectionFetchDataById(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+            return sectionFetchDataById(req, res);
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -370,8 +684,15 @@ sectionAdminRoutes.route('/edit_details/:id').get(passport.authenticate('jwt', {
 sectionAdminRoutes.route('/profile-edit/:users_id').get(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return profileFetchDataById(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          return profileFetchDataById(req, res);
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -386,8 +707,16 @@ sectionAdminRoutes.route('/profile-edit/:users_id').get(passport.authenticate('j
 sectionAdminRoutes.route('/getUserRole/:roles_id').get(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return getUserRoleById(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          return getUserRoleById(req, res);
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+
+
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -401,8 +730,15 @@ sectionAdminRoutes.route('/getUserRole/:roles_id').get(passport.authenticate('jw
 sectionAdminRoutes.route('/view_details/:id').get(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return sectionFetchDataById(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          return sectionFetchDataById(req, res);
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -416,15 +752,21 @@ sectionAdminRoutes.route('/getImage/:id').get(passport.authenticate('jwt', { ses
   try {
     var token = sectionGetToken(req.headers);
     if (token) {
-      var Files = require('../models/files');
-      var id = req.params.id;
-      Files.find({ files_id: id }, function (err, result) {
-        if (err)
-          return res.status(403).send({ success: false, msg: err });
-        else
-          return res.json(result);
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          var Files = require('../models/files');
+          var id = req.params.id;
+          Files.find({ files_id: id }, function (err, result) {
+            if (err)
+              return res.status(403).send({ success: false, msg: err });
+            else
+              return res.json(result);
 
+          });
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
       });
+
     }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
@@ -442,13 +784,17 @@ sectionAdminRoutes.route('/update/:id').post(passport.authenticate('jwt', { sess
   try {
     var token = sectionGetToken(req.headers);
     if (token) {
-
-      var upload = multer({ storage: storage }).any();
-      upload(req, res, function (err) {
-        if (err)
-          return res.status(403).send({ success: false, msg: 'Error uploading file..' });
-        else
-          return sectionUpdate(req, res);
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          var upload = multer({ storage: storage }).any();
+          upload(req, res, function (err) {
+            if (err)
+              return res.status(403).send({ success: false, msg: 'Error uploading file..' });
+            else
+              return sectionUpdate(req, res);
+          });
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
       });
 
     }
@@ -466,8 +812,15 @@ sectionAdminRoutes.route('/update/:id').post(passport.authenticate('jwt', { sess
 sectionAdminRoutes.route('/delete/:id').get(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return sectionDeleteRow(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          return sectionDeleteRow(req, res);
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -480,8 +833,14 @@ sectionAdminRoutes.route('/delete/:id').get(passport.authenticate('jwt', { sessi
 sectionAdminRoutes.route('/bulk-delete').post(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return sectionBulkDeleteRows(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          return sectionBulkDeleteRows(req, res);
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -497,8 +856,14 @@ sectionAdminRoutes.route('/bulk-delete').post(passport.authenticate('jwt', { ses
 sectionAdminRoutes.route('/changeStatus/:id').post(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return sectionChangeStatus(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          return sectionChangeStatus(req, res);
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -512,8 +877,14 @@ sectionAdminRoutes.route('/changeStatus/:id').post(passport.authenticate('jwt', 
 sectionAdminRoutes.route('/deleteFile/:id').post(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return sectionDeleteFile(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          return sectionDeleteFile(req, res);
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.status(403).send({ success: false, msg: 'Unauthorized.' });
   }
@@ -525,8 +896,14 @@ sectionAdminRoutes.route('/deleteFile/:id').post(passport.authenticate('jwt', { 
 sectionAdminRoutes.route('/getSettings').get(function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return getSettings(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          return getSettings(req, res);
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.status(403).send({ success: false, msg: 'Unauthorized.' });
   }
@@ -538,8 +915,14 @@ sectionAdminRoutes.route('/getSettings').get(function (req, res) {
 sectionAdminRoutes.route('/getUsers').get(function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return getUsers(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          return getUsers(req, res);
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.status(403).send({ success: false, msg: 'Unauthorized.' });
   }
@@ -576,8 +959,14 @@ sectionAdminRoutes.route('/getWebsiteNameSettings').post(function (req, res) {
 sectionAdminRoutes.route('/getRowSettings').post(function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return getRowSettings(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          return getRowSettings(req, res);
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.status(403).send({ success: false, msg: 'Unauthorized.' });
   }
@@ -591,14 +980,18 @@ sectionAdminRoutes.route('/updateSettings').post(passport.authenticate('jwt', { 
   try {
     var token = sectionGetToken(req.headers);
     if (token) {
-      var upload = multer({ storage: storage }).any();
-      upload(req, res, function (err) {
-        if (err)
-          return res.status(403).send({ success: false, msg: 'Error uploading file..' });
-        else
-          return sectionUpdateSettings(req, res);
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          var upload = multer({ storage: storage }).any();
+          upload(req, res, function (err) {
+            if (err)
+              return res.status(403).send({ success: false, msg: 'Error uploading file..' });
+            else
+              return sectionUpdateSettings(req, res);
+          });
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
       });
-
     }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
@@ -617,28 +1010,26 @@ sectionAdminRoutes.route('/getPackagesInstaller').post(passport.authenticate('jw
     var token = sectionGetToken(req.headers);
     if (token) {
 
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          http.get(req.body.package_url+'package.php?action=get_all', (response) => {
+            
+            let result = '';
 
-      http.get(req.body.package_url+'package.php?action=get_all', (response) => {
+            response.on('data', (chunk) => {
+              result += chunk;
+            });
+
+            response.on('end', () => {
+              return res.json(JSON.parse(result).data);
         
-        let result = '';
-
-        response.on('data', (chunk) => {
-          result += chunk;
-        });
-
-        response.on('end', () => {
+            });
 
 
-          return res.json(JSON.parse(result).data);
-    
-      
-
-        });
-
-
+          });
+        }else
+          return res.json({ success: false, msg: 'Unauthorized' });
       });
-
-
 
     }
     else
@@ -655,24 +1046,27 @@ sectionAdminRoutes.route('/searchPackagesInstaller').post(passport.authenticate(
   try{
   var token = sectionGetToken(req.headers);
   if (token) {
-      http.get(req.body.package_url+'package.php?action=search&package_name='+req.body.search_key, (response) => {
-            
-        let result = '';
 
-        response.on('data', (chunk) => {
-          result += chunk;
+    sectionIsPermission(token,data={}).then((is_perm)=>{
+      if(is_perm){
+            http.get(req.body.package_url+'package.php?action=search&package_name='+req.body.search_key, (response) => {
+                  
+              let result = '';
+
+              response.on('data', (chunk) => {
+                result += chunk;
+              });
+
+              response.on('end', () => {
+                return res.json(JSON.parse(result).data);
+
+              });
+
+
+            });
+          }else
+            return res.json({ success: false, msg: 'Unauthorized' });
         });
-
-        response.on('end', () => {
-          return res.json(JSON.parse(result).data);
-
-        });
-
-
-      });
-
-
-
     }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
@@ -687,19 +1081,24 @@ sectionAdminRoutes.route('/getOnePackagesInstaller').post(passport.authenticate(
   var token = sectionGetToken(req.headers);
   if (token) 
       {
-        http.get(req.body.package_url+'package.php?action=get_one&package_name='+req.body.package_name, (response) => {
+        sectionIsPermission(token,data={}).then((is_perm)=>{
+          if(is_perm){
+                  http.get(req.body.package_url+'package.php?action=get_one&package_name='+req.body.package_name, (response) => {
+                        
+                    let result = '';
             
-          let result = '';
-  
-          response.on('data', (chunk) => {
-            result += chunk;
-          });
-        
-          response.on('end', () => {
-            return  res.json(JSON.parse(result).data);
-  
-          });    
-      });
+                    response.on('data', (chunk) => {
+                      result += chunk;
+                    });
+                  
+                    response.on('end', () => {
+                      return  res.json(JSON.parse(result).data);
+            
+                    });    
+                });
+              }else
+                return res.json({ success: false, msg: 'Unauthorized' });
+        });
     }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
@@ -713,16 +1112,20 @@ sectionAdminRoutes.route('/installedPackages').post(passport.authenticate('jwt',
     var token = sectionGetToken(req.headers);
     if (token) {
 
-      var PackageInstaller = require('../models/package-installer');
-      PackageInstaller.find({}, function (err, result) {
-        if (err) {
-          return res.json({ success: false, msg: err });
-        }
-        else {
-          return res.json(result);
-        }
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+            if(is_perm){
+              var PackageInstaller = require('../models/package-installer');
+              PackageInstaller.find({}, function (err, result) {
+                if (err) {
+                  return res.json({ success: false, msg: err });
+                }
+                else {
+                  return res.json(result);
+                }
+              });
+            }else
+              return res.json({ success: false, msg: 'Unauthorized' });
       });
-
 
     }
     else
@@ -738,56 +1141,58 @@ sectionAdminRoutes.route('/installPackage').post(passport.authenticate('jwt', { 
     var token = sectionGetToken(req.headers);
     if (token) {
 
-      var npm = require('npm');
-      npm.load(function (err) {
-        // handle errors
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+            var npm = require('npm');
+            npm.load(function (err) {
+              // handle errors
 
-        // install module ffi
-        npm.commands.install([req.body.command_line_code], (er, data) => {
-          return res.json({ success: true, msg: "successfully installed" });
-          // log errors or data
-        });
-
-        // npm.on('log', function(message) {
-        //   // log installation progress
-        //   console.log(message);
-        // });
-      });
-
-      setTimeout(function () {
-
-
-        var i = 0;
-        var conf = {};
-        var data_conf = JSON.parse(req.body['configuration_keys']);
-
-
-        Object.values(data_conf).forEach(v => {
-          conf[String(v)] = "";
-
-          if (parseInt(i) + parseInt(1) == Object.keys(data_conf).length) {
-
-            var PackageInstaller = require('../models/package-installer');
-            var package_installer = new PackageInstaller({ "package_name": req.body.package_name, "package_config": JSON.stringify(conf) });
-            package_installer.save().then(item => {
-              return res.status(200).json({ success: true, msg: "successfully installed" });
-            })
-              .catch(err => {
-                return res.json({ success: false, msg: err });
-
+              // install module ffi
+              npm.commands.install([req.body.command_line_code], (er, data) => {
+                return res.json({ success: true, msg: "successfully installed" });
+                // log errors or data
               });
 
-          }
-          i++;
+              // npm.on('log', function(message) {
+              //   // log installation progress
+              //   console.log(message);
+              // });
+            });
+
+            setTimeout(function () {
 
 
-        });
+            var i = 0;
+            var conf = {};
+            var data_conf = JSON.parse(req.body['configuration_keys']);
 
 
-      }, 10000)
+            Object.values(data_conf).forEach(v => {
+              conf[String(v)] = "";
+
+              if (parseInt(i) + parseInt(1) == Object.keys(data_conf).length) {
+
+                var PackageInstaller = require('../models/package-installer');
+                var package_installer = new PackageInstaller({ "package_name": req.body.package_name, "package_config": JSON.stringify(conf) });
+                package_installer.save().then(item => {
+                  return res.status(200).json({ success: true, msg: "successfully installed" });
+                })
+                  .catch(err => {
+                    return res.json({ success: false, msg: err });
+
+                  });
+
+              }
+              i++;
 
 
+            });
 
+
+          }, 10000)
+        }else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
 
     }
     else
@@ -804,14 +1209,19 @@ sectionAdminRoutes.route('/updatePackageConfiguration').post(passport.authentica
     var token = sectionGetToken(req.headers);
     var result = {};
     if (token) {
-      var PackageInstaller = require('../models/package-installer');
-      result = req.body;
-      PackageInstaller.findOneAndUpdate({ '_id': req.body._id }, result).exec(function (err, updated) {
-        if (err)
-          return res.json({ success: false, msg: err });
-        else
-          return res.status(200).json('Updated successfully');
-      });
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+            var PackageInstaller = require('../models/package-installer');
+            result = req.body;
+            PackageInstaller.findOneAndUpdate({ '_id': req.body._id }, result).exec(function (err, updated) {
+              if (err)
+                return res.json({ success: false, msg: err });
+              else
+                return res.status(200).json('Updated successfully');
+            });
+          }else
+            return res.json({ success: false, msg: 'Unauthorized' });
+        });
     }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
@@ -824,8 +1234,14 @@ sectionAdminRoutes.route('/updatePackageConfiguration').post(passport.authentica
 sectionAdminRoutes.route('/getPackageData').post(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return sectiongetPackageData(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+            return sectiongetPackageData(req, res);
+          }else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -833,30 +1249,26 @@ sectionAdminRoutes.route('/getPackageData').post(passport.authenticate('jwt', { 
     log.logerror(res, err);
   }
 });
-sectiongetPackageData = (req, res) => {
-  var Section = require('../models/package-installer');
-  Section.findOne({ 'package_name': req.body.package_name }, function (err, result) {
-    if (err) {
-      return res.json({ success: false, msg: err });
-    }
-    else {
-      return res.json(result);
-    }
-  });
-};
+
 sectionAdminRoutes.route('/updatePackageConfiguration').post(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
     var result = {};
     if (token) {
-      var PackageInstaller = require('../models/package-installer');
-      result = req.body;
-      PackageInstaller.findOneAndUpdate({ '_id': req.body._id }, result).exec(function (err, updated) {
-        if (err)
-          return res.json({ success: false, msg: err });
-        else
-          return res.status(200).json('Updated successfully');
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+            var PackageInstaller = require('../models/package-installer');
+            result = req.body;
+            PackageInstaller.findOneAndUpdate({ '_id': req.body._id }, result).exec(function (err, updated) {
+              if (err)
+                return res.json({ success: false, msg: err });
+              else
+                return res.status(200).json('Updated successfully');
+            });
+          }else
+            return res.json({ success: false, msg: 'Unauthorized' });
       });
+
     }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
@@ -875,8 +1287,14 @@ sectionAdminRoutes.route('/updatePackageConfiguration').post(passport.authentica
 sectionAdminRoutes.route('/getMenuNameFromUrl').post(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
-    if (token)
-      return sectiongetMenuNameFromUrl(req, res);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+            return sectiongetMenuNameFromUrl(req, res);
+          }else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -887,8 +1305,19 @@ sectionAdminRoutes.route('/getMenuNameFromUrl').post(passport.authenticate('jwt'
 
 sectionAdminRoutes.route('/getAllModules').post(passport.authenticate('jwt', { session: false }),function (req, res) {
   try {
-  
-      return getAllModules(req, res);
+    var token = sectionGetToken(req.headers);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+            return getAllModules(req, res);
+          }else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+   
+    }
+    else
+      return res.json({ success: false, msg: 'Unauthorized' });
+
 }
   catch (err) {
     log.logerror(res, err);
@@ -1768,6 +2197,18 @@ sectionDeleteFile = (req, res) => {
 
 }
 
+sectiongetPackageData = (req, res) => {
+  var Section = require('../models/package-installer');
+  Section.findOne({ 'package_name': req.body.package_name }, function (err, result) {
+    if (err) {
+      return res.json({ success: false, msg: err });
+    }
+    else {
+      return res.json(result);
+    }
+  });
+};
+
 
 
 sectionUpdateSettings = (req, res) => {
@@ -1932,14 +2373,30 @@ changePassword = (req, res, token) => {
 sectionGetToken = (headers) => {
   if (headers && headers.authorization) {
     var parted = headers.authorization.split(' ');
-    if (parted.length === 2) {
-      return parted[1];
-    } else {
+    if (parted.length === 2) 
+      return  parted[1];
+    else 
       return null;
-    }
+    
   } else {
     return null;
   }
+};
+
+
+ sectionIsPermission = async (token,data)=>{
+  
+  var decode = jwt.verify(token, config.secret);
+  return await new Promise(function(resolve, reject) {
+        User.findById(decode._id, function (err, user) {
+        if(user.is_logged_in == 1)
+           resolve(true);
+        else
+          resolve(false);
+     });
+    
+  });
+    
 };
 
 

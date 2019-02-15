@@ -32,3 +32,173 @@
     at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
     at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
     at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41) code: 'MODULE_NOT_FOUND' }
+[2019-01-30T20:08:04.892] [ERROR] error - TypeError: [1].index is not a function
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:103:16
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/passport.js:18:15
+    at /opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/model.js:3954:16
+    at process.nextTick (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/query.js:2022:28)
+    at _combinedTickCallback (internal/process/next_tick.js:131:7)
+    at process._tickCallback (internal/process/next_tick.js:180:9)
+[2019-01-30T20:13:02.739] [ERROR] error - TypeError: [1].index is not a function
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:103:16
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/passport.js:18:15
+    at /opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/model.js:3954:16
+    at process.nextTick (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/query.js:2022:28)
+    at _combinedTickCallback (internal/process/next_tick.js:131:7)
+    at process._tickCallback (internal/process/next_tick.js:180:9)
+[2019-01-31T13:09:34.768] [ERROR] error - { JsonWebTokenError: jwt must be a string
+    at Object.module.exports [as verify] (/opt/lampp/htdocs/Magpie/node_modules/jsonwebtoken/verify.js:43:17)
+    at sectionIsPermission (/opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:2104:20)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:255:10
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/passport.js:18:15
+    at /opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/model.js:3954:16
+    at process.nextTick (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/query.js:2022:28) name: 'JsonWebTokenError', message: 'jwt must be a string' }
+[2019-01-31T13:12:06.493] [ERROR] error - { JsonWebTokenError: jwt must be a string
+    at Object.module.exports [as verify] (/opt/lampp/htdocs/Magpie/node_modules/jsonwebtoken/verify.js:43:17)
+    at sectionIsPermission (/opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:2108:20)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:255:10
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/passport.js:18:15
+    at /opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/model.js:3954:16
+    at process.nextTick (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/query.js:2022:28) name: 'JsonWebTokenError', message: 'jwt must be a string' }
+[2019-01-31T13:47:10.781] [ERROR] error - { JsonWebTokenError: jwt must be a string
+    at Object.module.exports [as verify] (/opt/lampp/htdocs/Magpie/node_modules/jsonwebtoken/verify.js:43:17)
+    at sectionIsPermission (/opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:2109:20)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:255:10
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/passport.js:18:15
+    at /opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/model.js:3954:16
+    at process.nextTick (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/query.js:2022:28) name: 'JsonWebTokenError', message: 'jwt must be a string' }
+[2019-02-05T18:54:38.569] [ERROR] error - ReferenceError: is_perm is not defined
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:1301:9
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/passport.js:18:15
+    at /opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/model.js:3954:16
+    at process.nextTick (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/query.js:2022:28)
+    at _combinedTickCallback (internal/process/next_tick.js:131:7)
+    at process._tickCallback (internal/process/next_tick.js:180:9)
+[2019-02-05T18:55:18.618] [ERROR] error - ReferenceError: is_perm is not defined
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:1301:9
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/passport.js:18:15
+    at /opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/model.js:3954:16
+    at process.nextTick (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/query.js:2022:28)
+    at _combinedTickCallback (internal/process/next_tick.js:131:7)
+    at process._tickCallback (internal/process/next_tick.js:180:9)
+[2019-02-05T18:55:35.522] [ERROR] error - ReferenceError: is_perm is not defined
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:1301:9
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/passport.js:18:15
+    at /opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/model.js:3954:16
+    at process.nextTick (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/query.js:2022:28)
+    at _combinedTickCallback (internal/process/next_tick.js:131:7)
+    at process._tickCallback (internal/process/next_tick.js:180:9)
+[2019-02-05T18:55:36.268] [ERROR] error - ReferenceError: is_perm is not defined
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:1301:9
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/passport.js:18:15
+    at /opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/model.js:3954:16
+    at process.nextTick (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/query.js:2022:28)
+    at _combinedTickCallback (internal/process/next_tick.js:131:7)
+    at process._tickCallback (internal/process/next_tick.js:180:9)
+[2019-02-05T18:55:43.397] [ERROR] error - ReferenceError: is_perm is not defined
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/sectionRoutes.js:1301:9
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/passport.js:18:15
+    at /opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/model.js:3954:16
+    at process.nextTick (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/query.js:2022:28)
+    at _combinedTickCallback (internal/process/next_tick.js:131:7)
+    at process._tickCallback (internal/process/next_tick.js:180:9)

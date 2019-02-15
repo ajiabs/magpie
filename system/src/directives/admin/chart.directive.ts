@@ -47,14 +47,20 @@ export class ChartDirective{
 								}
 							]
 						};
-						var ctxl = $("#"+element).get(0).getContext("2d");
-						var lineChart = new Chart(ctxl).Line(data);
+						if ($("#"+element).is(":visible")) {
+							var ctxl = $("#"+element).get(0).getContext("2d");
+							var lineChart = new Chart(ctxl).Line(data);
 
-					}else if(current_chart == "pie"){
-						var pdata = chart_data;
+						}
 					
-						var ctxp = $("#"+element).get(0).getContext("2d");
-						var pieChart = new Chart(ctxp).Pie(pdata);
+					}else if(current_chart == "pie"){
+						 var pdata = chart_data;
+						 if ($("#"+element).is(":visible")) {
+							var ctxp = $("#"+element).get(0).getContext("2d");
+							var pieChart = new Chart(ctxp).Pie(pdata);
+						  }
+					
+						
 
 					}
 				

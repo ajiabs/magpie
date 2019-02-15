@@ -2,6 +2,7 @@ import { Component,Input,EventEmitter,Output } from '@angular/core';
 import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { SectionService } from './../../system/src/services/admin/section.service';
+import { AuthGuard } from './../../system/src/services/admin/auth-guard.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
@@ -27,17 +28,20 @@ export class MagpieComponent {
     roles_menu:any;
     website_name:any
    
-  constructor(public route: ActivatedRoute, public router: Router,public http_client: HttpClient,public section_service: SectionService) {
+  constructor(public route: ActivatedRoute, public router: Router,public http_client: HttpClient,public section_service: SectionService,public authguard:AuthGuard) {
   }
   ngOnInit() {
   }
 
    @Input()
     logout = () => {
-      localStorage.removeItem('jwtToken');
-     // window.location.href = "/admin/login";
-      this.router.navigate(['/admin/login']);
-      location.reload();
+      this.section_service.logout().subscribe((res)=>{
+        this.authguard.removeLocalStorageSessions();
+        this.authguard.removeSessionStorageSessions();
+        this.router.navigate(['/admin/login']);
+        location.reload();
+
+      });
      
     }
 
@@ -53,6 +57,7 @@ export class MagpieComponent {
 
     @Input()
     isLoggedIn   = () =>{
+      
     return new Observable((observer) => {
             this.section_service.getAllMenus('menus').subscribe(res => {
               this.section_service.getCurrentRolePermissionMenus('roles',localStorage.getItem("userDetails['roles_id']")).subscribe(res1 => {

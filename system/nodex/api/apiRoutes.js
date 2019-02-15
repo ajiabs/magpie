@@ -7,6 +7,7 @@ require('./../admin/passport')(passport);
 var jwt = require('jsonwebtoken');
 var config = require('../../../config/DB');
 const log = require('../../../log/errorLogService');
+const User = require('../models/users');
 
 
 const Sections = require('../models/sections');
@@ -45,12 +46,21 @@ ApiAdminRoutes.route('/checkLogin').post(function (req, res) {
         // check if password matches
         user.comparePassword(req.body.password, function (err, isMatch) {
           if (isMatch && !err) {
-            // if user is found and password is right create a token
-            var token = jwt.sign(user.toJSON(), config.secret);
-            // return the information including token as JSON
-            return res.json({ success: true, token: 'JWT ' + token, result: user });
+
+            User.findOneAndUpdate({ '_id': user._id }, {is_logged_in:1}).exec(function (err, updated) {
+              if (err)
+                return res.json({ success: false, msg: err });
+              else
+                {
+                    // if user is found and password is right create a token
+                    var token = jwt.sign(user.toJSON(), config.secret);
+                    // return the information including token as JSON
+                    return res.json({ success: true, token: 'JWT ' + token, result: user });
+                }
+              });
+    
           } else {
-            return res.json({ success: false, msg: 'Authentication failed. Wrong password.' });
+            return res.json({ success: false, msg: 'Authentication failed. Incorrect username or password..' });
           }
         });
       }
@@ -63,15 +73,18 @@ ApiAdminRoutes.route('/checkLogin').post(function (req, res) {
 
 
 
-
-
-
 ApiAdminRoutes.route('/').post(passport.authenticate('jwt', { session: false }), function (req, res) {
 
   try {
     var token = apiGetToken(req.headers);
-    if (token)
-      return apiGetList(req, res);
+    if (token){
+      apiIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm)
+          return apiGetList(req, res);
+        else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -81,22 +94,26 @@ ApiAdminRoutes.route('/').post(passport.authenticate('jwt', { session: false }),
 });
 
 
-
-
 ApiAdminRoutes.route('/add').post(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = apiGetToken(req.headers);
     if (token) {
+      apiIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          var upload = multer({ storage: storage }).any();
 
-      var upload = multer({ storage: storage }).any();
-
-      upload(req, res, function (err) {
-        if (err)
-          return res.json({ success: false, msg: 'Error uploading file..' });
-        else {
+          upload(req, res, function (err) {
+            if (err)
+              return res.json({ success: false, msg: 'Error uploading file..' });
+            else {
+  
+            }
+            return apiAdd(req, res);
+          });
 
         }
-        return apiAdd(req, res);
+        else
+          return res.json({ success: false, msg: 'Unauthorized' });
       });
 
     }
@@ -113,8 +130,14 @@ ApiAdminRoutes.route('/add').post(passport.authenticate('jwt', { session: false 
 ApiAdminRoutes.route('/edit/:id').get(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = apiGetToken(req.headers);
-    if (token)
-      return apiFetchDataById(req, res);
+    if (token){
+      apiIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm)
+          return apiFetchDataById(req, res);
+        else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -127,8 +150,15 @@ ApiAdminRoutes.route('/edit/:id').get(passport.authenticate('jwt', { session: fa
 ApiAdminRoutes.route('/view/:id').get(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = apiGetToken(req.headers);
-    if (token)
-      return apiFetchDataById(req, res);
+    if (token){
+      apiIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm)
+          return apiFetchDataById(req, res);
+        else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -146,12 +176,18 @@ ApiAdminRoutes.route('/update/:id').post(passport.authenticate('jwt', { session:
   try {
     var token = apiGetToken(req.headers);
     if (token) {
-      var upload = multer({ storage: storage }).any();
-      upload(req, res, function (err) {
-        if (err)
-          return res.status(403).send({ success: false, msg: 'Error uploading file..' });
+      apiIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm){
+          var upload = multer({ storage: storage }).any();
+          upload(req, res, function (err) {
+            if (err)
+              return res.status(403).send({ success: false, msg: 'Error uploading file..' });
+            else
+              return apiUpdate(req, res);
+          });
+        }
         else
-          return apiUpdate(req, res);
+          return res.json({ success: false, msg: 'Unauthorized' });
       });
 
     }
@@ -168,8 +204,14 @@ ApiAdminRoutes.route('/update/:id').post(passport.authenticate('jwt', { session:
 ApiAdminRoutes.route('/delete/:id').get(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = apiGetToken(req.headers);
-    if (token)
-      return apiDeleteRow(req, res);
+    if (token){
+      apiIsPermission(token,data={}).then((is_perm)=>{
+        if(is_perm)
+          return apiDeleteRow(req, res);
+        else
+          return res.json({ success: false, msg: 'Unauthorized' });
+      });
+    }
     else
       return res.json({ success: false, msg: 'Unauthorized' });
   }
@@ -231,8 +273,11 @@ apiDeleteRow = (req, res) => {
   Section.findByIdAndRemove({ _id: req.params.id }, function (err, result) {
     if (err)
       return res.status(403).send({ success: false, msg: err });
-    else
+    else{
+      var io = req.app.get('socketio');
+      io.to(1).emit('delete item', {});
       return res.json('Successfully removed');
+    }
   });
 
 };
@@ -314,6 +359,8 @@ apiInsertData = (req, res, result) => {
     var Section = require('../../../nodex/models/' + req.originalUrl.split('/')[2]);
   var section = new Section(result);
   section.save().then(item => {
+    var io = req.app.get('socketio');
+    io.to(1).emit('new item', {});
     res.status(200).json('added successfully');
   })
     .catch(err => {
@@ -444,8 +491,11 @@ apiUpdateData = (req, res, result) => {
   Section.findOneAndUpdate({ '_id': req.params.id }, result).exec(function (err, updated) {
     if (err)
       return res.json({ success: false, msg: err });
-    else
+    else{
+      var io = req.app.get('socketio');
+      io.to(1).emit('update item', {});
       return res.status(200).json('Updated successfully');
+    }
 
   });
 
@@ -469,6 +519,23 @@ apiGetToken = (headers) => {
   } else {
     return null;
   }
+};
+
+
+apiIsPermission = async (token,data)=>{
+  
+  
+  var decode = jwt.verify(token, config.secret);
+  return await new Promise(function(resolve, reject) {
+        User.findById(decode._id, function (err, user) {
+        if(user.is_logged_in == 1)
+           resolve(true);
+        else
+          resolve(false);
+     });
+    
+  });
+    
 };
 
 

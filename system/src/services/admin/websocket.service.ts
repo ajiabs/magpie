@@ -19,7 +19,6 @@ export class WebsocketService {
   constructor(private http: HttpClient) { }
 
   joinRoom(data) {
-    console.log(data);
     this.socket.emit('join', data);
   }
 

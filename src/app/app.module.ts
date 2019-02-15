@@ -8,6 +8,7 @@ import { MagpieModule } from './../../system/src/magpie.module';
 import { AppComponent } from './app.component';
 
 import { DashboardComponent } from './../../src/app/admin/components/dashboard/dashboard.component';
+import { UsersIndexComponent } from './../../src/app/admin/components/users/index.component';
 import { HomeComponent } from './../../src/app/site/components/home/home.component';
 import { DashboardService } from './../../src/app/admin/services/dashboard.service';
 import { AuthGuard } from './../../system/src/services/admin/auth-guard.service';
@@ -21,6 +22,7 @@ const appRoutes: Routes = [];
   declarations: [
     AppComponent,
     DashboardComponent,
+    UsersIndexComponent,
     HomeComponent
 
   ],
