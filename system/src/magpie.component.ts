@@ -35,11 +35,12 @@ export class MagpieComponent {
 
    @Input()
     logout = () => {
+      this.router.navigate(['/admin/login']);
       this.section_service.logout().subscribe((res)=>{
+        location.reload();
         this.authguard.removeLocalStorageSessions();
         this.authguard.removeSessionStorageSessions();
-        this.router.navigate(['/admin/login']);
-        location.reload();
+       
 
       });
      
