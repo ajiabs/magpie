@@ -31,11 +31,11 @@ customRoutes.route('/getRoles').post(function (req, res) {
   try {
     var Section = require('../../system/nodex/models/roles');
     var token = customGetToken(req.headers);
-
+    var decode = jwt.verify(token, config.secret);
 
     var where = {};
     if (req.body.role_id != "1")
-      where = { "roles_id": { $ne: 1 } };
+      where = { "roles_id": { $ne: 1 },"created_user_id": decode.users_id.toString() };
 
 
     if (token) {

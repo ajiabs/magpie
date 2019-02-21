@@ -14,6 +14,10 @@ var UserSchema = new Schema({
   roles_id: {
         type: String
     },
+  created_user_id: {
+        type: String,
+        default:0
+    },
   password: {
         type: String
     },

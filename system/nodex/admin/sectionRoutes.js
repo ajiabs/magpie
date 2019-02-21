@@ -1464,14 +1464,21 @@ sectionGetConfig = (req, res) => {
 
 sectionGetList = (req, res) => {
 
+
+  var token = sectionGetToken(req.headers);
+  var decode = jwt.verify(token, config.secret);
+
   var current_section = req.originalUrl.split('/')[2];
   var where = {};
 
   if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != "1") {
+
     if (current_section == 'users')
-      where = { "roles_id": { $ne: "1" } };
+      where = { "roles_id": { $ne: "1" },"created_user_id":decode.users_id.toString() };
     if (current_section == 'roles')
-      where = { "roles_id": { $ne: 1 } };
+      where = { "roles_id": { $ne: 1 } ,"created_user_id":decode.users_id.toString()};
+  }else if(req.body.role_id != "1"){
+      where = {"created_user_id":decode.users_id.toString()};
   }
 
 
@@ -1503,12 +1510,19 @@ sectionSetPagination = (req, res, result) => {
 
   var current_section = req.originalUrl.split('/')[2];
   var where = {};
+  var token = sectionGetToken(req.headers);
+  var decode = jwt.verify(token, config.secret);
   if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != "1") {
+
     if (current_section == 'users')
-      where = { "roles_id": { $ne: "1" } };
+      where = { "roles_id": { $ne: "1" },"created_user_id":decode.users_id.toString() };
     if (current_section == 'roles')
-      where = { "roles_id": { $ne: 1 } };
+      where = { "roles_id": { $ne: 1 } ,"created_user_id":decode.users_id.toString()};
+  }else if(req.body.role_id != "1"){
+      where = {"created_user_id":decode.users_id.toString()};
   }
+
+
 
   if (req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' || req.originalUrl.split('/')[2] == 'menus' || req.originalUrl.split('/')[2] == 'mail-templates')
     var Section = require('../models/' + req.originalUrl.split('/')[2]);
@@ -1636,13 +1650,19 @@ sectionExport = (req, res) => {
     }
 
   });
+
+  var decode = jwt.verify(token, config.secret);
   if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != "1") {
 
     if (current_section == 'users')
-      where = { "roles_id": { $ne: "1" } };
+      where = { "roles_id": { $ne: "1" },"created_user_id":decode.users_id.toString() };
     if (current_section == 'roles')
-      where = { "roles_id": { $ne: 1 } };
+      where = { "roles_id": { $ne: 1 } ,"created_user_id":decode.users_id.toString()};
+  }else if(req.body.role_id != "1"){
+      where = {"created_user_id":decode.users_id.toString()};
   }
+
+
 
   /*if(JSON.parse(req.body.relation).length >0){
 
@@ -1756,6 +1776,7 @@ sectionSearch = (req, res) => {
     var Section = require('../../../nodex/models/' + req.originalUrl.split('/')[2]);
 
   var token = sectionGetToken(req.headers);
+  var decode = jwt.verify(token, config.secret);
   var searchable = [];
   var sort = req.body.sort_order == 'asc' ? 1 : -1;
   var sortBy = req.body.sort_orderBy;
@@ -1767,13 +1788,17 @@ sectionSearch = (req, res) => {
 
   var current_section = req.originalUrl.split('/')[2];
   var where = {};
+
   if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != "1") {
 
     if (current_section == 'users')
-      where = { "roles_id": { $ne: "1" } };
+      where = { "roles_id": { $ne: "1" },"created_user_id":decode.users_id.toString() };
     if (current_section == 'roles')
-      where = { "roles_id": { $ne: 1 } };
+      where = { "roles_id": { $ne: 1 } ,"created_user_id":decode.users_id.toString()};
+  }else if(req.body.role_id != "1"){
+      where = {"created_user_id":decode.users_id.toString()};
   }
+
 
   /*if(JSON.parse(req.body.relation).length >0){
 
@@ -1946,10 +1971,22 @@ sectionAdd = (req, res) => {
 
 insertData = (req, res, result) => {
 
+  var token = sectionGetToken(req.headers);
+  var decode = jwt.verify(token, config.secret);
+
+
   if (req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' || req.originalUrl.split('/')[2] == 'menus' || req.originalUrl.split('/')[2] == 'mail-templates')
+   {
     var Section = require('../models/' + req.originalUrl.split('/')[2]);
-  else
+    if(req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles')
+     result['created_user_id'] =  decode.users_id;
+
+   }
+  else{
     var Section = require('../../../nodex/models/' + req.originalUrl.split('/')[2]);
+    result['created_user_id'] =  decode.users_id;
+  }
+
   var section = new Section(result);
   section.save().then(item => {
     res.status(200).json('added successfully');

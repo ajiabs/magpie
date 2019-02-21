@@ -202,3 +202,54 @@
     at process.nextTick (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/query.js:2022:28)
     at _combinedTickCallback (internal/process/next_tick.js:131:7)
     at process._tickCallback (internal/process/next_tick.js:180:9)
+[2019-02-21T18:48:07.801] [ERROR] error - Error: Arguments must be aggregate pipeline operators
+    at Aggregate.append (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/aggregate.js:99:11)
+    at new Aggregate (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/aggregate.js:50:17)
+    at Function.aggregate (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/model.js:2810:19)
+    at getDashboardUsers (/opt/lampp/htdocs/Magpie/nodex/admin/usersRoutes.js:44:10)
+    at /opt/lampp/htdocs/Magpie/nodex/admin/usersRoutes.js:31:14
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/passport.js:18:15
+[2019-02-21T18:48:40.614] [ERROR] error - Error: Arguments must be aggregate pipeline operators
+    at Aggregate.append (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/aggregate.js:99:11)
+    at new Aggregate (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/aggregate.js:50:17)
+    at Function.aggregate (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/model.js:2810:19)
+    at getDashboardUsers (/opt/lampp/htdocs/Magpie/nodex/admin/usersRoutes.js:44:10)
+    at /opt/lampp/htdocs/Magpie/nodex/admin/usersRoutes.js:31:14
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/passport.js:18:15
+[2019-02-21T18:50:40.617] [ERROR] error - Error: Arguments must be aggregate pipeline operators
+    at Aggregate.append (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/aggregate.js:99:11)
+    at new Aggregate (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/aggregate.js:50:17)
+    at Function.aggregate (/opt/lampp/htdocs/Magpie/node_modules/mongoose/lib/model.js:2810:19)
+    at getDashboardUsers (/opt/lampp/htdocs/Magpie/nodex/admin/usersRoutes.js:44:10)
+    at /opt/lampp/htdocs/Magpie/nodex/admin/usersRoutes.js:31:14
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/layer.js:95:5)
+    at next (/opt/lampp/htdocs/Magpie/node_modules/express/lib/router/route.js:137:13)
+    at complete (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:263:13)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:270:15
+    at pass (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:431:14)
+    at Authenticator.transformAuthInfo (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/authenticator.js:453:5)
+    at /opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:267:22
+    at IncomingMessage.req.login.req.logIn (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/http/request.js:55:13)
+    at JwtStrategy.strategy.success (/opt/lampp/htdocs/Magpie/node_modules/passport/lib/middleware/authenticate.js:248:13)
+    at verified (/opt/lampp/htdocs/Magpie/node_modules/passport-jwt/lib/strategy.js:115:41)
+    at /opt/lampp/htdocs/Magpie/system/nodex/admin/passport.js:18:15
