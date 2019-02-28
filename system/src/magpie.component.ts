@@ -37,7 +37,7 @@ export class MagpieComponent {
     logout = () => {
       this.router.navigate(['/admin/login']);
       this.section_service.logout().subscribe((res)=>{
-        location.reload();
+       // location.reload();
         this.authguard.removeLocalStorageSessions();
         this.authguard.removeSessionStorageSessions();
        

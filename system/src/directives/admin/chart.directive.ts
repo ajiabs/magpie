@@ -50,6 +50,7 @@ export class ChartDirective{
 						if ($("#"+element).is(":visible")) {
 							var ctxl = $("#"+element).get(0).getContext("2d");
 							var lineChart = new Chart(ctxl).Line(data);
+							//lineChart.destroy();
 
 						}
 					
@@ -58,6 +59,7 @@ export class ChartDirective{
 						 if ($("#"+element).is(":visible")) {
 							var ctxp = $("#"+element).get(0).getContext("2d");
 							var pieChart = new Chart(ctxp).Pie(pdata);
+							//pieChart.destroy();
 						  }
 					
 						

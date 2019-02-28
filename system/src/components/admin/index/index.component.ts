@@ -452,7 +452,6 @@ bulkDelete =()=>{
  
 
     index = () =>{
-
       var th_service = this.section_service; 
       var th_router = this.router; 
       var th_searchable = [];
