@@ -24,8 +24,8 @@ var loading_img_url = environment.loading_image;
 })
 export class MagpieIndexComponent implements OnInit,OnDestroy {
   @Input()
-    section_data: any;
-    columns:any;
+    section_data: any="";
+    columns:any="";
     list_columns:any;
     full_columns:any;
     title:any;

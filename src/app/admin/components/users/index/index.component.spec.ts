@@ -1,5 +1,5 @@
 import { TestBed, async } from '@angular/core/testing';
-import { UsersIndexComponent } from './../users/index.component';
+import { UsersIndexComponent } from './../../users/index/index.component';
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({

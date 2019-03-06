@@ -3,12 +3,12 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
-import { MagpieIndexComponent } from './../../../../../system/src/components/admin/index/index.component';
-import { SectionService } from './../../../../../system/src/services/admin/section.service';
-import { WebsocketService } from './../../../../../system/src/services/admin/websocket.service';
+import { MagpieIndexComponent } from './../../../../../../system/src/components/admin/index/index.component';
+import { SectionService } from './../../../../../../system/src/services/admin/section.service';
+import { WebsocketService } from './../../../../../../system/src/services/admin/websocket.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { DashboardService } from './../../../../../src/app/admin/services/dashboard.service';
-import { environment } from './../../../../../src/environments/environment';
+import { DashboardService } from './../../../../../../src/app/admin/services/dashboard.service';
+import { environment } from './../../../../../../src/environments/environment';
 declare var swal: any;
 declare var $: any;
 
