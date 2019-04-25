@@ -39,7 +39,7 @@ export class AppComponent extends  MagpieComponent {
     if(localStorage.getItem("current_segment") == 'admin'){
 
    
-      if (typeof localStorage.getItem('jwtToken') != undefined ) {
+      if (typeof localStorage.getItem('jwtToken') != undefined && localStorage.getItem('jwtToken') != null ) {
 
       
        
@@ -54,7 +54,7 @@ export class AppComponent extends  MagpieComponent {
         session_data['image'] =  sessionStorage.getItem("session_storage_user['image']")!=null?sessionStorage.getItem("session_storage_user['image']"):localStorage.getItem("userDetails['image']");
         this.authguard.setSessions(session_data);
 
-        if(localStorage.getItem('jwtToken') == 'null')
+        if(localStorage.getItem('jwtToken') == null)
         {
           this.authguard.setSessions(session_data);
           this.router.navigate(['/admin/login']);
@@ -112,7 +112,7 @@ export class AppComponent extends  MagpieComponent {
 
         this.router.events.subscribe(event => {
           if (event instanceof NavigationEnd ) {
-            if (typeof sessionStorage.getItem('jwtToken') != undefined) 
+            if (typeof sessionStorage.getItem('jwtToken') != undefined && localStorage.getItem('jwtToken') != null) 
                this.authguard.setSessions(session_data);
                if(event.urlAfterRedirects == '/admin/dashboard'){
                   setTimeout(()=>{

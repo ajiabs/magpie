@@ -93,7 +93,7 @@ import { FormsModule } from '@angular/forms';
     Select2Module,
     Ng4GeoautocompleteModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDZ0qMJNqSxi8QJFuUDuPdE7Pwh3TPCjpo',
+      apiKey: 'AIzaSyBcigPmyW-A993UDs9v6iejN4FB-h0Pi3k',
       libraries: ["places"]
     }),
     NgxEditorModule,

@@ -41,15 +41,4 @@ export class DashboardService {
 
   }
 
-  getUsersCount = (current_route) =>{
-    let httpOptions = {
-       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
-     };
-     const uri = server_url+'users/getUsersCount';
-     return this.http.get(uri,httpOptions)
-        .map(res => {
-               return res;
-             });
-   }
-
 }
