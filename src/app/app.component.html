@@ -51,21 +51,31 @@
   
    <ul class="app-menu">
       
-        <li class="treeview {{router.url.split('/')[2] == 'dashboard'?'is-expanded':''}}" id="{{'Dashboard'}}"><a class="app-menu__item" data-toggle="treeview" [routerLink]="['admin/dashboard']" routerLinkActive="active"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a></li>
-        <li  *ngFor="let main of roles_menu;let last = last" menu-toggle [isLast]="last" id="{{main.name}}" class="treeview {{main.submenu.indexOf(router.url.split('/')[2]) > -1?'is-expanded':''}}"  >
-          <a class="app-menu__item"  data-toggle="treeview">
-            <i class="app-menu__icon fa {{main.icon}}"></i>
-            <span class="app-menu__label">{{main.name}}</span>
-            <i class="treeview-indicator fa fa-angle-right"></i></a>
-          <ul class="treeview-menu">
-            <li *ngFor="let menus of main.sub" id="{{menus.name}}" >
-              <a class="treeview-item {{menus.url.split('/').indexOf(router.url.split('/')[2]) > -1?'active':''}}" [routerLink]="[menus.url]" routerLinkActive="active">
-                <i class="app-menu__icon fa {{menus.icon}}"></i>
-                <span class="app-menu__label">{{menus.display_name}}</span>
-              </a>
-            </li>
-        </ul>
-       </li>
+    <li *ngFor="let main of roles_menu;let last = last" menu-toggle [isLast]="last" id="{{main.name}}" class="treeview {{main.submenu.indexOf(router.url.split('/')[2]) > -1?'is-expanded':''}}">
+      <a *ngIf="main.sub.length == '0' && main.url_type == 'internal'" class="app-menu__item" data-toggle="treeview" [routerLink]="[main.url]"
+        routerLinkActive="active">
+        <i class="app-menu__icon fa {{main.icon}}"></i>
+        <span class="app-menu__label">{{main.name}}</span>
+      </a>
+      <a *ngIf="main.sub.length == '0' && main.url_type == 'external'" class="app-menu__item" href="{{ main.url }}">
+        <i class="app-menu__icon fa {{main.icon}}"></i>
+        <span class="app-menu__label">{{main.name}}</span>
+      </a>
+      <a *ngIf="main.sub.length > '0'" class="app-menu__item" data-toggle="treeview">
+        <i class="app-menu__icon fa {{main.icon}}"></i>
+        <span class="app-menu__label">{{main.name}}</span>
+        <i class="treeview-indicator fa fa-angle-right"></i>
+      </a>
+      <ul *ngIf="main.sub.length > '0'" class="treeview-menu">
+        <li *ngFor="let menus of main.sub" id="{{menus.name}}">
+          <a class="treeview-item {{menus.url.split('/').indexOf(router.url.split('/')[2]) > -1?'active':''}}" [routerLink]="[menus.url]"
+            routerLinkActive="active">
+            <i class="app-menu__icon fa {{menus.icon}}"></i>
+            <span class="app-menu__label">{{menus.display_name}}</span>
+          </a>
+        </li>
+      </ul>
+    </li>
     </ul> 
   </aside>
   <main class="app-content">

@@ -1,27 +1,59 @@
-import { TestBed, async } from '@angular/core/testing';
+
+
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { AppComponent } from './app.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { SectionService } from './../../system/src/services/admin/section.service';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ToArrayPipe } from './../../system/src/pipes/admin/toArray.pipe'
+import { GetFilePipe } from './../../system/src/pipes/admin/getFile.pipe'
+import { AuthGuard } from './../../system/src/services/admin/auth-guard.service';
+import { WebsocketService } from './../../system/src/services/admin/websocket.service';
+import { ExportService } from './../../system/src/services/admin/export.service';
+
+
+@Component({ selector: 'routerLink', template: '' })
+class RouterLinkDirectiveStub { }
+@Component({ selector: 'router-outlet', template: '' })
+class RouterOutletStubComponent { }
 describe('AppComponent', () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
+      imports: [
+        RouterModule.forRoot([]),
+        ReactiveFormsModule,
+        HttpClientModule
       ],
-    }).compileComponents();
+      providers: [
+        SectionService,
+        AuthGuard,ExportService,
+        WebsocketService
+        
+      ],
+      declarations: [
+        AppComponent,
+        RouterLinkDirectiveStub,
+        RouterOutletStubComponent,
+        ToArrayPipe,
+        GetFilePipe
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    })
+      .compileComponents();
   }));
-  it('should create the app', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  }));
-  it(`should have as title 'app'`, async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app');
-  }));
-  it('should render title in a h1 tag', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to app!');
-  }));
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

@@ -20,6 +20,7 @@ import { MagpiePageNotFoundComponent } from './components/admin/page-notfound/pa
 import { magpieRoutes } from './../../system/src/routerConfig';
 import { SectionService } from './../../system/src/services/admin/section.service';
 import { WebsocketService } from './../../system/src/services/admin/websocket.service';
+import { ExportService } from './../../system/src/services/admin/export.service';
 import { AuthGuard } from './../../system/src/services/admin/auth-guard.service';
 import { FilterPipe} from './../../system/src/pipes/admin/objectFilterByKeyValue.pipe';
 import { KeyReturnPipe} from './../../system/src/pipes/admin/objectReturnKey.pipe';
@@ -133,7 +134,7 @@ import { FormsModule } from '@angular/forms';
     ToObjectPipe,
     RouterModule
   ],
-  providers: [SectionService,WebsocketService,AuthGuard],
+  providers: [SectionService,WebsocketService,AuthGuard,ExportService],
   bootstrap: [MagpieComponent]
 })
 export class MagpieModule { }

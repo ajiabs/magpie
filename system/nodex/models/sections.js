@@ -33,6 +33,7 @@ Sections.pre('save', function (next) {
       //required:full_col[p].validations[0].required
     
     }
+    sche['created_user_id'] =  {"type": "Number","default":0}
   
 
     cont += "var "+sections.section_name.split(' ').join('_')+" = new Schema("+JSON.stringify(sche)+",{collection:'"+sections.section_table_name+"'});\n";

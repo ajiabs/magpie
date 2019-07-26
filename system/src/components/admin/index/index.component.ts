@@ -4,6 +4,7 @@ import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
+import { ExportService } from './../../../../../system/src/services/admin/export.service';
 import { WebsocketService } from './../../../../../system/src/services/admin/websocket.service';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import 'rxjs/add/operator/map';
@@ -68,18 +69,15 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
     selectedRows:number=0;
     ij=1;
     template: string ='<img class="custom-spinner-template" src="'+loading_img_url+'">';
-  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public spinnerService: Ng4LoadingSpinnerService,public webSocketService: WebsocketService) {
+  constructor(public route: ActivatedRoute,public router: Router, public fb: FormBuilder,public http: HttpClient,public section_service:SectionService,public spinnerService: Ng4LoadingSpinnerService,public webSocketService: WebsocketService,public exportService: ExportService) {
 
     this.webSocketService.createItemMessageReceived().subscribe(data => {
-     // new notifier({title: "Success! ", message: data.message, icon: 'fa fa-check',type: "success"});
       this.index();
     });
     this.webSocketService.updateItemMessageReceived().subscribe(data => {
-     // new notifier({title: "Success! ", message: data.message, icon: 'fa fa-check',type: "success"});
       this.index();
     });
     this.webSocketService.deleteItemMessageReceived().subscribe(data => {
-     // new notifier({title: "Success! ", message: data.message, icon: 'fa fa-check',type: "success"});
       this.index();
     });
  
@@ -111,7 +109,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
    
   }
 
-  export_csv = ()=>{
+  export= (type)=>{
 
 
       var export_csv_data = true;
@@ -136,19 +134,31 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
                 this.route.params.subscribe(params => {
                   this.section_service.export(this.search_word,this.searchable_fields, this.order_fieldBy,this.order_field,this.column_relation,this.router.url,columns_array).subscribe(result => {
                   
-                
+        
+                  if (type == 'csv') {
                     var options = {
                       useBom: true,
                       noDownload: false,
-                      showLabels: true, 
+                      showLabels: true,
                       headers: result['columns'],
-                    
+    
                     };
-                  
-
-                  if(export_csv_data){
-                    new Angular5Csv(result['data'], current_route,options);
-                    export_csv_data = false;
+                    this.exportService.export_csv(result['data'], current_route, options);
+                  }
+                  else if (type == 'pdf') {
+                    var rows = [];
+                    Object.keys(result['data']).forEach(element => {
+                      var temp = [];
+                      Object.keys(result['data'][element]).forEach(item => {
+                        temp.push(result['data'][element][item]);
+                      });
+                      rows.push(temp);
+                    });
+                    var content = {
+                      head: [result['columns']],
+                      body: rows
+                    }
+                    this.exportService.export_pdf(content, '', current_route);
                   }
                   
                   

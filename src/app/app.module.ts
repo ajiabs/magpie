@@ -12,6 +12,7 @@ import { UsersIndexComponent } from './../../src/app/admin/components/users/inde
 import { HomeComponent } from './../../src/app/site/components/home/home.component';
 import { DashboardService } from './../../src/app/admin/services/dashboard.service';
 import { AuthGuard } from './../../system/src/services/admin/auth-guard.service';
+import { ExportService } from './../../system/src/services/admin/export.service';
 import { SectionService } from './../../system/src/services/admin/section.service';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { TagInputModule } from 'ngx-chips';
@@ -33,7 +34,7 @@ const appRoutes: Routes = [];
       preloadingStrategy: PreloadAllModules
       }), MagpieModule,HttpClientModule, ReactiveFormsModule,Ng4LoadingSpinnerModule.forRoot(),TagInputModule
   ],
-  providers: [DashboardService,AuthGuard,SectionService],
+  providers: [DashboardService,AuthGuard,SectionService,ExportService],
   exports: [RouterModule],
   bootstrap: [AppComponent]
 })

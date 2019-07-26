@@ -92,31 +92,27 @@ export class MagpieComponent {
                      return (menus[keyA].menu_order - menus[keyB].menu_order);
                 });
 
-               
-              
                 sortedMenus.forEach(function(element) {
                   var i = element;
-                if(menus[i] != undefined){
-                 
-                    var parent_key = Object.keys(res).find(x => res[x].menus_id === Number.parseInt(menus[i].parent_id));
-                    if(tmp_main.indexOf(res[parent_key].name) == -1){
-                      tmp_main.push(res[parent_key].name);
-                      main_menu.push({"name":res[parent_key].name,"icon":res[parent_key].icon,"sub":[menus[i]],"submenu":[menus[i].url.split('/')[1]]});
-                      k++;
-                    }
-                    else{
-    
-                      var tmp_key = Object.keys(main_menu).find(x => main_menu[x].name === res[parent_key].name);
-                      main_menu[tmp_key]['sub'].push(menus[i]);
-                      main_menu[tmp_key]['submenu'].push(menus[i].url.split('/')[1]);
-                    
-                    }
+                  if(menus[i] != undefined){
+                  
+                  if(Number.parseInt(menus[i].parent_id)== -1){
+                  main_menu.push({"name":menus[i].name,"icon":menus[i].icon,"sub":[],"submenu":[], "url_type": menus[i].url_type == 'internal'? 'internal': ( typeof menus[i].url_type == 'undefined'? 'internal':'external'), "url": menus[i].url});
+                  } else{
+                  var parent_key = Object.keys(res).find(x => res[x].menus_id === Number.parseInt(menus[i].parent_id)); 
+                  if(tmp_main.indexOf(res[parent_key].name) == -1){
+                  tmp_main.push(res[parent_key].name);
+                  main_menu.push({"name":res[parent_key].name,"icon":res[parent_key].icon,"sub":[menus[i]],"submenu":[menus[i].url.split('/')[1]], "url_type": res[k].url_type == 'internal'? 'internal':'external', "url": res[k].url});
+                  k++;
                   }
-                    
-                });
-
-                
-                
+                  else{
+                  var tmp_key = Object.keys(main_menu).find(x => main_menu[x].name === res[parent_key].name);
+                  main_menu[tmp_key]['sub'].push(menus[i]);
+                  main_menu[tmp_key]['submenu'].push(menus[i].url.split('/')[1]);
+                  }
+                  } 
+                  }
+                  }); 
             
                 return observer.next(main_menu);
                   

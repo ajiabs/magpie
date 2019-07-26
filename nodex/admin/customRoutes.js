@@ -34,7 +34,7 @@ customRoutes.route('/getRoles').post(function (req, res) {
     var decode = jwt.verify(token, config.secret);
 
     var where = {};
-    if (req.body.role_id != "1")
+    if (req.body.role_id != 1)
       where = { "roles_id": { $ne: 1 },"created_user_id": decode.users_id.toString() };
 
 

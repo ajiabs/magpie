@@ -3,9 +3,12 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { SectionService } from './../../system/src/services/admin/section.service';
+import { WebsocketService } from './../../system/src/services/admin/websocket.service';
 import { Meta,Title } from '@angular/platform-browser';
 import { AuthGuard } from './../../system/src/services/admin/auth-guard.service';
 declare var getStarted:any;
+declare var $: any;
+declare var notifier: any;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -20,8 +23,18 @@ export class AppComponent extends  MagpieComponent {
   menuRow:any;
   
 
-  constructor(router: Router,route: ActivatedRoute, http: HttpClient,section_service: SectionService,authguard:AuthGuard,private meta: Meta,private titleService: Title) {
-    super(route,router,http,section_service,authguard)
+  constructor(router: Router,route: ActivatedRoute, http: HttpClient,section_service: SectionService,authguard:AuthGuard,private meta: Meta,private titleService: Title,private webSocketService:WebsocketService) {
+    super(route,router,http,section_service,authguard);
+    this.webSocketService.createItemMessageReceived().subscribe(data => {
+      new notifier({title: "Success! ", message: data.message, icon: 'fa fa-check',type: "success"});
+    });
+    this.webSocketService.updateItemMessageReceived().subscribe(data => {
+        new notifier({title: "Success! ", message: data.message, icon: 'fa fa-check',type: "success"});
+    });
+    this.webSocketService.deleteItemMessageReceived().subscribe(data => {
+     new notifier({title: "Success! ", message: data.message, icon: 'fa fa-check',type: "success"});
+    });
+
 
 
   }

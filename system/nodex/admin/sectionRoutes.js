@@ -152,7 +152,7 @@ sectionAdminRoutes.route('/autologin').post(passport.authenticate('jwt', { sessi
                                   // return the information including token as JSON
                                   var now_date = new Date(Date.now()).toLocaleString();
 
-                
+                                console.log(now_date)
                                 return res.json({ success: true, token: 'JWT ' + token, result: data_result, todays_date: now_date });
                             });
                         }
@@ -1432,7 +1432,7 @@ getCurrentRolePermissionMenus = (req, res) => {
 sectionGetRolePermissionMenus = (req, res) => {
 
   var where = { 'parent_id': { $ne: 0 } };
-  if (req.body.role_id != "1")
+  if (req.body.role_id != 1)
     where = { 'parent_id': { $ne: 0 }, "menus_id": { $nin: [3, 5] } };
 
   var Section = require('../models/' + req.originalUrl.split('/')[2]);
@@ -1471,14 +1471,14 @@ sectionGetList = (req, res) => {
   var current_section = req.originalUrl.split('/')[2];
   var where = {};
 
-  if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != "1") {
+  if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != 1) {
 
     if (current_section == 'users')
-      where = { "roles_id": { $ne: "1" },"created_user_id":decode.users_id.toString() };
+      where = { "roles_id": { $ne: 1 },"created_user_id":decode.users_id };
     if (current_section == 'roles')
-      where = { "roles_id": { $ne: 1 } ,"created_user_id":decode.users_id.toString()};
-  }else if(req.body.role_id != "1"){
-      where = {"created_user_id":decode.users_id.toString()};
+      where = { "roles_id": { $ne: 1 } ,"created_user_id":decode.users_id};
+  }else if(req.body.role_id != 1){
+      where = {"created_user_id":decode.users_id};
   }
 
 
@@ -1512,14 +1512,14 @@ sectionSetPagination = (req, res, result) => {
   var where = {};
   var token = sectionGetToken(req.headers);
   var decode = jwt.verify(token, config.secret);
-  if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != "1") {
+  if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != 1) {
 
     if (current_section == 'users')
-      where = { "roles_id": { $ne: "1" },"created_user_id":decode.users_id.toString() };
+      where = { "roles_id": { $ne: 1 },"created_user_id":decode.users_id};
     if (current_section == 'roles')
-      where = { "roles_id": { $ne: 1 } ,"created_user_id":decode.users_id.toString()};
-  }else if(req.body.role_id != "1"){
-      where = {"created_user_id":decode.users_id.toString()};
+      where = { "roles_id": { $ne: 1 } ,"created_user_id":decode.users_id};
+  }else if(req.body.role_id != 1){
+      where = {"created_user_id":decode.users_id};
   }
 
 
@@ -1652,14 +1652,14 @@ sectionExport = (req, res) => {
   });
 
   var decode = jwt.verify(token, config.secret);
-  if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != "1") {
+  if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != 1) {
 
     if (current_section == 'users')
-      where = { "roles_id": { $ne: "1" },"created_user_id":decode.users_id.toString() };
+      where = { "roles_id": { $ne: 1 },"created_user_id":decode.users_id };
     if (current_section == 'roles')
-      where = { "roles_id": { $ne: 1 } ,"created_user_id":decode.users_id.toString()};
-  }else if(req.body.role_id != "1"){
-      where = {"created_user_id":decode.users_id.toString()};
+      where = { "roles_id": { $ne: 1 } ,"created_user_id":decode.users_id};
+  }else if(req.body.role_id != 1){
+      where = {"created_user_id":decode.users_id};
   }
 
 
@@ -1789,14 +1789,14 @@ sectionSearch = (req, res) => {
   var current_section = req.originalUrl.split('/')[2];
   var where = {};
 
-  if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != "1") {
+  if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != 1) {
 
     if (current_section == 'users')
-      where = { "roles_id": { $ne: "1" },"created_user_id":decode.users_id.toString() };
+      where = { "roles_id": { $ne: 1 },"created_user_id":decode.users_id};
     if (current_section == 'roles')
-      where = { "roles_id": { $ne: 1 } ,"created_user_id":decode.users_id.toString()};
-  }else if(req.body.role_id != "1"){
-      where = {"created_user_id":decode.users_id.toString()};
+      where = { "roles_id": { $ne: 1 } ,"created_user_id":decode.users_id};
+  }else if(req.body.role_id != 1){
+      where = {"created_user_id":decode.users_id};
   }
 
 

@@ -19,7 +19,14 @@
               <input type="file" class="form-control-sm col-md-5  pull-left"   (change)="onImportEvent($event)"  [hidden]="!import_action">
             
               &nbsp; <button class="btn btn-info btn-sm col-md-3  pull-left" (click)="import_csv()" [disabled]="file_import_button" [hidden]="!import_action"><i class="fa fa-arrow-circle-down"></i>Import</button>
-              &nbsp;  <button class="btn btn-warning btn-sm col-md-3  pull-right" (click)="export_csv()"  [hidden]="!export_action"><i class="fa fa-arrow-circle-up"></i>Export</button>
+              &nbsp; <button id="export" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="modal"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [hidden]="!export_action">
+              <i class="fa fa-arrow-circle-up"></i>Export</button>
+              <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" (click)="export('csv')">Export as Csv</a>
+                <a class="dropdown-item" (click)="export('pdf')">Export as Pdf</a>
+             </div>
+        
            
              </div>
              <div class="clearfix"></div>

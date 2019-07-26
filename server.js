@@ -1,3 +1,4 @@
+
 const express = require('express'),
 path = require('path'),
 passport = require('passport'),
@@ -15,6 +16,9 @@ var https = require('https');
 var compression = require('compression');
 var expressStaticGzip = require('express-static-gzip');
 const fs = require('fs');
+var dash = require('appmetrics-dash');
+
+
 
 
 magpieAdminRoutes  = require('./system/nodex/admin/sectionRoutes');
@@ -99,18 +103,18 @@ io.sockets.on('connection', function (client) {
   });
 
   client.on('createItem', (data) => {
-      client.broadcast.in(data.room).emit('new item', {message:'New '+data.module+' created.'});
+      client.broadcast.in(data.room).emit('new item', {message:'New '+data.module+' is created.'});
   });
   client.on('updateItem', (data) => {
 
   
-      client.broadcast.in(data.room).emit('update item',  {message:'A'+data.module+' updated.'});
+      client.broadcast.in(data.room).emit('update item',  {message:'A '+data.module+' is  updated.'});
   });
   client.on('deleteItem', (data) => {
-    client.broadcast.in(data.room).emit('delete item',  {message:'A '+data.module+' deleted.'});
+    client.broadcast.in(data.room).emit('delete item',  {message:'A '+data.module+' is deleted.'});
   });
   client.on('changeItemStatus', (data) => {
-    client.broadcast.in(data.room).emit('change status item',  {message:'A '+data.module+' deleted.'});
+    client.broadcast.in(data.room).emit('change status item',  {message:'A '+data.module+' is  deleted.'});
   });
 
 
@@ -120,7 +124,7 @@ io.sockets.on('connection', function (client) {
 
 
 
-
+dash.monitor({server: httpServer});
 
 httpServer.listen(port, function(){
     console.log('Listening on port ' + port);
