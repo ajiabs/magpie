@@ -5,7 +5,7 @@ var passport = require('passport');
 var customRoutes = express.Router();
 require('../../system/nodex/admin/passport')(passport);
 var jwt = require('jsonwebtoken');
-var config = require('../../config/DB');
+var config = require('../../config/web-config');
 const log = require('../../log/errorLogService');
 
 //const Sections = require('../../system/nodex/admin/models/sections');
@@ -31,7 +31,7 @@ customRoutes.route('/getRoles').post(function (req, res) {
   try {
     var Section = require('../../system/nodex/models/roles');
     var token = customGetToken(req.headers);
-    var decode = jwt.verify(token, config.secret);
+    var decode = jwt.verify(token, config.db.secret);
 
     var where = {};
     if (req.body.role_id != 1)

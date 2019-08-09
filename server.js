@@ -7,7 +7,7 @@ cors = require('cors'),
 mongoose = require('mongoose'),
 session      = require('express-session'),
 flash    = require('connect-flash'),
-config = require('./config/DB'),
+CONFIG = require('./config/web-config'),
 LocalStrategy = require('passport-local').Strategy,
 RedisStore = require('connect-redis')(session);
 const http = require('http');
@@ -28,7 +28,11 @@ adminCustomRoutes  = require('./nodex/admin/customRoutes');
 apiCustomRoutes  = require('./nodex/api/apiRoutes');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DB).then(
+mongoose.connect(CONFIG.db.DB_PATH,{ keepAlive:true,
+  useCreateIndex:true,
+  useFindAndModify:false,
+  useNewUrlParser: true 
+ }).then(
     () => {console.log('Database is connected') },
     err => { console.log('Can not connect to the database'+ err)}
   );
@@ -42,7 +46,9 @@ app.use(cors());
 //   methods: ["GET", "POST"],
 //   allowedHeaders: ["Content-Type", "Authorization"]
 // }));
-const port = process.env.PORT || 4000;
+// const port = process.env.PORT || 4000;
+console.log(process.env.NODE_APP_STAGE);
+const port = process.env.PORT || CONFIG.app.PORT;
 app.use(compression());
 
 

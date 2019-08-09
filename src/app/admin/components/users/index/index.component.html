@@ -5,34 +5,39 @@
   <div class="tile">
     <div class="row">
       <div class="col-lg-12">
-        <div class="tile-title-w-btn">
-            <h3 class="title">List {{title}}</h3>
-            <input type="text" class="form-control form-control-sm col-md-3" id="search_word" ng-model="search_word" placeholder="Search" [hidden]="!search_action" (input)="onSearchChange($event.target.value)">
+          <div class="tile-title-w-btn">
+              <h3 class="title">List {{title}}</h3>
+              <input type="text" class="form-control form-control-sm search-outer" id="search_word" ng-model="search_word" placeholder="Search" [hidden]="!search_action" (input)="onSearchChange($event.target.value)">
+  
+             
+              <p><a class="btn btn-primary icon-btn" [routerLink]="['/admin/'+section_alias+'/create']" [hidden]="!create_action"><i class="fa fa-plus"></i>Add</a></p>
+            </div>
+            <div class="clearfix"></div>
+            <button class="btn btn-danger btn-sm col-md-1" (click)="bulkDelete()"  [disabled]="!multiple_delete_button && multiple_delete"  [hidden]="!multiple_delete || !delete_action"><i class="fa fa-trash"></i>Delete</button>
+            <div class="pull-right">
+               <div class="">
+                <input type="file" class="form-control-sm col-md-5 col-sm-5  pull-left"   (change)="onImportEvent($event)"  [hidden]="!import_action">
+              
+                <button class="btn btn-info btn-sm col-md-3 col-sm-3 pull-left btm-mrg" (click)="import_csv()" [disabled]="file_import_button" [hidden]="!import_action"><i class="fa fa-arrow-circle-down"></i>Import</button>
+                <!-- <button class="btn btn-warning btn-sm col-md-3 col-sm-3 btm-mrg  pull-right" (click)="export_csv()"  [hidden]="!export_action"><i class="fa fa-arrow-circle-up"></i>Export</button> -->
+                <button id="export" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="modal"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [hidden]="!export_action">
+                <i class="fa fa-arrow-circle-up"></i>Export</button>
+                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" (click)="export('csv')">Export as Csv</a>
+                  <a class="dropdown-item" (click)="export('pdf')">Export as Pdf</a>
+                  <a class="dropdown-item" (click)="export('xlsx')">Export as xlsx</a>
+               </div>
+               </div>
+               <div class="clearfix"></div>
+               <p class="form-control-feedback" *ngIf="file_import_type">Csv Upload Only</p>
+             </div>
+  
 
-           
-            <p><a class="btn btn-primary icon-btn" [routerLink]="['/admin/'+section_alias+'/create']" [hidden]="!create_action"><i class="fa fa-plus"></i>Add</a></p>
-          </div>
+
+      
           <div class="clearfix"></div>
-          <button class="btn btn-danger btn-sm col-md-1" (click)="bulkDelete()"  [disabled]="!multiple_delete_button && multiple_delete"  [hidden]="!multiple_delete || !delete_action"><i class="fa fa-trash"></i>Delete</button>
-          <div class="pull-right">
-             <div class="">
-              <input type="file" class="form-control-sm col-md-5  pull-left"   (change)="onImportEvent($event)"  [hidden]="!import_action">
-            
-              &nbsp; <button class="btn btn-info btn-sm col-md-3  pull-left" (click)="import_csv()" [disabled]="file_import_button" [hidden]="!import_action"><i class="fa fa-arrow-circle-down"></i>Import</button>
-              &nbsp; <button id="export" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="modal"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [hidden]="!export_action">
-              <i class="fa fa-arrow-circle-up"></i>Export</button>
-              <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" (click)="export('csv')">Export as Csv</a>
-                <a class="dropdown-item" (click)="export('pdf')">Export as Pdf</a>
-             </div>
-        
-           
-             </div>
-             <div class="clearfix"></div>
-             <p class="form-control-feedback" *ngIf="file_import_type">Csv Upload Only</p>
-           </div>
-          <div class="clearfix"></div>
+          <div class="table-responsive">
           <table class="table table-bordered dataTable" *ngIf="section_data!=''">
             <thead>
               <tr>
@@ -50,6 +55,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
 
           <div *ngIf="section_data==''">
               <p class="no-data-found">No data found.</p>

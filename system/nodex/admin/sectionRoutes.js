@@ -6,7 +6,7 @@ var sectionAdminRoutes = express.Router();
 var http = require("http");
 require('./passport')(passport);
 var jwt = require('jsonwebtoken');
-var config = require('../../../config/DB');
+var config = require('../../../config/web-config');
 
 const Sections = require('../models/sections');
 const User = require('../models/users');
@@ -74,7 +74,7 @@ sectionAdminRoutes.route('/checkLogin').post(function (req, res) {
                         __v: 0 
                         }
 
-                        var token = jwt.sign(data_result, config.secret, {
+                        var token = jwt.sign(data_result, config.db.secret, {
                           expiresIn: '1d' // expires in 1d
                   
                         });
@@ -145,7 +145,7 @@ sectionAdminRoutes.route('/autologin').post(passport.authenticate('jwt', { sessi
                                   }
 
                                    // if user is found and password is right create a token
-                                var token = jwt.sign(data_result, config.secret,{
+                                var token = jwt.sign(data_result, config.db.secret,{
                                       expiresIn: '1d' // expires in 1d
                           
                                 });
@@ -225,7 +225,7 @@ sectionAdminRoutes.route('/userDetailsFromToken').post(passport.authenticate('jw
       sectionIsPermission(token,data={}).then((is_perm)=>{
 
         if(is_perm){
-          var decode = jwt.verify(token, config.secret);
+          var decode = jwt.verify(token, config.db.secret);
           return res.json({ success: true, result:decode});
         } 
         else
@@ -258,7 +258,7 @@ sectionAdminRoutes.route('/decodeToken').post(passport.authenticate('jwt', { ses
       sectionIsPermission(token,data={}).then((is_perm)=>{
           if(is_perm){
             var user_token = req.body.token;
-            var decode = jwt.verify(user_token.split(' ')[1], config.secret);
+            var decode = jwt.verify(user_token.split(' ')[1], config.db.secret);
 
             var Roles = require('../models/roles');
                             
@@ -1466,7 +1466,7 @@ sectionGetList = (req, res) => {
 
 
   var token = sectionGetToken(req.headers);
-  var decode = jwt.verify(token, config.secret);
+  var decode = jwt.verify(token, config.db.secret);
 
   var current_section = req.originalUrl.split('/')[2];
   var where = {};
@@ -1511,7 +1511,7 @@ sectionSetPagination = (req, res, result) => {
   var current_section = req.originalUrl.split('/')[2];
   var where = {};
   var token = sectionGetToken(req.headers);
-  var decode = jwt.verify(token, config.secret);
+  var decode = jwt.verify(token, config.db.secret);
   if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != 1) {
 
     if (current_section == 'users')
@@ -1651,7 +1651,7 @@ sectionExport = (req, res) => {
 
   });
 
-  var decode = jwt.verify(token, config.secret);
+  var decode = jwt.verify(token, config.db.secret);
   if ((current_section == 'users' || current_section == 'roles') && req.body.role_id != 1) {
 
     if (current_section == 'users')
@@ -1776,7 +1776,7 @@ sectionSearch = (req, res) => {
     var Section = require('../../../nodex/models/' + req.originalUrl.split('/')[2]);
 
   var token = sectionGetToken(req.headers);
-  var decode = jwt.verify(token, config.secret);
+  var decode = jwt.verify(token, config.db.secret);
   var searchable = [];
   var sort = req.body.sort_order == 'asc' ? 1 : -1;
   var sortBy = req.body.sort_orderBy;
@@ -1972,7 +1972,7 @@ sectionAdd = (req, res) => {
 insertData = (req, res, result) => {
 
   var token = sectionGetToken(req.headers);
-  var decode = jwt.verify(token, config.secret);
+  var decode = jwt.verify(token, config.db.secret);
 
 
   if (req.originalUrl.split('/')[2] == 'users' || req.originalUrl.split('/')[2] == 'roles' || req.originalUrl.split('/')[2] == 'sections' || req.originalUrl.split('/')[2] == 'menus' || req.originalUrl.split('/')[2] == 'mail-templates')
@@ -2283,7 +2283,7 @@ sectionUpdateSettings = (req, res) => {
     });
   } else {
     var token = getToken(req.headers);
-    var userDetails = jwt.verify(token, config.secret);
+    var userDetails = jwt.verify(token, config.db.secret);
     user_id = userDetails.users_id;
     Settings.find({ user_id: user_id }, function (err, result) {
       if (!result)
@@ -2308,7 +2308,7 @@ sectionUpdateSettingsData = (req, res, result) => {
   var Settings = require('../models/' + req.originalUrl.split('/')[2]);
 
   var token = getToken(req.headers);
-  var userDetails = jwt.verify(token, config.secret);
+  var userDetails = jwt.verify(token, config.db.secret);
   user_id = userDetails.users_id;
 
   var settingLengthArr = result.length;
@@ -2345,7 +2345,7 @@ sectionAdminRoutes.route('/sendPasswordResetMail').post(function (req, res) {
       if (result) {
         var userId = result['users_id'];
         result['date'] = moment().format();
-        var token = jwt.sign(result.toJSON(), config.secret);
+        var token = jwt.sign(result.toJSON(), config.db.secret);
 
         var password = new Password({
           "token": token,
@@ -2380,7 +2380,7 @@ sectionAdminRoutes.route('/sendPasswordResetMail').post(function (req, res) {
 
 changePassword = (req, res, token) => {
 
-  var result = jwt.verify(token, config.secret);
+  var result = jwt.verify(token, config.db.secret);
   var Users = require('../models/users');
   Users.findOne({
     users_id: result.users_id
@@ -2423,7 +2423,7 @@ sectionGetToken = (headers) => {
 
  sectionIsPermission = async (token,data)=>{
   
-  var decode = jwt.verify(token, config.secret);
+  var decode = jwt.verify(token, config.db.secret);
   return await new Promise(function(resolve, reject) {
         User.findById(decode._id, function (err, user) {
         if(user.is_logged_in == 1)

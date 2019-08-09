@@ -41,9 +41,18 @@ export class MenuToggleDirective{
 							treeviewMenu.find("[data-toggle='treeview']").parent().removeClass('is-expanded');
 						}
 						$(this).parent().toggleClass('is-expanded');
-					});
 
-				
+					
+						
+					});
+					
+
+						$(".sub_menus").click(function (event){
+							if(window.innerWidth <=730)
+							$('.app').toggleClass('sidenav-toggled');
+						});
+
+					
 	
 					// // Set initial active toggle
 				    // $("[data-toggle='treeview.'].is-expanded").parent().toggleClass('is-expanded');

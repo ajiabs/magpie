@@ -168,6 +168,8 @@ export class AppComponent extends  MagpieComponent {
                 this.authguard.removeLocalStorageSessions();
                 this.authguard.removeSessionStorageSessions();
                this.showNav = false;
+               this.titleService.setTitle(this.website_name + ' | Login');
+
              }else{
      
                var newUrl = event.url.split("?");

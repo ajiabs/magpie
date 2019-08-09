@@ -160,6 +160,10 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
                     }
                     this.exportService.export_pdf(content, '', current_route);
                   }
+                  else if (type == 'xlsx') {
+               
+                    this.exportService.export_xlsx(result['data'],'simple');
+                  }
                   
                   
                   

@@ -5,7 +5,7 @@ var passport = require('passport');
 var customAdminRoutes = express.Router();
 require('./passport')(passport);
 var jwt = require('jsonwebtoken');
-var config = require('../../../config/DB');
+const config = require('../../../config/web-config');
 const log = require('../../../log/errorLogService');
 const User = require('../models/users');
 
@@ -64,7 +64,7 @@ customAdminRoutes.route('/getRoles').post(function (req, res) {
 
 
     var where = {};
-    var decode = jwt.verify(token, config.secret);
+    var decode = jwt.verify(token, config.db.secret);
   
     if (req.body.role_id != 1)
       where = { "roles_id": { $ne: 1 } ,"created_user_id": decode.users_id };
@@ -130,7 +130,7 @@ customGetToken = (headers) => {
 customIsPermission = async (token,data)=>{
   
   
-  var decode = jwt.verify(token, config.secret);
+  var decode = jwt.verify(token, config.db.secret);
   return await new Promise(function(resolve, reject) {
         User.findById(decode._id, function (err, user) {
         if(user.is_logged_in == 1)

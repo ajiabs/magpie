@@ -1,55 +1,63 @@
 <ng4-loading-spinner [threshold]="1" [template]="template" 
-[loadingText]="'Please wait...'" [timeout]="10000000" [zIndex]="999"> </ng4-loading-spinner>         
+ [timeout]="10000000" [zIndex]="999"> </ng4-loading-spinner>         
 <div class="row">
 <div class="col-md-12">
   <div class="tile">
     <div class="row">
       <div class="col-lg-12">
-        <div class="tile-title-w-btn">
-            <h3 class="title">List {{title}}</h3>
-            <input type="text" class="form-control form-control-sm col-md-3" id="search_word" ng-model="search_word" placeholder="Search" [hidden]="!search_action" (input)="onSearchChange($event.target.value)">
 
-           
-            <p><a class="btn btn-primary icon-btn" [routerLink]="['/admin/'+section_alias+'/create']" [hidden]="!create_action"><i class="fa fa-plus"></i>Add</a></p>
-          </div>
-          <div class="clearfix"></div>
-          <button class="btn btn-danger btn-sm col-md-1" (click)="bulkDelete()"  [disabled]="!multiple_delete_button && multiple_delete"  [hidden]="!multiple_delete || !delete_action"><i class="fa fa-trash"></i>Delete</button>
-          <div class="pull-right">
-             <div class="">
-              <input type="file" class="form-control-sm col-md-5  pull-left"   (change)="onImportEvent($event)"  [hidden]="!import_action">
-            
-              &nbsp; <button class="btn btn-info btn-sm col-md-3  pull-left" (click)="import_csv()" [disabled]="file_import_button" [hidden]="!import_action"><i class="fa fa-arrow-circle-down"></i>Import</button>
-              &nbsp;  <button id="export" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="modal"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [hidden]="!export_action">
-              <i class="fa fa-arrow-circle-up"></i>Export</button>
-              <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" (click)="export('csv')">Export as Csv</a>
-                <a class="dropdown-item" (click)="export('pdf')">Export as Pdf</a>
-             </div>
-           
-             </div>
-             <div class="clearfix"></div>
-             <p class="form-control-feedback" *ngIf="file_import_type">Csv Upload Only</p>
-           </div>
-          <div class="clearfix"></div>
-          <table class="table table-bordered dataTable" *ngIf="section_data!=''">
-            <thead>
-              <tr>
-                <th *ngIf="multiple_delete && delete_action"><input type="checkbox" (change)="multipleRowsDelete($event);" ></th>
+           <div class="tile-title-w-btn">
+              <h3 class="title">List {{title}}</h3>
+              <input type="text" class="form-control form-control-sm search-outer" id="search_word" ng-model="search_word" placeholder="Search" [hidden]="!search_action" (input)="onSearchChange($event.target.value)">
+  
+             
+              <p><a class="btn btn-primary icon-btn" [routerLink]="['/admin/'+section_alias+'/create']" [hidden]="!create_action"><i class="fa fa-plus"></i>Add</a></p>
+            </div>
+            <div class="clearfix"></div>
+            <button class="btn btn-danger btn-sm col-md-1" (click)="bulkDelete()"  [disabled]="!multiple_delete_button && multiple_delete"  [hidden]="!multiple_delete || !delete_action"><i class="fa fa-trash"></i>Delete</button>
+            <div class="pull-right">
+               <div class="">
+                <input type="file" class="form-control-sm col-md-5 col-sm-5  pull-left"   (change)="onImportEvent($event)"  [hidden]="!import_action">
               
-                <th  *ngFor="let column of columns | columnFilter : {list : true};let i = index "  [ngClass]="column.sortable == 'true'?(i==column_index?(column_order ? 'sorting_asc' : 'sorting_desc'):'sorting'):''"  id="columnOrder{{i}}" (click)="onSortClick(column.sortable,column.field,i)"><strong>{{column.label}}</strong></th>
-                <th [hidden]="!edit_action && !view_action && !delete_action"><strong>Actions</strong></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let data of section_data;let i = index ">
-                <td *ngIf="multiple_delete && delete_action"><input type="checkbox" [checked]="checkBoxArr.indexOf(data._id) !== -1?true:false" (change)="singleRowDelete($event,data._id);"></td>
-                <td *ngFor="let column of columns | columnFilter : {list : true}"><span *ngIf="column.toggle_status == undefined">{{(column.type == 'tags' ||  column.type =='selectbox' || column.type =='checkbox' ||  column.type =='radio')?(data[column.field] | dynamicSource:data[column.field]:column.source:column.type):(column.type =='map')?(data[column.field] | getMapDetails:"address"):data[column.field]}}</span><a (click)="onClickChangeStatus(data._id,data[column.field],column.field,column.source)"><span *ngIf="column.toggle_status == 'true'" class="badge {{data[column.field]== column.source[0]['value']?'badge-primary':'badge-warning'}}">{{data[column.field]}}</span></a></td>
-                <td [hidden]="!edit_action && !view_action && !delete_action"><a [routerLink]="['/admin/'+section_alias+'/edit', data._id]" class="btn btn-info btn-sm" [hidden]="!edit_action">&nbsp;<i class="fa fa-edit"></i></a>&nbsp;&nbsp;<a [routerLink]="['/admin/'+section_alias+'/view', data._id]" class="btn btn-success btn-sm" [hidden]="!view_action">&nbsp;<i class="fa fa-eye"></i></a>&nbsp;&nbsp;<a (click)="onDeleteClick(data._id)"  class="btn btn-danger btn-sm" [hidden]="!delete_action">&nbsp;<i class="fa fa-trash"></i></a></td>
-              </tr>
-            </tbody>
-          </table>
+                <button class="btn btn-info btn-sm col-md-3 col-sm-3 pull-left btm-mrg" (click)="import_csv()" [disabled]="file_import_button" [hidden]="!import_action"><i class="fa fa-arrow-circle-down"></i>Import</button>
+                <!-- <button class="btn btn-warning btn-sm col-md-3 col-sm-3 btm-mrg  pull-right" (click)="export_csv()"  [hidden]="!export_action"><i class="fa fa-arrow-circle-up"></i>Export</button> -->
+                <button id="export" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="modal"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [hidden]="!export_action">
+                <i class="fa fa-arrow-circle-up"></i>Export</button>
+                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" (click)="export('csv')">Export as Csv</a>
+                  <a class="dropdown-item" (click)="export('pdf')">Export as Pdf</a>
+                  <a class="dropdown-item" (click)="export('xlsx')">Export as xlsx</a>
+               </div>
+               </div>
+               <div class="clearfix"></div>
+               <p class="form-control-feedback" *ngIf="file_import_type">Csv Upload Only</p>
+             </div>
+  
 
+             
+
+          <div class="clearfix"></div>
+          <div class="table-responsive">
+
+            <table class="table table-bordered dataTable" *ngIf="section_data!=''">
+              <thead>
+                <tr>
+                  <th *ngIf="multiple_delete && delete_action"><input type="checkbox" (change)="multipleRowsDelete($event);" ></th>
+                
+                  <th  *ngFor="let column of columns | columnFilter : {list : true};let i = index "  [ngClass]="column.sortable == 'true'?(i==column_index?(column_order ? 'sorting_asc' : 'sorting_desc'):'sorting'):''"  id="columnOrder{{i}}" (click)="onSortClick(column.sortable,column.field,i)"><strong>{{column.label}}</strong></th>
+                  <th [hidden]="!edit_action && !view_action && !delete_action"><strong>Actions</strong></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of section_data;let i = index ">
+                  <td *ngIf="multiple_delete && delete_action"><input type="checkbox" [checked]="checkBoxArr.indexOf(data._id) !== -1?true:false" (change)="singleRowDelete($event,data._id);"></td>
+                  <td *ngFor="let column of columns | columnFilter : {list : true}"><span *ngIf="column.toggle_status == undefined">{{(column.type == 'tags' ||  column.type =='selectbox' || column.type =='checkbox' ||  column.type =='radio')?(data[column.field] | dynamicSource:data[column.field]:column.source:column.type):(column.type =='map')?(data[column.field] | getMapDetails:"address"):data[column.field]}}</span><a (click)="onClickChangeStatus(data._id,data[column.field],column.field,column.source)"><span *ngIf="column.toggle_status == 'true'" class="badge {{data[column.field]== column.source[0]['value']?'badge-primary':'badge-warning'}}">{{data[column.field]}}</span></a></td>
+                  <td [hidden]="!edit_action && !view_action && !delete_action"><a [routerLink]="['/admin/'+section_alias+'/edit', data._id]" class="btn btn-info btn-sm" [hidden]="!edit_action">&nbsp;<i class="fa fa-edit"></i></a>&nbsp;&nbsp;<a [routerLink]="['/admin/'+section_alias+'/view', data._id]" class="btn btn-success btn-sm" [hidden]="!view_action">&nbsp;<i class="fa fa-eye"></i></a>&nbsp;&nbsp;<a (click)="onDeleteClick(data._id)"  class="btn btn-danger btn-sm" [hidden]="!delete_action">&nbsp;<i class="fa fa-trash"></i></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div *ngIf="section_data==''">
               <p class="no-data-found">No data found.</p>
           </div>

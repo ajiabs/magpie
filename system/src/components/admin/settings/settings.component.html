@@ -24,6 +24,15 @@
                                         {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}}
                                         is required</div>
                                 </div>
+                                <div *ngIf="column.type == 'password'">
+                                    <input class="form-control {{(settingsForm.controls[column.slug].invalid && (settingsForm.controls[column.slug].dirty || settingsForm.controls[column.slug].touched))?'is-invalid':settingsForm.controls[column.slug].valid?'is-valid':''}}"
+                                        type="password" formControlName="{{column.slug}}" #{{column.slug}} [(ngModel)]="settings_form_data[column.slug]"
+                                        placeholder="Enter your {{column.label}}">
+                                    <div *ngIf="settingsForm.controls[column.slug].invalid && (settingsForm.controls[column.slug].dirty || settingsForm.controls[column.slug].touched) && settingsForm.controls[column.slug].errors.required"
+                                        class="form-control-feedback">
+                                        {{column.label.charAt(0).toUpperCase() + column.label.substr(1).toLowerCase()}}
+                                        is required</div>
+                                </div>
                                 <div *ngIf="column.type == 'email'">
                                     <input class="form-control {{(settingsForm.controls[column.slug].invalid && (settingsForm.controls[column.slug].dirty || settingsForm.controls[column.slug].touched))?'is-invalid':settingsForm.controls[column.slug].valid?'is-valid':''}}"
                                         type="email" formControlName="{{column.slug}}" #{{column.slug}} [(ngModel)]="settings_form_data[column.slug]"

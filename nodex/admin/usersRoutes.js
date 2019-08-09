@@ -5,7 +5,7 @@ var passport = require('passport');
 var usersAdminRoutes = express.Router();
 require('../../system/nodex/admin/passport')(passport);
 var jwt = require('jsonwebtoken');
-var config = require('../../config/DB');
+var config = require('../../config/web-config');
 const log = require('../../log/errorLogService');
 
 //const Sections = require('../../system/nodex/admin/models/sections');
@@ -39,7 +39,7 @@ usersAdminRoutes.route('/getDashboardUsers').get(passport.authenticate('jwt', { 
 
 getDashboardUsers = (req, res) => {
     var token = usersGetToken(req.headers);
-    var decode = jwt.verify(token, config.secret);
+    var decode = jwt.verify(token, config.db.secret);
     const User = require('../../system/nodex/models/users');
     
     User.aggregate([{"$match": {$and: [{ "created_user_id":decode.users_id.toString()}]}},{ "$project": { "Email": "$email", "Name": "$name" } }]).limit(5).exec(function (err, result) {
@@ -69,7 +69,7 @@ usersAdminRoutes.route('/getUsersCount').get(passport.authenticate('jwt', { sess
 
 getUsersCount = (req, res) => {
   var token = usersGetToken(req.headers);
-  var decode = jwt.verify(token, config.secret);
+  var decode = jwt.verify(token, config.db.secret);
 
   const User = require('../../system/nodex/models/users');
   User.count({"created_user_id":decode.users_id.toString()}).exec(function (err, count) {

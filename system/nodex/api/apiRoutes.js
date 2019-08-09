@@ -5,7 +5,7 @@ var passport = require('passport');
 var ApiAdminRoutes = express.Router();
 require('./../admin/passport')(passport);
 var jwt = require('jsonwebtoken');
-var config = require('../../../config/DB');
+var config = require('../../../config/web-config');
 const log = require('../../../log/errorLogService');
 const User = require('../models/users');
 
@@ -53,7 +53,7 @@ ApiAdminRoutes.route('/checkLogin').post(function (req, res) {
               else
                 {
                     // if user is found and password is right create a token
-                    var token = jwt.sign(user.toJSON(), config.secret);
+                    var token = jwt.sign(user.toJSON(), config.db.secret);
                     // return the information including token as JSON
                     return res.json({ success: true, token: 'JWT ' + token, result: user });
                 }
@@ -525,7 +525,7 @@ apiGetToken = (headers) => {
 apiIsPermission = async (token,data)=>{
   
   
-  var decode = jwt.verify(token, config.secret);
+  var decode = jwt.verify(token, config.db.secret);
   return await new Promise(function(resolve, reject) {
         User.findById(decode._id, function (err, user) {
         if(user.is_logged_in == 1)

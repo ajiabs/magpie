@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "ng": "ng",
-    "start": "ng build --prod --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer && node compress.js && node server.js",
-    "build": "ng build --prod --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer && node compress.js && node server.js",
+    "ng":   "ng",
+    "dev":  "ng build --configuration=developement --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer &&  NODE_APP_STAGE=development node server.js  &&  node compress.js",
+    "prod": "ng build --configuration=production --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer && NODE_APP_STAGE=production node server.js &&  node compress.js",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
+    "e2e":  "ng e2e",
     "postinstall": "ng build --prod --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer"
   },
   "private": true,
@@ -35,6 +35,7 @@
     "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
+    "buffer": "^5.2.1",
     "connect-flash": "^0.1.1",
     "connect-redis": "^3.3.3",
     "cookie-parser": "^1.4.3",
@@ -45,6 +46,7 @@
     "express-session": "^1.15.6",
     "express-static-gzip": "^1.1.3",
     "fast-csv": "^2.4.1",
+    "file-saver": "^2.0.2",
     "flash": "^1.1.0",
     "force-ssl-heroku": "^1.0.2",
     "jquery": "^3.3.1",
@@ -76,6 +78,7 @@
     "select2": "^4.0.6-rc.1",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
+    "xlsx": "^0.15.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {

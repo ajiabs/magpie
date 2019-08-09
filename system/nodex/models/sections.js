@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 var Schema = mongoose.Schema;
 var fs = require('fs');
-var config = require('../../../config/DB');
+var config = require('../../../config/web-config');
 
 var Sections = new Schema({
   section_name: {
@@ -41,7 +41,7 @@ Sections.pre('save', function (next) {
     cont += "module.exports = mongoose.model('"+sections.section_name.split(' ').join('_')+"', "+sections.section_name.split(' ').join('_')+")";
    
     next();
-    mongoose.connect(config.DB, function(err, db) {
+    mongoose.connect(config.db.DB_PATH, function(err, db) {
         db.createCollection(sections.section_table_name, function(err, collection){});
         var writeStream = fs.createWriteStream("nodex/models/"+sections.section_alias+".js");
         writeStream.write(cont);

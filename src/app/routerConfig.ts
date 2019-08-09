@@ -25,11 +25,7 @@ import { HomeComponent } from './../../src/app/site/components/home/home.compone
          component:HomeComponent,
          runGuardsAndResolvers: 'always',
      }
-    // , 
-    // { path: 'admin/dashboard',
-    //   redirectTo:"admin/users",
-    //   pathMatch:"full"
-    // }
+    
         
    
 ];

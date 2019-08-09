@@ -2691,6 +2691,7 @@ fieldset:disabled a.btn {
   color: #FFF;
   background-color: #17a2b8;
   border-color: #17a2b8;
+  margin-right:10px;
 }
 
 .btn-info:not(:disabled):not(.disabled):active, .btn-info:not(:disabled):not(.disabled).active,
@@ -9312,6 +9313,7 @@ table.table-bordered.dataTable th:last-child, table.table-bordered.dataTable th:
 table.table-bordered.dataTable td:last-child,
 table.table-bordered.dataTable td:last-child {
   border-right-width: 0;
+  white-space: nowrap;
 }
 
 table.table-bordered.dataTable tbody th,
@@ -13871,6 +13873,8 @@ be a descendant of the grid when it is being dragged.
 
 .tile .tile-title-w-btn .title {
   margin: 0;
+  font-size:15px;
+  width:100%;
 }
 
 .tile .tile-title-w-btn .side {
@@ -14871,4 +14875,34 @@ be a descendant of the grid when it is being dragged.
 
 .user .user-settings label {
   color: #666;
+}
+
+.form-control-feedback{
+  color:red;
+}
+
+.chart {
+display: block;
+width: 100%;
+}
+
+.search-outer
+{
+   height: 37px;
+   width:380px;
+   margin-right: 15px;
+}
+
+@media(max-width:700px)
+{
+  .btn-info.disabled, .btn-info:disabled
+  {
+    margin-right:0;
+    margin-bottom:10px;
+  }
+
+  .pull-right .btn-warning
+  {
+    width:100%;
+  }
 }

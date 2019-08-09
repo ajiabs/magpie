@@ -5,7 +5,7 @@ var passport = require('passport');
 var apiAdminRoutes = express.Router();
 require('../../system/nodex/admin/passport')(passport);
 var jwt = require('jsonwebtoken');
-var config = require('../../config/DB');
+var config = require('../../config/web-config');
 const log = require('../../log/errorLogService');
 var fs = require('fs');
 

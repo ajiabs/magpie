@@ -52,12 +52,12 @@
    <ul class="app-menu">
       
     <li *ngFor="let main of roles_menu;let last = last" menu-toggle [isLast]="last" id="{{main.name}}" class="treeview {{main.submenu.indexOf(router.url.split('/')[2]) > -1?'is-expanded':''}}">
-      <a *ngIf="main.sub.length == '0' && main.url_type == 'internal'" class="app-menu__item" data-toggle="treeview" [routerLink]="[main.url]"
+      <a *ngIf="main.sub.length == '0' && main.url_type == 'internal'" class="app-menu__item  sub_menus" data-toggle="treeview" [routerLink]="[main.url]"
         routerLinkActive="active">
         <i class="app-menu__icon fa {{main.icon}}"></i>
         <span class="app-menu__label">{{main.name}}</span>
       </a>
-      <a *ngIf="main.sub.length == '0' && main.url_type == 'external'" class="app-menu__item" href="{{ main.url }}">
+      <a *ngIf="main.sub.length == '0' && main.url_type == 'external'" class="app-menu__item sub_menus" href="{{ main.url }}">
         <i class="app-menu__icon fa {{main.icon}}"></i>
         <span class="app-menu__label">{{main.name}}</span>
       </a>
@@ -68,7 +68,7 @@
       </a>
       <ul *ngIf="main.sub.length > '0'" class="treeview-menu">
         <li *ngFor="let menus of main.sub" id="{{menus.name}}">
-          <a class="treeview-item {{menus.url.split('/').indexOf(router.url.split('/')[2]) > -1?'active':''}}" [routerLink]="[menus.url]"
+          <a class="treeview-item {{menus.url.split('/').indexOf(router.url.split('/')[2]) > -1?'active':''}} sub_menus" [routerLink]="[menus.url]"
             routerLinkActive="active">
             <i class="app-menu__icon fa {{menus.icon}}"></i>
             <span class="app-menu__label">{{menus.display_name}}</span>
