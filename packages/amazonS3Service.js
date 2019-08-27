@@ -2,7 +2,8 @@ const Package = require('../system/nodex/models/package-installer');
 const fs = require('fs');
 var AWS = require('aws-sdk');
 
-exports.uploadFile = (req, res, file) => {
+exports.uploadFile = (req, res, file,folderName) => {
+    return new Promise((resolve, reject) => {
     var async = require('async');
     async.waterfall([
         function getCredentials(done) {
@@ -21,7 +22,7 @@ exports.uploadFile = (req, res, file) => {
                         done(null, s3, bucket);
                     }
                     else {
-                        return res.json({ success: false, msg: 'Amazon S3 authentication failed' });
+                        return res.json({ status: 402, msg: 'Amazon S3 authentication failed' });
                     }
                 }
             });
@@ -30,27 +31,30 @@ exports.uploadFile = (req, res, file) => {
         function uploadFiles(s3, bucket, done) {
             var responseData = [];
             Object.keys(file).forEach(k => {
-                fs.readFile(file[k], (err, data) => {
+                fs.readFile("uploads/"+file[k], (err, data) => {
                     if (err) throw err;
                     const params = {
                         Bucket: bucket,
-                        Key: file[k],
-                        Body: fs.createReadStream(file[k]),
+                        Key: folderName+file[k],
+                        ACL: 'public-read',
+                        Body: fs.createReadStream("uploads/"+file[k]),
 
                     };
                     s3.upload(params, function (err, data) {
                         // s3.getSignedUrl('putObject', params, function (err, data) {
                         if (err) throw err
-                        console.log(data)
+                        //console.log(data)
                         responseData.push(data);
                         if (responseData.length == file.length)
-                            return res.json({ status: 'success', location: responseData });
+                        resolve(responseData) ;
+                            //res.json({ status: 'success', location: responseData });
                     });
                 });
             });
 
         }
     ]);
+})
 
 };
 
