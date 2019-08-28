@@ -4,7 +4,8 @@ let dev = {
     secret:'meansecure'
   },
   app: {
-    PORT: 4000
+    PORT: 4000,
+    BUILD_PATH:"bldfiles_dev"
   }
 };
 let prod = {
@@ -13,7 +14,8 @@ let prod = {
     secret:'meansecure'
   },
   app: {
-    PORT: 4001
+    PORT: 4001,
+    BUILD_PATH:"bldfiles_prod"
   }
 };
 let staging = {
@@ -22,7 +24,8 @@ let staging = {
     secret:'meansecure'
   },
   app: {
-    PORT: 4002
+    PORT: 4002,
+    BUILD_PATH:"bldfiles_staging"
   }
 };
 let config = "";

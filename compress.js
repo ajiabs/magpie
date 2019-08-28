@@ -8,11 +8,12 @@ first install brotli and zlib packages as dev dependencies
    npm install --save-dev zlib
 
 */
-
+const CONFIG = require('./config/web-config');
 const brotli = require('brotli');
 const zlib = require('zlib');
 const fs = require('fs');
-const compressDir = 'dist/';
+const compressDir = CONFIG.app.BUILD_PATH+'/';
+
 
 const brotliSettings = {
   extension: 'br',

@@ -56,7 +56,7 @@ app.use(compression());
 
 
 // app.use(express.static(path.join(__dirname, 'dist')));
-app.use('/', expressStaticGzip(__dirname+'/dist', {
+app.use('/', expressStaticGzip(__dirname+'/'+CONFIG.app.BUILD_PATH, {
   enableBrotli: true, 
   orderPreference: ['br','gzip','deflate']
 }));
@@ -95,7 +95,7 @@ app.use('/api/:section', magpieApiRoutes);
 
 
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
+  res.sendFile(path.join(__dirname+'/'+CONFIG.app.BUILD_PATH, '/index.html'));
 });
 const httpServer = http.createServer(app);
 var io = require('socket.io')(httpServer);

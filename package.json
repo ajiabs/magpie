@@ -4,9 +4,9 @@
   "license": "MIT",
   "scripts": {
     "ng":   "ng",
-    "dev":  "ng build --configuration=developement --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer &&  NODE_APP_STAGE=development node server.js  &&  node compress.js",
-    "prod": "ng build --configuration=production --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer && NODE_APP_STAGE=production node server.js &&  node compress.js",
-    "staging": "ng build --configuration=staging --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer && NODE_APP_STAGE=staging node server.js &&  node compress.js",
+    "dev":  "ng build --configuration=developement --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer &&  NODE_APP_STAGE=development node magpie_server.js  &&  node compress.js",
+    "prod": "ng build --configuration=production --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer && NODE_APP_STAGE=production node magpie_server.js &&  node compress.js",
+    "staging": "ng build --configuration=staging --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer && NODE_APP_STAGE=staging node magpie_server.js &&  node compress.js",
     "test": "ng test",
     "lint": "ng lint",
     "e2e":  "ng e2e"

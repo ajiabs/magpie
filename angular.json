@@ -28,6 +28,7 @@
           "configurations": {
             "production": {
               "optimization": true,
+              "outputPath": "bldfiles_prod",
               "outputHashing": "all",
               "sourceMap": false,
               "extractCss": true,
@@ -45,6 +46,7 @@
             },
             "developement": {
               "optimization": true,
+  	      "outputPath": "bldfiles_dev",
               "outputHashing": "all",
               "sourceMap": false,
               "extractCss": true,
@@ -62,6 +64,7 @@
             },
             "staging": {
               "optimization": true,
+              "outputPath": "bldfiles_staging",
               "outputHashing": "all",
               "sourceMap": false,
               "extractCss": true,
