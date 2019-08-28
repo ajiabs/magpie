@@ -1,0 +1,12 @@
+.chart {
+    display: block;
+    width: 100%;
+    }
+
+a:hover{
+    text-decoration: none;
+}
+
+.form-control-feedback{
+    color:red;
+  }

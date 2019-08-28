@@ -1,0 +1,87 @@
+           
+<div class="row">
+  <div class="col-md-12">
+    <div class="tile">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="tile-title-w-btn">
+              <h3 class="title">List {{title}}</h3>
+              <input type="text" class="form-control form-control-sm col-md-3" id="search_word" (input)="onSearchChange($event.target.value)"  placeholder="Search" >
+            
+            </div>
+            <div class="row user">
+                <div class="col-md-12">
+                  <ul class="nav nav-tabs user-tabs">
+                    <li class="nav-item"><a class="nav-link active" href="#packages-rep" data-toggle="tab">Packages</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#packages-installed" data-toggle="tab">Installed</a></li>
+                  </ul>
+                </div>
+            
+              <div class="col-md-12">
+              <div class="tab-content">
+                <div class="tab-pane active" id="packages-rep">
+                    <div class="row">
+
+
+                    <div class="col-md-4" *ngFor="let packages of  packagesData">
+                      <div class="timeline-post">
+                        <div class="post-media"><a  [routerLink]="['/admin/package-installer/'+packages.package_name]"><img src="{{package_url}}{{packages.package_name}}/{{packages.image}}"  width="48px" height="48px"></a>
+                          <div class="content">
+                            <h5><a  [routerLink]="['/admin/package-installer/'+packages.package_name]">{{packages.package_name | titlecase}}</a></h5>
+                            <p class="text-muted"><small>{{packages.publish_date}}</small></p>
+                          </div>
+                        </div>
+                        <div class="post-content">
+                          <p>{{packages.short_description}}</p>
+                        </div>
+                        <ul class="post-utility">
+                          <li class="likes"><i class="fa fa-download"></i>2 Downloads </li>
+                          <li class="comments" *ngIf="(localPackages.indexOf(packages.package_name) == -1 && installing[packages.package_name] == false)"><button class="btn btn-sm btn-primary" (click)="installPackage(packages)"><b>install</b></button></li>
+                          <li class="comments" *ngIf="(localPackages.indexOf(packages.package_name) == -1 && installing[packages.package_name]  == true) || localPackages.indexOf(packages.package_name) >= 0"><button class="btn btn-sm btn-primary" [disabled]="true"> <b *ngIf="(localPackages.indexOf(packages.package_name) == -1 && installing[packages.package_name] == true)"><i class="fa fa-spinner fa-spin"></i>installing</b><b *ngIf="localPackages.indexOf(packages.package_name) >= 0">installed</b></button></li>
+
+                        </ul>
+                      </div>
+                    </div>
+                
+                     
+                        
+                   </div>
+                </div>
+                <div class="tab-pane fade" id="packages-installed">
+                    <div class="row">
+
+
+                        <div class="col-md-12"  *ngFor="let packages of  installedPackages">
+                          <div class="timeline-post">
+                            <div class="post-media"><a  [routerLink]="['/admin/package-installer/'+packages.package_name]"><img src="{{package_url}}{{packages.package_name}}/{{packages.image}}"  width="48px" height="48px"></a>
+                              <div class="content">
+                                <h5><a  [routerLink]="['/admin/package-installer/'+packages.package_name]">{{packages.package_name | titlecase}}</a></h5>
+                                <p class="text-muted"><small>{{packages.publish_date}}</small></p>
+                              </div>
+                            </div>
+                            <div class="post-content">
+                              <p>{{packages.short_description}}</p>
+                            </div>
+                            <ul class="post-utility">
+                              <li class="likes"><i class="fa fa-download"></i>2 Downloads</li>
+                              <li class="comments"><button class="btn btn-sm btn-primary" [disabled]="true">installed</button></li>
+                            </ul>
+                          </div>
+                        </div>
+                    
+                         
+                            
+                       </div>
+                </div>
+              </div>
+            </div>
+            
+           </div>
+  
+
+        </div>
+      </div>
+    </div>
+   </div>
+  </div>
+  

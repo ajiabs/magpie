@@ -1,0 +1,118 @@
+
+ <div *ngIf="!admin_part">
+  <div id="navbar">
+    <a href="admin/login">Admin</a>
+    <a href="http://192.168.0.100/magpie/">Documentation</a>
+  </div>
+  <main class="app-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+
+
+<div *ngIf="showNav && admin_part">
+
+  <header class="app-header"><a class="app-header__logo" [routerLink]="['admin/dashboard']" routerLinkActive="active">{{website_name}}</a>
+   <a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
+   
+    <ul class="app-nav">
+    
+      <li class="dropdown"><a class="app-nav__item" data-toggle="dropdown" aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
+        <ul class="dropdown-menu settings-menu dropdown-menu-right">
+          <li *ngIf="package_installer"><a class="dropdown-item" [routerLink]="['admin/package-installer']" routerLinkActive="active"><i class="fa fa-briefcase fa-lg"></i> Package Installer</a></li>
+          <!-- <li><a class="dropdown-item" [routerLink]="['admin/settings']" routerLinkActive="active"><i class="fa fa-cog fa-lg"></i> Settings</a></li> -->
+          <li><a class="dropdown-item" [routerLink]="['admin/account']" routerLinkActive="active"><i class="fa fa-user fa-lg"></i> Account</a></li>
+          <li><a class="dropdown-item"  [routerLink]="['#']" (click)="logout()"  routerLinkActive="active"><i class="fa fa-sign-out fa-lg"></i> Logout</a></li>
+        </ul>
+      </li>
+    </ul>
+  </header>
+
+
+  <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+  <aside class="app-sidebar">
+   
+    <div class="app-sidebar__user" id="profile-logo">
+      <span  *ngIf="login_image != '' && login_image != 'null'">
+        <a  [routerLink]="['admin/account']"><img *ngFor="let i of login_image | toArray" class="app-sidebar__user-avatar" [src]="i | getFile:'id' | async" width="50px" height="50px" alt=""></a>
+      </span>
+      <span  *ngIf="login_image == ''">
+        <a  [routerLink]="['admin/account']"><img  class="app-sidebar__user-avatar" src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg" alt=""></a>
+      </span>
+      <div>
+        <p class="app-sidebar__user-name"><a  [routerLink]="['admin/account']">{{login_name}}</a></p>
+        <p class="app-sidebar__user-designation">{{login_role}}</p>
+      </div>
+    </div>
+
+
+
+  
+   <ul class="app-menu">
+      
+    <li *ngFor="let main of roles_menu;let last = last" menu-toggle [isLast]="last" id="{{main.name}}" class="treeview {{main.submenu.indexOf(router.url.split('/')[2]) > -1?'is-expanded':''}}">
+      <a *ngIf="main.sub.length == '0' && main.url_type == 'internal'" class="app-menu__item  sub_menus" data-toggle="treeview" [routerLink]="[main.url]"
+        routerLinkActive="active">
+        <i class="app-menu__icon fa {{main.icon}}"></i>
+        <span class="app-menu__label">{{main.name}}</span>
+      </a>
+      <a *ngIf="main.sub.length == '0' && main.url_type == 'external'" class="app-menu__item sub_menus" href="{{ main.url }}">
+        <i class="app-menu__icon fa {{main.icon}}"></i>
+        <span class="app-menu__label">{{main.name}}</span>
+      </a>
+      <a *ngIf="main.sub.length > '0'" class="app-menu__item" data-toggle="treeview">
+        <i class="app-menu__icon fa {{main.icon}}"></i>
+        <span class="app-menu__label">{{main.name}}</span>
+        <i class="treeview-indicator fa fa-angle-right"></i>
+      </a>
+      <ul *ngIf="main.sub.length > '0'" class="treeview-menu">
+        <li *ngFor="let menus of main.sub" id="{{menus.name}}">
+          <a class="treeview-item {{menus.url.split('/').indexOf(router.url.split('/')[2]) > -1?'active':''}} sub_menus" [routerLink]="[menus.url]"
+            routerLinkActive="active">
+            <i class="app-menu__icon fa {{menus.icon}}"></i>
+            <span class="app-menu__label">{{menus.display_name}}</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    </ul> 
+  </aside>
+  <main class="app-content">
+    <div class="app-title" *ngIf="showBeadcrumb">
+       <div>
+          <h1>{{showNavDisplayTitle.replace("-"," ") | titlecase}}</h1>
+      </div>
+      <ul class="app-breadcrumb breadcrumb">
+        <li class="breadcrumb-item"><i [routerLink]="['admin/dashboard']" class="fa fa-home fa-lg"></i></li>
+        <li class="breadcrumb-item" *ngIf="showNavTitle != undefined"><a [routerLink]="['admin/'+(showNavTitle | lowercase)]">{{showNavDisplayTitle.replace("-"," ") | titlecase}}</a></li>
+         <li class="breadcrumb-item"  *ngIf="showNavMethod != undefined"><a >{{showNavMethod  | titlecase}}</a></li>
+      </ul>
+
+    </div>
+      
+     <router-outlet></router-outlet>
+          
+  </main>
+</div>
+
+
+
+
+<div *ngIf="!showNav && admin_part">
+<section class="material-half-bg">
+<div class="cover"></div>
+</section>
+<section class="login-content">
+<div class="logo">
+  <h1>{{website_name}}</h1>
+</div>    
+<div class="login-box">
+  <router-outlet></router-outlet>
+</div>
+</section>
+</div>
+
+
+
+

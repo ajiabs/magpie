@@ -1,0 +1,11 @@
+.chart {
+    display: block;
+    width: 100%;
+    }
+
+a:hover{
+    text-decoration: none;
+}
+.home-logo{
+    max-width: 100%;
+}

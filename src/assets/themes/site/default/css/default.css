@@ -1,0 +1,80 @@
+@import url(//fonts.googleapis.com/css?family=Lato:700);
+body {
+    margin:0;
+    font-family:'Lato', sans-serif;
+    text-align:center;
+    color: #999;
+}
+.welcome {
+    width: 300px;
+    height: 200px;
+    position: absolute;
+    left: 44%;
+    top: 50%;
+    margin-left: -150px;
+    margin-top: -100px;
+    text-align: center
+}
+a, a:visited {
+    text-decoration:none;
+}
+h1 {
+    font-size: 32px;
+    margin: 16px 0 0 0;
+  
+}
+
+#navbar {
+overflow: hidden;
+background-color:#0587bc;
+}
+
+#navbar a {
+float: right;
+display: block;
+color: #f2f2f2;
+text-align: center;
+padding: 14px;
+text-decoration: none;
+}
+
+
+.content {
+padding: 16px;
+}
+
+.sticky {
+position: fixed;
+top: 0;
+width: 100%;
+}
+
+.sticky + .content {
+padding-top: 60px;
+}
+.page-error {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-height: calc(100vh - 110px);
+    margin-bottom: 0;
+}
+.page-error h1 {
+    margin: 10px;
+    color: #dc3545;
+    font-size: 42px;
+}
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}

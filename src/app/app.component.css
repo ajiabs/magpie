@@ -1,0 +1,14 @@
+.dropdown{
+    cursor: pointer;
+}
+.app-sidebar__user-name a{
+    text-decoration:none;
+    color: inherit;
+
+}
+:host ::ng-deep .custom-spinner-template {
+   
+   top: 24% !important;
+    left: 35% !important;
+    /* bottom: 5% !important; */
+}

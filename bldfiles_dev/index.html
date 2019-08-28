@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Magpie</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">  
+  <script src="assets/themes/admin/default/js/jquery-3.2.1.min.js"></script>
+  <script>
+    var defaul_theme = "default";
+    var global = global || window;
+    // var Buffer = Buffer || [];
+    // var process = process || {
+    //   env: { DEBUG: undefined },
+    //   version: []
+    // };
+  </script>
+
+  <script>
+    if(window.location.pathname.split('/')[1] == 'admin'){
+      var root_folder = "assets/themes/admin/"+defaul_theme;
+      var styles = [
+        {"css":"css/main.css","type":"internal"},
+        {"css":"css/driver.min.css","type":"internal"},
+        {"css":"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css","type":"external"}
+       ];
+       var scripts = [
+        {"js":"js/bootstrap.min.js","type":"internal"},
+        {"js":"js/select2.min.js","type":"internal"},
+        {"js":"js/moment.min.js","type":"internal"},
+        {"js":"js/pace.min.js","type":"internal"},
+        {"js":"js/bootstrap-notify.min.js","type":"internal"},
+        {"js":"js/bootstrap-datepicker.min.js","type":"internal"},
+        {"js":"js/sweetalert.min.js","type":"internal"},
+        {"js":"js/chart.min.js","type":"internal"},
+        {"js":"js/driver.min.js","type":"internal"},
+        {"js":"https://maps.google.com/maps/api/js?sensor=true&key=AIzaSyBcigPmyW-A993UDs9v6iejN4FB-h0Pi3k&libraries=places&language=en-US","type":"external"},
+        {"js":"js/custom.js","type":"internal"},
+ 
+       ];
+    }
+    else{
+      var root_folder = "assets/themes/site/"+defaul_theme;
+      var styles = [
+         {"css":"css/default.css","type":"internal"},
+      ];
+      var scripts = [];
+    }
+
+
+
+
+    
+     if(styles.length>0){
+      for(i=0;i<styles.length;i++){
+       addStyle(root_folder,styles[i].css,styles[i].type);
+      }
+     }
+ 
+     if(scripts.length>0){
+      for(i=0;i<scripts.length;i++){
+       addScripts(root_folder,scripts[i].js,scripts[i].type);
+      }
+     }
+ 
+     
+      function addStyle(root_folder,css,type="internal")
+       {  
+         var styles = document.createElement('link');
+         styles.type="text/css";
+         styles.rel="stylesheet";
+         styles.href= type=="internal"?root_folder+'/'+css:css;
+         document.head.appendChild(styles);
+       }
+       function addScripts(root_folder,js,type="internal")
+       {  
+         var scripts = document.createElement('script');
+         scripts.type="text/javascript";
+         scripts.src= type=="internal"?root_folder+'/'+js:js;
+         document.head.appendChild(scripts);
+       }
+
+      // var current_segment = window.location.pathname.split('/')[1] == 'admin' || window.location.pathname.split('/')[1] == ''?'admin':'site';
+       var current_segment = window.location.pathname.split('/')[1] == 'admin'?'admin':'site';
+       localStorage.setItem("current_segment",current_segment);
+     
+   </script>
+<link rel="stylesheet" href="styles.3ff695c00d717f2d2a11.css"></head>
+<body class="app sidebar-mini rtl">
+	
+  <app-root></app-root>
+
+
+<script type="text/javascript" src="runtime.a5dd35324ddfd942bef1.js"></script><script type="text/javascript" src="polyfills.0d20005c3393ee8571dc.js"></script><script type="text/javascript" src="vendor.6f7d090dbc07e7851e78.js"></script><script type="text/javascript" src="main.6c3fad90137c35f423f1.js"></script></body> 
+</html>
