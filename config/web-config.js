@@ -20,7 +20,7 @@ let prod = {
 };
 let staging = {
   db:{
-    DB_PATH:"mongodb://127.0.0.1:27017/magpie_default",
+    DB_PATH:"mongodb://magpieadmin:3wtBZDcI5e9c32g@127.0.0.1:27017/magpie?authMechanism=SCRAM-SHA-1",
     secret:'meansecure'
   },
   app: {
