@@ -24,4 +24,4 @@ stage_deploy:
     - npm run staging
     - bash .gitlab-deploy.sh
     - rsync -avzh bldfiles_staging magpie@$DEPLOY_SERVER:$DOCUMENT_ROOT
-    - ssh magpie@$DEPLOY_SERVER "/usr/bin/pm2 restart 0"
+    - ssh magpie@$DEPLOY_SERVER "/usr/local/bin/pm2 restart 0"
