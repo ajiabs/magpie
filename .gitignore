@@ -5,6 +5,9 @@
 dist
 /dist-server
 /out-tsc
+.gitlab-ci.yml
+.gitlab-deploy.sh
+
 
 
 # dependencies
