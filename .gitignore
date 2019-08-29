@@ -8,6 +8,7 @@ dist
 *.yml
 *.sh
 /bldfiles_dev
+/config
 /node_modules
 nodejs_dc.log
 nodejs_restclient.log
