@@ -9,7 +9,7 @@
     "staging": "ng build --configuration=staging --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer && NODE_APP_STAGE=staging node compress.js",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e" 
   },
   "private": true,
   "dependencies": {
