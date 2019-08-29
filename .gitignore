@@ -5,8 +5,8 @@
 dist
 /dist-server
 /out-tsc
-.gitlab-ci.yml
-.gitlab-deploy.sh
+*.yml
+*.sh
 /bldfiles_dev
 /node_modules
 nodejs_dc.log
