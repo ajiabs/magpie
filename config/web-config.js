@@ -10,22 +10,22 @@ let dev = {
 };
 let prod = {
   db:{
-    DB_PATH:"mongodb://127.0.0.1:27017/magpie_default",
-    secret:'meansecure'
+    DB_PATH:"mongodb://{username}:{password}@{host}:27017/{database}?authMechanism=SCRAM-SHA-1",
+    secret:'{secret}'
   },
   app: {
-    PORT: 4001,
-    BUILD_PATH:"bldfiles_prod"
+    PORT: {port},
+    BUILD_PATH:"{build_path}"
   }
 };
 let staging = {
   db:{
-    DB_PATH:"mongodb://magpieadmin:3wtBZDcI5e9c32g@127.0.0.1:27017/magpie?authMechanism=SCRAM-SHA-1",
-    secret:'meansecure'
+    DB_PATH:"mongodb://{username}:{password}@{host}:27017/{database}?authMechanism=SCRAM-SHA-1",
+    secret:'{secret}'
   },
   app: {
-    PORT: 4002,
-    BUILD_PATH:"bldfiles_staging"
+    PORT: {port},
+    BUILD_PATH:"{build_path}"
   }
 };
 let config = "";
