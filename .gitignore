@@ -5,6 +5,10 @@
 dist
 /dist-server
 /out-tsc
+/bldfiles_dev
+/node_modules
+nodejs_dc.log
+nodejs_restclient.log
 
 
 # dependencies
