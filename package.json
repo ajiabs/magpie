@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "ng":   "ng",
-    "dev":  "ng build --configuration=developement --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer &&  NODE_APP_STAGE=development node magpie_server.js  &&  node compress.js",
+    "ng": "ng",
+    "dev": "ng build --configuration=developement --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer &&  NODE_APP_STAGE=development node magpie_server.js  &&  node compress.js",
     "prod": "ng build --configuration=production --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer && NODE_APP_STAGE=production  node compress.js",
     "staging": "ng build --configuration=staging --aot --vendor-chunk --common-chunk  --delete-output-path --buildOptimizer && NODE_APP_STAGE=staging node compress.js",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e":  "ng e2e"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -54,7 +54,7 @@
     "jspdf-autotable": "^3.1.3",
     "jwt-decode": "^2.2.0",
     "log4js": "^3.0.6",
-    "moment": "^2.22.2",
+    "moment": "^2.24.0",
     "mongodb-autoincrement": "^1.0.1",
     "mongoose": "^5.0.17",
     "mongoose-sequence": "^4.0.1",

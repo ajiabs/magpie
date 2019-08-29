@@ -7,6 +7,10 @@ dist
 /out-tsc
 .gitlab-ci.yml
 .gitlab-deploy.sh
+/bldfiles_dev
+/node_modules
+nodejs_dc.log
+nodejs_restclient.log
 
 
 

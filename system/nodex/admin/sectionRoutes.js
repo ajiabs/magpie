@@ -5,6 +5,7 @@ var passport = require('passport');
 var sectionAdminRoutes = express.Router();
 var http = require("http");
 require('./passport')(passport);
+require('moment')(moment);
 var jwt = require('jsonwebtoken');
 var config = require('../../../config/web-config');
 
@@ -150,7 +151,7 @@ sectionAdminRoutes.route('/autologin').post(passport.authenticate('jwt', { sessi
                           
                                 });
                                   // return the information including token as JSON
-                                  var now_date = new Date(Date.now()).toLocaleString();
+                                  var now_date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss').toString() ;
 
                                 console.log(now_date)
                                 return res.json({ success: true, token: 'JWT ' + token, result: data_result, todays_date: now_date });
