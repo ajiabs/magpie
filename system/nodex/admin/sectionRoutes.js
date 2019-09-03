@@ -5,7 +5,7 @@ var passport = require('passport');
 var sectionAdminRoutes = express.Router();
 var http = require("http");
 require('./passport')(passport);
-require('moment')(moment);
+var moment = require('moment');
 var jwt = require('jsonwebtoken');
 var config = require('../../../config/web-config');
 
