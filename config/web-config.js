@@ -14,7 +14,7 @@ let prod = {
     secret:'{secret}'
   },
   app: {
-    PORT: {port},
+    PORT: "{port}",
     BUILD_PATH:"{build_path}"
   }
 };
@@ -24,7 +24,7 @@ let staging = {
     secret:'{secret}'
   },
   app: {
-    PORT: {port},
+    PORT: "{port}",
     BUILD_PATH:"{build_path}"
   }
 };
