@@ -49,7 +49,7 @@ export class MagpieProfileEditComponent implements OnInit {
                   if(typeof column_config[key]['validations'][0]['file_type'] !== "undefined")
                     validation_array.push(ImageValidator.imageExtensionValidator(["image/jpeg","image/jpg","image/png"]));
                   if(typeof column_config[key]['validations'][0]['file_size'] !== "undefined")
-                    validation_array.push(ImageValidator.imageSizeValidator(1));
+                    validation_array.push(ImageValidator.imageSizeValidator(column_config[key]['validations'][0]['file_size']));
                 
                   if(typeof column_config[key]['validations'][0]['pattern'] !== "undefined")
                         validation_array.push(Validators.pattern(column_config[key]['validations'][0]['pattern']));

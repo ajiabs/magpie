@@ -192,7 +192,7 @@ export class AppComponent extends  MagpieComponent {
                        th.showNavDisplayTitle = this.menuRow.display_name;
                        th.titleService.setTitle(th.website_name + ' | ' + th.showNavDisplayTitle);
                        if(th.showNavDisplayTitle != 'Dashboard')
-                         th.showNavTitle = this.menuRow.name;
+                         th.showNavTitle = this.menuRow.name.replace(" ","-");
                        else
                          th.showNavTitle = undefined;
                    }else{
