@@ -5,19 +5,21 @@
   <div class="tile">
     <div class="row">
       <div class="col-lg-12">
-
-           <div class="tile-title-w-btn">
-              <h3 class="title">List {{title}}</h3>
-              <input type="text" class="form-control form-control-sm search-outer" id="search_word" ng-model="search_word" placeholder="Search" [hidden]="!search_action" (input)="onSearchChange($event.target.value)">
-  
-             
-              <p><a class="btn btn-primary icon-btn" [routerLink]="['/admin/'+section_alias+'/create']" [hidden]="!create_action"><i class="fa fa-plus"></i>Add</a></p>
-            </div>
-            <div class="clearfix"></div>
+        <div class="tile-title-w-btn title-search-btn-responsive">
+          <h3 class="title">List {{title}}</h3>
+          <div class="search-btn-responsive">
+            <input type="text" class="form-control form-control-sm search-outer" id="search_word"
+              ng-model="search_word" placeholder="Search" [hidden]="!search_action"
+              (input)="onSearchChange($event.target.value)">            
+            <p><a class="btn btn-primary icon-btn" [routerLink]="['/admin/'+section_alias+'/create']"
+                [hidden]="!create_action"><i class="fa fa-plus"></i>Add</a></p>
+          </div>
+        </div>           
+        <div class="clearfix"></div>
             <button class="btn btn-danger btn-sm col-md-1" (click)="bulkDelete()"  [disabled]="!multiple_delete_button && multiple_delete"  [hidden]="!multiple_delete || !delete_action"><i class="fa fa-trash"></i>Delete</button>
             <div class="pull-right">
                <div class="">
-                <input type="file" class="form-control-sm col-md-5 col-sm-5  pull-left"   (change)="onImportEvent($event)"  [hidden]="!import_action">
+                <input type="file" class="form-control-sm col-md-5 col-sm-5  pull-left csv-file-responsive"   (change)="onImportEvent($event)"  [hidden]="!import_action">
               
                 <button class="btn btn-info btn-sm col-md-3 col-sm-3 pull-left btm-mrg" (click)="import_csv()" [disabled]="file_import_button" [hidden]="!import_action"><i class="fa fa-arrow-circle-down"></i>Import</button>
                 <!-- <button class="btn btn-warning btn-sm col-md-3 col-sm-3 btm-mrg  pull-right" (click)="export_csv()"  [hidden]="!export_action"><i class="fa fa-arrow-circle-up"></i>Export</button> -->

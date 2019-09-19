@@ -67,7 +67,9 @@ customAdminRoutes.route('/getRoles').post(function (req, res) {
     var decode = jwt.verify(token, config.db.secret);
   
     if (req.body.role_id != 1)
-      where = { "roles_id": { $ne: 1 } ,"created_user_id": decode.users_id };
+      where = { "roles_id": { $ne: 1 }, "created_user_id": decode.users_id, status: "active" };
+    else
+      where = { status: "active" };
 
 
     if (token) {

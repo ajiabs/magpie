@@ -8,8 +8,7 @@
        <div class="col-lg-12">
           <div class="tile-title-w-btn">
             <h3 class="title">Add {{title}}</h3>
-          <p><a class="btn btn-secondary icon-btn btn-sm" [routerLink]="['/admin/'+section_alias]" ><i class="fa fa-arrow-left"></i></a></p>
-          </div>
+            <p><a class="btn btn-secondary icon-btn btn-sm" *ngIf="section_alias!=''" [routerLink]="['/admin/'+section_alias]" ><i class="fa fa-arrow-left"></i></a></p>          </div>
           <div class="tile-body">
           <form [formGroup]="sectionForm"  novalidate>
             <div class="row">

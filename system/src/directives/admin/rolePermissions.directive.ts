@@ -28,7 +28,21 @@ export class RolePermissionsDirective{
 		 ngAfterContentInit(): void {
 
 		
-		  var menus = this.allMenus;
+			var newMenu = this.allMenus;
+			if (localStorage.getItem("userDetails['role_name']").trim() != 'Developer') {
+				var menus = [];
+				Object.keys(newMenu).forEach(k => {
+					if (newMenu[k].name != 'Roles' && newMenu[k].name != 'Mail Templates' && newMenu[k].name != 'Sections' && newMenu[k].name != 'Menus' && newMenu[k].name != 'Dashboard Config') {
+						menus.push(newMenu[k]);
+					}
+				});
+			}
+			else {
+				var menus = [];
+				Object.keys(newMenu).forEach(k => {
+					menus.push(newMenu[k]);
+				});
+			}
 		  var section = [];
         
 		 

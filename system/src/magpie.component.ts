@@ -73,10 +73,10 @@ export class MagpieComponent {
                     var  module = current_roles_menus[i];
                     if(current_roles_menus[i].actions[j].name == module.name.split(' ').join('-')+'-Index' && current_roles_menus[i].actions[j].perm == 'true'){
                       var module_key = Object.keys(res).find(x => res[x].name === module.name);
-                    
-                      menus[k] = res[module_key];
-                      k++;
-    
+                      if(typeof res[module_key] != 'undefined'){
+                        menus[k] = res[module_key];
+                        k++;
+                      }
                     }
                   }
     

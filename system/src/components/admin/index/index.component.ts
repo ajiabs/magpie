@@ -52,7 +52,7 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
     current:any;
     paginate_array:any;
     start_no:any;
-    end_no;any;
+    end_no:any;
     paginate_showBlocks:any;
     paginate_total:any;
     paginate_from:any;
@@ -534,7 +534,7 @@ bulkDelete =()=>{
             this.current = 1;
             var per_pagecount = parseInt(JSON.parse(res[0].section_config).per_pagecount);
             this.per_page = this.paginate?per_pagecount:9999999;
-            this.paginate_showBlocks = 5;
+            this.paginate_showBlocks = 4;
             this.paginate_total = 1;
             this.paginate_from = 1;
             this.paginate_to = 1;

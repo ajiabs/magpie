@@ -4,6 +4,7 @@ import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { SectionService } from './../../../../../system/src/services/admin/section.service';
+import { Select2OptionData } from 'ng2-select2';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 declare var swal: any;

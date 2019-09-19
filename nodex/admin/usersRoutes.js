@@ -38,18 +38,18 @@ usersAdminRoutes.route('/getDashboardUsers').get(passport.authenticate('jwt', { 
 });
 
 getDashboardUsers = (req, res) => {
-    var token = usersGetToken(req.headers);
-    var decode = jwt.verify(token, config.db.secret);
-    const User = require('../../system/nodex/models/users');
-    
-    User.aggregate([{"$match": {$and: [{ "created_user_id":decode.users_id.toString()}]}},{ "$project": { "Email": "$email", "Name": "$name" } }]).limit(5).exec(function (err, result) {
-      if (err) {
-        return res.json({ success: false, msg: err });
-      }
-      else {
-        return res.json(result);
-      }
-    });
+  var token = usersGetToken(req.headers);
+  var decode = jwt.verify(token, config.db.secret);
+  const User = require('../../system/nodex/models/users');
+
+  User.aggregate([{ "$match": { "created_user_id": decode.users_id } }, { "$project": { "Email": "$email", "Name": "$name" } }]).limit(5).exec(function (err, result) {
+    if (err) {
+      return res.json({ success: false, msg: err });
+    }
+    else {
+      return res.json(result);
+    }
+  });
 
 };
 
@@ -72,7 +72,7 @@ getUsersCount = (req, res) => {
   var decode = jwt.verify(token, config.db.secret);
 
   const User = require('../../system/nodex/models/users');
-  User.count({"created_user_id":decode.users_id.toString()}).exec(function (err, count) {
+  User.count({ "created_user_id": decode.users_id }).exec(function (err, count) {
     if (err) {
       return res.json({ success: false, msg: err });
     }

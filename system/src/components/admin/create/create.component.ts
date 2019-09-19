@@ -30,7 +30,7 @@ export class MagpieCreateComponent implements OnInit,OnDestroy {
     title:any;
     create_action:any;
     columns:any;
-    section_alias:any;
+    section_alias:any='';
     actions:any;
     section_data:any;
     custom:any[];

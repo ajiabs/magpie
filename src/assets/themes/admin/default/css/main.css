@@ -13776,6 +13776,7 @@ be a descendant of the grid when it is being dragged.
   .app-title p {
     display: none;
   }
+  
 }
 
 .app-breadcrumb {
@@ -13793,6 +13794,7 @@ be a descendant of the grid when it is being dragged.
 @media (max-width: 480px) {
   .app-breadcrumb {
     margin-top: 10px;
+    float: right;
   }
 }
 
@@ -14889,7 +14891,7 @@ width: 100%;
 .search-outer
 {
    height: 37px;
-   width:380px;
+   width:300px ;
    margin-right: 15px;
 }
 
@@ -14897,12 +14899,47 @@ width: 100%;
 {
   .btn-info.disabled, .btn-info:disabled
   {
-    margin-right:0;
+    margin-right:10px;
     margin-bottom:10px;
+    width:40%;
   }
 
   .pull-right .btn-warning
   {
-    width:100%;
+    width:40%;
   }
+
+
+}
+.title-search-btn-responsive{
+  display: flex !important;
+}
+.search-btn-responsive{
+  display: flex !important;
+  margin-top: 10px;
+}
+@media (max-width: 600px) {
+  .search-outer{
+    height: 37px;
+    width:100%;
+    margin-right: 15px;
+  }
+  .search-btn-responsive{
+    display: flex !important;
+    margin-top: 10px;
+  }
+  .title-search-btn-responsive{
+    display: block !important;
+  }
+  .csv-file-responsive{
+    padding-left: 0 !important;
+  } 
+
+}
+.required_field{
+  color:red;
+  font-size: 20px;
+}
+.form-control-feedback{
+  color:red;
 }

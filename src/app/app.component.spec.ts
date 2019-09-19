@@ -5,6 +5,7 @@ import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { AgmCoreModule } from '@agm/core';
 import { SectionService } from './../../system/src/services/admin/section.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ToArrayPipe } from './../../system/src/pipes/admin/toArray.pipe'
@@ -27,7 +28,8 @@ describe('AppComponent', () => {
       imports: [
         RouterModule.forRoot([]),
         ReactiveFormsModule,
-        HttpClientModule
+        HttpClientModule,
+        AgmCoreModule
       ],
       providers: [
         SectionService,
