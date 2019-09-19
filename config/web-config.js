@@ -28,6 +28,7 @@ let staging = {
     BUILD_PATH:"{build_path}"
   }
 };
+
 let config = "";
 switch (process.env.NODE_APP_STAGE) {
   case 'production':
