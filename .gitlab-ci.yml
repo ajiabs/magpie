@@ -1,0 +1,27 @@
+image: trion/ng-cli-karma
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+ - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+
+ - eval $(ssh-agent -s)
+
+ # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+ - ssh-add <(echo "$SSH_PRIVATE_KEY")
+ - mkdir -p ~/.ssh
+ - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+stage_deploy:
+  artifacts:
+  stage: build
+  only:
+    - staging
+  script:
+    - npm install
+    - npm run staging
+    - bash .gitlab-deploy.sh
+    - rsync -avzh bldfiles_staging magpie@$DEPLOY_SERVER:$DOCUMENT_ROOT
+    - ssh magpie@$DEPLOY_SERVER "/usr/local/bin/pm2 restart 0"
