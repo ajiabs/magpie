@@ -1,5 +1,3 @@
-#!/bin/bash
-
 set -f
 string=$DEPLOY_SERVER
 array="${string//,/ }"

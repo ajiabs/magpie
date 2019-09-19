@@ -5,10 +5,14 @@
 dist
 /dist-server
 /out-tsc
+*.yml
+*.sh
 /bldfiles_dev
+/config
 /node_modules
 nodejs_dc.log
 nodejs_restclient.log
+
 
 
 # dependencies
