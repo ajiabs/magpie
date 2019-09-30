@@ -16,7 +16,7 @@ export class ToArrayPipe implements PipeTransform {
 
  transform(items: any): any[] {
 
-   if (items == "" || items == undefined) return [];
+   if (items == "" || items == undefined || (typeof items == "object")) return [];
   
     var obj = JSON.parse(items);
     return Object.keys(obj).map(function(k) { return obj[k] })[0];
