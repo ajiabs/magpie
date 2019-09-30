@@ -162,7 +162,6 @@ onTagsChange = (field,data)=>{
   
 
   onFileChangeEvent  = (fileInput: any,field) => {
-   
         var files = [];
         for ( var index=0; index<fileInput.target.files.length; index++ ) {
 

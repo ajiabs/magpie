@@ -16,7 +16,7 @@ var https = require('https');
 var compression = require('compression');
 var expressStaticGzip = require('express-static-gzip');
 const fs = require('fs');
-var dash = require('appmetrics-dash');
+//var dash = require('appmetrics-dash');
 
 
 
@@ -130,7 +130,7 @@ io.sockets.on('connection', function (client) {
 
 
 
-dash.monitor({server: httpServer});
+//dash.monitor({server: httpServer});
 
 httpServer.listen(port, function(){
     console.log('Listening on port ' + port);
