@@ -270,7 +270,7 @@ onTagsChange = (field,data)=>{
                       var column_config = JSON.parse(res[0].section_config).column;
                       var th_files = [];
                       var th =this;
-                      column_config.forEach(function (rowItem) { 
+                      column_config.forEach(function (rowItem,rowIndex) { 
                       
                         if((rowItem.type == 'tags' || rowItem.type == 'selectbox' || rowItem.type == 'checkbox' || rowItem.type == 'radio') && rowItem.source_type == 'dynamic'){
                             
@@ -291,6 +291,10 @@ onTagsChange = (field,data)=>{
                         }
                         if(rowItem.type == 'file' || rowItem.type == 'image')
                             th_files.push(rowItem.field);
+
+                        if(rowItem.type == 'email' || rowItem.type == 'password'){
+                         
+                        }
                     
                       });
                       this.columns = column_config;
