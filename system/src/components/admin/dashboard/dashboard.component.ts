@@ -47,7 +47,7 @@ export class MagpieDashboardComponent implements OnInit,OnDestroy {
         label: "Complete"
       },
       {
-        value: "50",
+        value: "300",
         color:"#F7464A",
         highlight: "#FF5A5E",
         label: "In-Progress"

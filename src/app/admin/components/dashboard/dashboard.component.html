@@ -66,7 +66,9 @@
       <div class="tile" *ngIf="data.entity_type === 'pie_chart'">
         <h3 class="tile-title">{{data.entity_display_name}}</h3>
         <div class="embed-responsive embed-responsive-16by9">
-          <canvas chart [chartType]="pie" [chartData]="data.entity_config['value']" class="embed-responsive-item"
+          <!-- <canvas chart [chartType]="pie" [chartData]="data.entity_config['value']" class="embed-responsive-item"
+            id="pieChart_{{i}}"></canvas> -->
+            <canvas chart [chartType]="pie" [chartData]="pie_data" class="embed-responsive-item"
             id="pieChart_{{i}}"></canvas>
         </div>
       </div>

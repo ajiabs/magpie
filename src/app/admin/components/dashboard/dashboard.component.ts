@@ -17,11 +17,28 @@ declare var $: any;
 })
 export class DashboardComponent extends  MagpieDashboardComponent {
   users_count:any;
+  pie_data:any;
   dashboard_config:any;
   constructor(route: ActivatedRoute, router: Router, fb: FormBuilder, http: HttpClient,section_service:SectionService,private dashboard_service:DashboardService) {
     super(route,router,fb,http,section_service);
    }
   ngOnInit(){
+
+  this.pie_data =  [
+      {
+        value: "45",
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: "Complete"
+      },
+      {
+        value: "55",
+        color:"#F7464A",
+        highlight: "#FF5A5E",
+        label: "In-Progress"
+      }
+    ];
+
 
 
           this.dashboard_service.getDashboardConfig(localStorage.getItem("userDetails['roles_id']")).subscribe(res => {
