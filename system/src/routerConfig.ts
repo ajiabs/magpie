@@ -102,6 +102,78 @@ const routes:Routes = [
           
          ]
        },
+       {
+        path: 'cms',
+        children: [ 
+          { path: 'login',
+            component: MagpieLoginComponent,
+          },
+          { path: 'reset-password',
+            component: MagpieResetPasswordComponent,
+          },
+          { path: ':role/dashboard',
+            component: MagpieDashboardComponent,
+            canActivate: [AuthGuard],
+            runGuardsAndResolvers: 'always',
+          },
+          { path: 'account',
+            component: MagpieProfileEditComponent,
+            canActivate: [AuthGuard],
+            runGuardsAndResolvers: 'always',
+          },
+          { path: 'settings',
+            component: MagpieSettingsComponent,
+            canActivate: [AuthGuard],
+            runGuardsAndResolvers: 'always',
+          },
+          { path: 'package-installer',
+            component: MagpiePackageInstallerComponent,
+            canActivate: [AuthGuard],
+            runGuardsAndResolvers: 'always',
+          },
+          { path: 'package-installer/:pacakge',
+            component: MagpiePackageInstallerDetailsComponent,
+            canActivate: [AuthGuard],
+            runGuardsAndResolvers: 'always',
+          },
+          { path: 'autologin/:token/:date',
+            component: MagpieAutoLoginComponent,
+            canActivate: [AuthGuard],
+            runGuardsAndResolvers: 'always' 
+          },
+
+          { path: '404',
+            component: MagpiePageNotFoundComponent,
+            // canActivate: [AuthGuard],
+             runGuardsAndResolvers: 'always' 
+          },
+          { path: ':section/create', 
+            component: MagpieCreateComponent,
+            canActivate: [AuthGuard],
+            runGuardsAndResolvers: 'always',
+          },
+          {
+            path: ':section/edit/:id',
+            component: MagpieEditComponent,
+            canActivate: [AuthGuard],
+            runGuardsAndResolvers: 'always',
+          },
+          {
+            path: ':section/view/:id',
+            component: MagpieViewComponent,
+            canActivate: [AuthGuard],
+            runGuardsAndResolvers: 'always',
+          },
+          { path: ':section',
+            component: MagpieIndexComponent,
+            canActivate: [AuthGuard],
+            runGuardsAndResolvers: 'always',
+           },
+           
+         
+          
+         ]
+       },
        { path: '**',
          redirectTo: '/404',
          pathMatch:"full"

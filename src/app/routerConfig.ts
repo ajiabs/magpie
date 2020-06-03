@@ -8,6 +8,27 @@ import { HomeComponent } from './../../src/app/site/components/home/home.compone
 
   const routes:Routes = [
     {
+      path: 'cms',
+      children: [ 
+        { path: ':role/dashboard',
+          component:DashboardComponent,
+          canActivate: [AuthGuard],
+          runGuardsAndResolvers: 'always',
+        },
+        { path: 'users',
+          component:UsersIndexComponent,
+          canActivate: [AuthGuard],
+          runGuardsAndResolvers: 'always',
+        },
+        {
+          path: 'roles/view/:id',
+          component: RolesViewComponent,
+          canActivate: [AuthGuard],
+          runGuardsAndResolvers: 'always',
+        },
+      ]
+    },
+    {
       path: 'admin',
       children: [ 
         { path: 'dashboard',

@@ -19,9 +19,9 @@
             <button class="btn btn-danger btn-sm col-md-1" (click)="bulkDelete()"  [disabled]="!multiple_delete_button && multiple_delete"  [hidden]="!multiple_delete || !delete_action"><i class="fa fa-trash"></i>Delete</button>
             <div class="pull-right">
                <div class="">
-                <input type="file" class="form-control-sm col-md-5 col-sm-5  pull-left csv-file-responsive"   (change)="onImportEvent($event)"  [hidden]="!import_action">
+                <input type="file" accept=".csv" class="form-control-sm col-md-5 col-sm-5  pull-left csv-file-responsive"   (change)="onImportEvent($event)"  [hidden]="!import_action">
               
-                <button class="btn btn-info btn-sm col-md-3 col-sm-3 pull-left btm-mrg" (click)="import_csv()" [disabled]="file_import_button" [hidden]="!import_action"><i class="fa fa-arrow-circle-down"></i>Import</button>
+                <button class="btn btn-info btn-sm col-md-3 col-sm-3 pull-left btm-mrg" (click)="import_csv()" [disabled]="file_import_button" [hidden]="!import_action"><i class="fa fa-arrow-circle-down"></i>Import CSV</button>
                 <!-- <button class="btn btn-warning btn-sm col-md-3 col-sm-3 btm-mrg  pull-right" (click)="export_csv()"  [hidden]="!export_action"><i class="fa fa-arrow-circle-up"></i>Export</button> -->
                 <button id="export" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="modal"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [hidden]="!export_action">
