@@ -184,16 +184,16 @@ export class MagpieIndexComponent implements OnInit,OnDestroy {
 
   onImportEvent  = (fileInput: any) => {
     this.file_import = fileInput.target.files[0];
-
-    if(this.file_import.type != 'text/csv')
-    {
-      this.file_import_type = true;
-      this.file_import_button = true;
-    }else
+    
+    
+    if(this.file_import.type == 'text/csv' || this.file_import.type == 'application/vnd.ms-excel')
     {
       this.file_import_type = false;
       this.file_import_button = false;
-
+    }else
+    {
+      this.file_import_type = true;
+      this.file_import_button = true;
     } 
 
 }
