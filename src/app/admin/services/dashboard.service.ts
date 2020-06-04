@@ -28,6 +28,48 @@ export class DashboardService {
    
   }
 
+  getCountStaticMenus = () => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'section/getAllMenusCount';
+    return this
+      .http
+      .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
+
+  }
+
+  getCountStaticUsers = () => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'section/getCountStaticUsers';
+    return this
+      .http
+      .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
+
+  }
+
+  getCountDynamicUsers = () => {
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
+    };
+    const uri = server_url + 'section/getCountDynamicUsers';
+    return this
+      .http
+      .get(uri, httpOptions)
+      .map(res => {
+        return res;
+      });
+
+  }
+
   dashboardCustomRoute = (current_route,fn)=>{
 
     let httpOptions = {

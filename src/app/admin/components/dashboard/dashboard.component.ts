@@ -16,6 +16,10 @@ declare var $: any;
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent extends  MagpieDashboardComponent {
+  static_menus_count:any;
+  static_users_count:any;
+  dynamic_users_count:any;
+
   users_count:any;
   pie_data:any;
   dashboard_config:any;
@@ -23,6 +27,8 @@ export class DashboardComponent extends  MagpieDashboardComponent {
     super(route,router,fb,http,section_service);
    }
   ngOnInit(){
+
+
 
   this.pie_data =  [
       {
@@ -39,6 +45,15 @@ export class DashboardComponent extends  MagpieDashboardComponent {
       }
     ];
 
+    this.dashboard_service.getCountStaticMenus().subscribe(res => {
+      this.static_menus_count = res;
+    });
+    this.dashboard_service.getCountStaticUsers().subscribe(res => {
+      this.static_users_count = res;
+    });
+    this.dashboard_service.getCountDynamicUsers().subscribe(res => {
+      this.dynamic_users_count = res;
+    });
 
 
           this.dashboard_service.getDashboardConfig(localStorage.getItem("userDetails['roles_id']")).subscribe(res => {

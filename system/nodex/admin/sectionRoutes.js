@@ -343,6 +343,68 @@ sectionAdminRoutes.route('/getAllMenus').get(passport.authenticate('jwt', { sess
   }
 });
 
+//-----------------------------------------------------------------------
+sectionAdminRoutes.route('/getAllMenusCount').get(passport.authenticate('jwt', { session: false }), function (req, res) {
+  try {
+    var token = sectionGetToken(req.headers);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+          if(is_perm)
+            return sectionGetAllMenusCount(req, res);
+          else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+     
+    }
+    else
+      return res.json({ success: false, msg: 'Unauthorized' });
+  }
+  catch (err) {
+    log.logerror(res, err);
+  }
+});
+
+sectionAdminRoutes.route('/getCountStaticUsers').get(passport.authenticate('jwt', { session: false }), function (req, res) {
+  try {
+    var token = sectionGetToken(req.headers);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+          if(is_perm)
+            return sectionGetAllStaticUsersCount(req, res);
+          else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+     
+    }
+    else
+      return res.json({ success: false, msg: 'Unauthorized' });
+  }
+  catch (err) {
+    log.logerror(res, err);
+  }
+});
+
+sectionAdminRoutes.route('/getCountDynamicUsers').get(passport.authenticate('jwt', { session: false }), function (req, res) {
+  try {
+    var token = sectionGetToken(req.headers);
+    if (token){
+      sectionIsPermission(token,data={}).then((is_perm)=>{
+          if(is_perm)
+            return sectionGetAllDynamicUsersCount(req, res);
+          else
+            return res.json({ success: false, msg: 'Unauthorized' });
+      });
+     
+    }
+    else
+      return res.json({ success: false, msg: 'Unauthorized' });
+  }
+  catch (err) {
+    log.logerror(res, err);
+  }
+});
+//-----------------------------------------------------------------------
+
 sectionAdminRoutes.route('/getRolePermissionMenus').post(passport.authenticate('jwt', { session: false }), function (req, res) {
   try {
     var token = sectionGetToken(req.headers);
@@ -1413,6 +1475,27 @@ sectionGetAllMenus = (req, res) => {
     }
   });
 
+};
+
+sectionGetAllMenusCount = (req, res) => {
+  var Section = require('../models/menus');
+  Section.count().exec(function (err, count) {
+    return res.json(count);
+  });
+};
+
+sectionGetAllStaticUsersCount = (req, res) => {
+  var Section = require('../models/users');
+  Section.count().exec(function (err, count) {
+    return res.json(count);
+  });
+};
+
+sectionGetAllDynamicUsersCount = (req, res) => {
+  var Section = require('../models/users');
+  Section.count().exec(function (err, count) {
+    return res.json(count);
+  });
 };
 
 getCurrentRolePermissionMenus = (req, res) => {

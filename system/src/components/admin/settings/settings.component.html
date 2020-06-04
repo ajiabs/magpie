@@ -11,7 +11,8 @@
 
                     <form class="settings-form" [formGroup]="settingsForm" novalidate>
                         <div class="row">
-                            <div  *ngFor="let column of columns;let rowIndex=index" [ngClass]="column.type != 'hidden'?'col-md-6':''">
+                            <!-- <div  *ngFor="let column of columns;let rowIndex=index" [ngClass]="column.type != 'hidden'?'col-md-6':''"> -->
+                            <div  *ngFor="let column of columns;let rowIndex=index" [ngClass]="'col-md-6'">
                                 <label class="control-label" *ngIf="(column.type == 'hidden' && isDeveloper) || column.type != 'hidden' ">{{column.label}}<span
                                         class="required_field">*</span></label>
                                 <div *ngIf="column.type == 'textbox'">
