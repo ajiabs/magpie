@@ -87,6 +87,8 @@ export class MagpiePackageInstallerComponent implements OnInit {
 
         new notifier({title:"Success! ", message:  pkg.package_name+" plugin has been installed.", icon: 'fa fa-check',type: "success"});
 
+        this.localPackages.push(pkg.package_name);
+        
         this.getInstallerPackage();
         
       });

@@ -35,7 +35,8 @@
                           <p>{{packages.short_description}}</p>
                         </div>
                         <ul class="post-utility">
-                          <li class="likes"><i class="fa fa-download"></i>2 Downloads </li>
+                          <li class="likes"><i class="fa fa-download"></i>
+                          {{localPackages.length}} Downloads </li>
                           <li class="comments" *ngIf="(localPackages.indexOf(packages.package_name) == -1 && installing[packages.package_name] == false)"><button class="btn btn-sm btn-primary" (click)="installPackage(packages)"><b>install</b></button></li>
                           <li class="comments" *ngIf="(localPackages.indexOf(packages.package_name) == -1 && installing[packages.package_name]  == true) || localPackages.indexOf(packages.package_name) >= 0"><button class="btn btn-sm btn-primary" [disabled]="true"> <b *ngIf="(localPackages.indexOf(packages.package_name) == -1 && installing[packages.package_name] == true)"><i class="fa fa-spinner fa-spin"></i>installing</b><b *ngIf="localPackages.indexOf(packages.package_name) >= 0">installed</b></button></li>
 
