@@ -67,7 +67,7 @@
     "ngx-color-picker": "^6.7.0",
     "ngx-editor": "^3.3.0",
     "node-authorize-net": "0.0.5",
-    "nodemailer": "^4.6.8",
+    "nodemailer": "^6.4.16",
     "nodemon": "^1.17.3",
     "npm": "^6.4.1",
     "passport": "^0.4.0",
